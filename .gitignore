@@ -48,3 +48,8 @@ next-env.d.ts
 
 # os
 Thumbs.db
+
+# playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

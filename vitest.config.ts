@@ -1,6 +1,5 @@
-import path from 'path';
-
 import react from '@vitejs/plugin-react';
+import path from 'path';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -13,15 +12,19 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
+    exclude: ['node_modules', 'e2e/**'],
     css: { modules: { classNameStrategy: 'non-scoped' } },
+    env: {
+      NEXT_PUBLIC_APP_NAME: 'Test App',
+      NEXT_PUBLIC_APP_URL: 'http://localhost:3000',
+    },
     coverage: {
       provider: 'v8',
-      // Raise thresholds as the project grows; 50% is the baseline for a boilerplate
       thresholds: {
-        lines: 50,
-        functions: 50,
-        branches: 50,
-        statements: 50,
+        lines: 70,
+        functions: 70,
+        branches: 70,
+        statements: 70,
       },
     },
   },

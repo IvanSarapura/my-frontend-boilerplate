@@ -17,7 +17,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' blob: data:",
       "font-src 'self'",
-      "connect-src 'self'",
+      "connect-src 'self' https://jsonplaceholder.typicode.com",
       "frame-ancestors 'none'",
     ].join('; '),
   },
@@ -25,6 +25,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  cacheComponents: true,
   async headers() {
     return [
       {

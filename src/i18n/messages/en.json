@@ -1,0 +1,17 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "notFound": "Page not found",
+    "backHome": "Back to home",
+    "tryAgain": "Try again"
+  },
+  "home": {
+    "title": "Frontend Boilerplate",
+    "subtitle": "Next.js · TypeScript · Vitest · Prettier · ESLint"
+  },
+  "posts": {
+    "title": "Posts",
+    "description": "Fetched from JSONPlaceholder API"
+  }
+}

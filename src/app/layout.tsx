@@ -1,9 +1,9 @@
+import './globals.css';
+
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { env } from '@/lib/env';
-
-import './globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -33,6 +33,9 @@ export const metadata: Metadata = {
     template: `%s | ${env.NEXT_PUBLIC_APP_NAME}`,
   },
   description: APP_DESCRIPTION,
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     title: env.NEXT_PUBLIC_APP_NAME,
     description: APP_DESCRIPTION,
@@ -40,7 +43,7 @@ export const metadata: Metadata = {
     locale: 'en_US',
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: env.NEXT_PUBLIC_APP_NAME,
     description: APP_DESCRIPTION,
   },
@@ -53,7 +56,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body>{children}</body>
+      <body>
+        <a href="#main-content" className="sr-only">
+          Skip to main content
+        </a>
+        {/* div wraps children so pages can keep their own <main> without nesting */}
+        <div id="main-content">{children}</div>
+      </body>
     </html>
   );
 }

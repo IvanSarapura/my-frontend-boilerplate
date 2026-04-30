@@ -1,0 +1,17 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "error": "Algo salió mal",
+    "notFound": "Página no encontrada",
+    "backHome": "Volver al inicio",
+    "tryAgain": "Intentar de nuevo"
+  },
+  "home": {
+    "title": "Boilerplate Frontend",
+    "subtitle": "Next.js · TypeScript · Vitest · Prettier · ESLint"
+  },
+  "posts": {
+    "title": "Publicaciones",
+    "description": "Obtenido desde JSONPlaceholder API"
+  }
+}
