@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# my-frontend-boilerplate
+
+A professional, minimal Next.js frontend boilerplate with a complete DX and CI/CD setup ready to clone and build on.
+
+## Stack
+
+| Tool            | Version | Purpose                         |
+| --------------- | ------- | ------------------------------- |
+| Next.js         | 16      | React framework (App Router)    |
+| React           | 19      | UI library                      |
+| TypeScript      | 5       | Type safety (strict mode)       |
+| React Compiler  | 1.0.0   | Automatic memoization           |
+| Prettier        | 3       | Code formatting                 |
+| ESLint          | 9       | Linting (flat config)           |
+| Vitest          | 4       | Unit / component testing        |
+| Testing Library | 16      | DOM testing utilities           |
+| Husky           | 9       | Git hooks                       |
+| lint-staged     | 16      | Pre-commit quality checks       |
+| commitlint      | 19      | Conventional commit enforcement |
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js `>=18.18.0` — use [nvm](https://github.com/nvm-sh/nvm): `nvm use`
+
+### Setup
 
 ```bash
+cp .env.local.example .env.local
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Script                  | Description                      |
+| ----------------------- | -------------------------------- |
+| `npm run dev`           | Start development server         |
+| `npm run build`         | Build for production             |
+| `npm start`             | Start production server          |
+| `npm run lint`          | Run ESLint                       |
+| `npm run typecheck`     | TypeScript type check (no emit)  |
+| `npm run format`        | Format all files with Prettier   |
+| `npm run format:check`  | Check formatting without writing |
+| `npm test`              | Run tests once                   |
+| `npm run test:watch`    | Run tests in watch mode          |
+| `npm run test:coverage` | Run tests with coverage report   |
 
-## Learn More
+## Git Conventions
 
-To learn more about Next.js, take a look at the following resources:
+Commits must follow [Conventional Commits](https://www.conventionalcommits.org/). The `commit-msg` hook enforces this automatically.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+feat: add user authentication
+fix: resolve layout shift on mobile
+docs: update README setup section
+chore: upgrade vitest to v4
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+**Allowed types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+src/
+  app/
+    layout.tsx          # Root layout with metadata (OG + Twitter cards)
+    page.tsx            # Home page
+    page.module.css     # Home page styles
+    globals.css         # Global styles and CSS custom properties
+    error.tsx           # Error boundary (Client Component)
+    not-found.tsx       # 404 page
+    loading.tsx         # Loading skeleton
+    page.test.tsx       # Example unit test
+    favicon.ico
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## CI/CD
+
+GitHub Actions runs on push/PR to `main` and `develop`.
+
+```
+quality ──┐
+           ├──▶ build
+test    ──┘
+```
+
+- **quality** — format check → lint → typecheck
+- **test** — full test suite with coverage (uploaded as artifact)
+- **build** — production build (runs only if both quality and test pass)
+
+Concurrent runs on the same branch are cancelled automatically.

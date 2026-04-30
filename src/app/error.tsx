@@ -1,0 +1,28 @@
+'use client';
+
+import { useEffect } from 'react';
+
+import styles from './error.module.css';
+
+export default function Error({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    // Replace with your error monitoring service (e.g. Sentry.captureException(error))
+    console.error('[Error boundary]', error);
+  }, [error]);
+
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>Something went wrong</h1>
+      <p className={styles.message}>{error.message}</p>
+      <button className={styles.action} onClick={reset}>
+        Try again
+      </button>
+    </div>
+  );
+}
