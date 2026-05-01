@@ -1,0 +1,17 @@
+.main {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4);
+}
+
+.title {
+  font-size: var(--text-3xl);
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+}
+
+.subtitle {
+  color: var(--muted);
+  font-size: var(--text-base);
+  margin-bottom: var(--space-8);
+}

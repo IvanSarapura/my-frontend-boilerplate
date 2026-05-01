@@ -4,7 +4,11 @@
     "error": "Algo salió mal",
     "notFound": "Página no encontrada",
     "backHome": "Volver al inicio",
-    "tryAgain": "Intentar de nuevo"
+    "tryAgain": "Intentar de nuevo",
+    "submit": "Enviar",
+    "sending": "Enviando...",
+    "success": "¡Éxito!",
+    "close": "Cerrar"
   },
   "home": {
     "title": "Boilerplate Frontend",
@@ -12,6 +16,17 @@
   },
   "posts": {
     "title": "Publicaciones",
-    "description": "Obtenido desde JSONPlaceholder API"
+    "description": "Obtenido desde JSONPlaceholder API · cacheado ~1 minuto vía use cache"
+  },
+  "contact": {
+    "title": "Contacto",
+    "subtitle": "Envíanos un mensaje y te responderemos pronto.",
+    "nameLabel": "Nombre",
+    "namePlaceholder": "Tu nombre",
+    "emailLabel": "Correo electrónico",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "messageLabel": "Mensaje",
+    "messagePlaceholder": "¿Cómo podemos ayudarte?",
+    "successMessage": "¡Gracias! Tu mensaje ha sido enviado."
   }
 }

@@ -3,6 +3,9 @@ import './globals.css';
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
+import { QueryProvider } from '@/components/providers/query-provider';
+import { ToastProvider } from '@/components/ui/toast-context';
+import { Toaster } from '@/components/ui/toaster';
 import { env } from '@/lib/env';
 import { generateWebsiteJsonLd } from '@/lib/json-ld';
 
@@ -77,8 +80,13 @@ export default async function RootLayout({
         <a href="#main-content" className="sr-only">
           Skip to main content
         </a>
-        {/* div wraps children so pages can keep their own <main> without nesting */}
-        <div id="main-content">{children}</div>
+        <ToastProvider>
+          <QueryProvider>
+            {/* div wraps children so pages can keep their own <main> without nesting */}
+            <div id="main-content">{children}</div>
+            <Toaster />
+          </QueryProvider>
+        </ToastProvider>
       </body>
     </html>
   );

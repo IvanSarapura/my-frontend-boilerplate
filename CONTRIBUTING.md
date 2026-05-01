@@ -113,6 +113,27 @@ feature/your-feature-name
 
 4. **Update documentation** (README, JSDoc comments, etc.) if your change affects the public API or usage.
 
+### Adding a New Feature
+
+Features live in `src/features/<feature-name>/` and follow a consistent structure:
+
+```
+src/features/<name>/
+├── api/               # Server-side data fetching & Server Actions
+│   └── <name>.service.ts
+├── components/        # Feature-specific UI
+│   └── <name>-form.tsx
+├── schemas.ts         # Zod validation schemas
+├── types.ts           # Shared TypeScript types
+└── index.ts           # Public barrel exports
+```
+
+**Rules:**
+
+- A feature must export its public API via `index.ts`.
+- Components inside a feature can import from `components/ui/` but not from other features.
+- If logic is needed by multiple features, move it to `lib/` or `components/ui/`.
+
 ### Pre-commit Checks
 
 This project uses **Husky** and **lint-staged** to enforce quality before every commit. These hooks run automatically — you do not need to configure anything.
@@ -170,6 +191,7 @@ Scopes help identify the affected area. Choose the most specific scope possible:
 | ------------ | ------------------------------------------------------------- |
 | `app`        | Next.js App Router code (`src/app/`)                          |
 | `components` | React components (`src/components/`)                          |
+| `features`   | Domain-driven features (`src/features/`)                      |
 | `hooks`      | Custom React hooks (`src/hooks/`)                             |
 | `i18n`       | Internationalisation logic or translations (`src/i18n/`)      |
 | `lib`        | Utilities, env validation, helpers (`src/lib/`)               |
@@ -261,6 +283,9 @@ npm run test:e2e     # Terminal 2
 
 # Open Playwright UI mode for debugging
 npm run test:e2e:ui
+
+# Build Storybook to verify stories compile
+npm run storybook:build
 ```
 
 > **Coverage thresholds:** The project enforces a minimum coverage threshold. If your PR reduces coverage significantly, you may need to add tests.
@@ -282,7 +307,7 @@ ls -la .next/
 ### Before Submitting
 
 - [ ] Branch is up to date with `main` (`git pull origin main`)
-- [ ] All local quality checks pass (`npm run format:check && npm run lint && npm run typecheck && npm test && npm run build`)
+- [ ] All local quality checks pass (`npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run storybook:build`)
 - [ ] Commit messages follow Conventional Commits
 - [ ] Changes are focused and atomic (one concern per PR)
 - [ ] Tests added or updated for new functionality
@@ -301,6 +326,7 @@ ls -la .next/
 3. **All CI jobs must pass.** The pipeline runs:
    - Format / Lint / Typecheck
    - Unit tests with coverage
+   - Storybook build
    - Production build
    - E2E tests
    - Dependency security review

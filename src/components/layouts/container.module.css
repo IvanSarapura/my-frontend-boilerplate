@@ -5,13 +5,13 @@
   padding-inline: var(--space-4);
 }
 
-@media (min-width: 640px) {
+@media (width >= 640px) {
   .container {
     padding-inline: var(--space-6);
   }
 }
 
-@media (min-width: 1024px) {
+@media (width >= 1024px) {
   .container {
     padding-inline: var(--space-8);
   }

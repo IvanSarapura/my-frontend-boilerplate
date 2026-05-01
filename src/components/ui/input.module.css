@@ -1,0 +1,61 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  width: 100%;
+}
+
+.label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--foreground);
+}
+
+.input {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+  color: var(--foreground);
+  background: var(--background);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--muted);
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgb(0 112 243 / 0.2);
+}
+
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: var(--card-bg);
+}
+
+.error {
+  border-color: var(--color-error, #ef4444);
+}
+
+.error:focus {
+  border-color: var(--color-error, #ef4444);
+  box-shadow: 0 0 0 2px rgb(239 68 68 / 0.2);
+}
+
+.helper {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+
+.errorText {
+  font-size: var(--text-xs);
+  color: var(--color-error, #ef4444);
+}

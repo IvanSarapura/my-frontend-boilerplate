@@ -5,17 +5,18 @@ import ErrorComponent from './error';
 
 describe('Error boundary', () => {
   it('renders error message and reset button', () => {
+    vi.stubEnv('NODE_ENV', 'production');
     const error = new Error('Test error');
     const reset = vi.fn();
     render(<ErrorComponent error={error} reset={reset} />);
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-    // NODE_ENV=test is not 'development', so the generic message is shown
     expect(
       screen.getByText('An unexpected error occurred. Please try again later.'),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /try again/i }),
     ).toBeInTheDocument();
+    vi.unstubAllEnvs();
   });
 
   it('calls reset when clicking the button', () => {

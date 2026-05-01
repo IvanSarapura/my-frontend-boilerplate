@@ -2,7 +2,6 @@
   "extends": ["stylelint-config-standard"],
   "rules": {
     "alpha-value-notation": "number",
-    "color-function-notation": "legacy",
     "selector-class-pattern": null
   }
 }
