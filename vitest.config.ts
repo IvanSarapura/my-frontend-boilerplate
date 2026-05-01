@@ -37,11 +37,10 @@ export default defineConfig({
         functions: 70,
         branches: 70,
         statements: 70,
+        // Enforce per file so a single well-covered file cannot mask
+        // another with 0% coverage.
+        perFile: true,
       },
-      // Enforce thresholds per individual file rather than globally.
-      // Prevents a single file with 100% coverage from masking another
-      // with 0% coverage.
-      perFile: true,
     },
   },
 });
