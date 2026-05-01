@@ -8,9 +8,9 @@ updates:
     groups:
       all-dependencies:
         patterns:
-          - "*"
+          - '*'
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
 
   - package-ecosystem: github-actions
     directory: /
@@ -20,6 +20,6 @@ updates:
     groups:
       all-actions:
         patterns:
-          - "*"
+          - '*'
     commit-message:
-      prefix: "chore(deps)"
+      prefix: 'chore(deps)'
