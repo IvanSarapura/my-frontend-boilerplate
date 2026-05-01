@@ -10,11 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions:
-  contents: read
-
 jobs:
   quality:
+    permissions:
+      contents: read
     name: Format, Lint & Typecheck
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -64,6 +63,9 @@ jobs:
     name: Tests
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
 
@@ -99,6 +101,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [quality, test]
+    permissions:
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
 
@@ -132,13 +137,17 @@ jobs:
         with:
           name: next-build
           path: .next/
-          retention-days: 1
+          if-no-files-found: error
+          retention-days: 7
 
   e2e:
     name: E2E Tests
     runs-on: ubuntu-latest
     timeout-minutes: 20
     needs: [build]
+    permissions:
+      contents: read
+      actions: write
     steps:
       - uses: actions/checkout@v4
 
