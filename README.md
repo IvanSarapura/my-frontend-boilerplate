@@ -69,16 +69,87 @@ Variables are validated at startup with Zod (`src/lib/env.ts`). Missing or malfo
 
 ## Git Conventions
 
-Commits must follow [Conventional Commits](https://www.conventionalcommits.org/). The `commit-msg` hook enforces this automatically.
+This project enforces [Conventional Commits](https://www.conventionalcommits.org/) via a `commit-msg` hook (powered by Husky + commitlint). Following this standard keeps the history readable, enables automatic changelog generation, and prevents CI failures.
 
-```
-feat: add user authentication
-fix: resolve layout shift on mobile
-docs: update README setup section
-chore: upgrade vitest to v4
+### Commit message format
+
+```text
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer(s)]
 ```
 
-**Allowed types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
+### Allowed types
+
+| Type       | When to use                                                            |
+| ---------- | ---------------------------------------------------------------------- |
+| `feat`     | A new feature or capability                                            |
+| `fix`      | A bug fix                                                              |
+| `docs`     | Documentation-only changes (README, JSDoc, etc.)                       |
+| `style`    | Code style changes that do not affect meaning (formatting, semicolons) |
+| `refactor` | Code change that neither fixes a bug nor adds a feature                |
+| `perf`     | Performance improvement                                                |
+| `test`     | Adding or correcting tests                                             |
+| `chore`    | Routine tasks, dependency updates, config tweaks                       |
+| `ci`       | Changes to CI/CD configuration (GitHub Actions, workflows)             |
+| `build`    | Changes affecting the build system or external dependencies            |
+| `revert`   | Reverts a previous commit                                              |
+
+### Scopes (recommended)
+
+Scopes are optional but highly recommended to identify the affected area:
+
+- `app` — Next.js App Router code
+- `components` — UI or layout components
+- `hooks` — Custom React hooks
+- `i18n` — Internationalisation logic or translations
+- `lib` — Utilities, env validation, helpers
+- `styles` — Global CSS, tokens, design system
+- `test` — Test suites or testing configuration
+- `ci` — GitHub Actions workflows
+- `deps` — Dependency updates
+
+### Examples
+
+```bash
+# Feature with scope
+feat(i18n): add Spanish locale support
+
+# Bug fix with scope and body
+fix(app): resolve layout shift on mobile navigation
+
+The root layout was missing a min-height declaration, causing
+content to jump when the navigation bar mounted.
+
+# Documentation without scope
+docs: update README with commit conventions
+
+# CI fix referencing an issue
+fix(ci): grant actions:write permissions to resolve artifact download
+
+Previously, the workflow set permissions: contents: read globally,
+which prevented upload/download-artifact from accessing the GitHub
+Actions API and caused the E2E job to fail with:
+"Artifact not found for name: next-build".
+
+Closes #42
+
+# Dependency update
+chore(deps): upgrade vitest to v4.1.5
+```
+
+### How to avoid commit failures
+
+1. **Always use a type** — a commit like `update stuff` will be rejected by the hook.
+2. **Use imperative mood** — "fix bug" instead of "fixed bug" or "fixes bug".
+3. **Keep the description concise** — aim for 50–72 characters in the first line.
+4. **Reference issues when applicable** — `Fixes #123` or `Closes #456` in the footer.
+5. **If the hook rejects your commit**, amend the message and try again:
+   ```bash
+   git commit --amend
+   ```
 
 ## Internationalisation
 
@@ -130,13 +201,15 @@ src/
     env.ts                   # Zod env schema — throws on invalid config at startup
     utils.ts                 # cx() for conditional CSS classes
     json-ld.ts               # generateWebsiteJsonLd() structured data helper
-  proxy.ts                   # Locale routing — redirects / → /en
+  proxy.ts                   # Locale routing — redirects / → /en (Next.js 16 Proxy)
   types/
     index.ts                 # Shared TypeScript utility types
 e2e/
   home.spec.ts               # Locale routing + heading assertions
   smoke.spec.ts              # Health endpoint + 404 + skip-link
 ```
+
+> **Note on `src/proxy.ts`:** Next.js 16 renamed the legacy `middleware.ts` convention to `proxy.ts`. Do not rename this file to `middleware` — it will not be recognised by the framework.
 
 ## CI/CD
 
@@ -148,11 +221,19 @@ quality ──┐
 test    ──┘
 ```
 
-- **quality** — format check → lint → stylelint → typecheck → security audit → commitlint (PR only)
-- **test** — full unit suite with v8 coverage (artifact uploaded, 7-day retention)
-- **build** — production build; bundle-size summary posted to job summary; build artifact uploaded
-- **e2e** — Playwright Chromium tests against the built artifact; report uploaded (7-day retention)
+| Job         | What it does                                                                                                         |
+| ----------- | -------------------------------------------------------------------------------------------------------------------- |
+| **quality** | format check → lint → typecheck → security audit → commitlint validation (PR only)                                   |
+| **test**    | full unit/component suite with v8 coverage report; coverage artifact uploaded (7-day retention)                      |
+| **build**   | production build; bundle-size summary posted to job summary; build artifact uploaded with `if-no-files-found: error` |
+| **e2e**     | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)                   |
 
-`.next/cache` is cached between runs using `actions/cache@v4` keyed on `package-lock.json` + source files.
+### Artifact strategy
 
-Concurrent runs on the same branch are cancelled automatically.
+- Jobs that upload or download artifacts (`test`, `build`, `e2e`) are granted `actions: write` permissions so that `actions/upload-artifact@v4` and `actions/download-artifact@v4` can communicate with the GitHub Actions API.
+- Build and report artifacts are retained for **7 days** to allow re-running E2E jobs or inspecting failures without rebuilding.
+- `.next/cache` is cached between runs using `actions/cache@v4`, keyed on `package-lock.json` plus source files.
+
+### Concurrency
+
+Concurrent runs on the same branch are cancelled automatically (`cancel-in-progress: true`) to avoid wasting runner minutes.
