@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -45,5 +45,37 @@ describe('Modal', () => {
     );
     await userEvent.click(screen.getByLabelText('Close dialog'));
     expect(onClose).toHaveBeenCalled();
+  });
+
+  it('closes on Escape key', () => {
+    const onClose = vi.fn();
+    render(
+      <Modal open title="T" onClose={onClose}>
+        C
+      </Modal>,
+    );
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls onClose when Escape is pressed', () => {
+    const onClose = vi.fn();
+    render(
+      <Modal open title="T" onClose={onClose}>
+        C
+      </Modal>,
+    );
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders focusable elements inside the dialog', () => {
+    const onClose = vi.fn();
+    render(
+      <Modal open title="T" onClose={onClose}>
+        <button type="button">Action</button>
+      </Modal>,
+    );
+    expect(screen.getByRole('button', { name: 'Action' })).toBeInTheDocument();
   });
 });

@@ -20,12 +20,28 @@ export default defineConfig({
     },
     coverage: {
       provider: 'v8',
+      // CSS Modules contain no executable JavaScript logic; including them
+      // artificially dilutes coverage metrics. Stories, mocks, and test files
+      // are also excluded as they are not production code.
+      exclude: [
+        '**/*.module.css',
+        '**/*.stories.tsx',
+        'src/mocks/**',
+        '**/*.test.tsx',
+        '**/*.spec.tsx',
+        'e2e/**',
+        'coverage/**',
+      ],
       thresholds: {
         lines: 70,
         functions: 70,
         branches: 70,
         statements: 70,
       },
+      // Enforce thresholds per individual file rather than globally.
+      // Prevents a single file with 100% coverage from masking another
+      // with 0% coverage.
+      perFile: true,
     },
   },
 });

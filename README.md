@@ -368,7 +368,20 @@ The `contact` feature demonstrates the modern mutation pattern:
 
 ### Unit & Component Tests
 
-Components and hooks are tested in isolation with Vitest and Testing Library. Coverage thresholds are enforced at **70%**.
+Components and hooks are tested in isolation with Vitest and Testing Library.
+
+**Coverage policy:**
+
+- **Threshold:** 70% minimum for statements, branches, functions, and lines.
+- **Per-file enforcement:** `vitest.config.ts` uses `perFile: true`, meaning every individual file must meet the threshold. A single file with 100% coverage cannot mask another with 0%.
+- **Excluded from coverage:** CSS Modules (static, no executable logic), Storybook stories, MSW mocks, and test files themselves are excluded so they do not dilute the metric.
+
+**Test categories:**
+
+- **Rendering:** Every component verifies correct DOM output and accessibility roles.
+- **Interaction:** Components with keyboard support (Modal, Select) include tests for `Escape`, `Tab`, `ArrowDown`, `ArrowUp`, and `Enter`.
+- **State:** Hooks and context providers verify state transitions and side effects.
+- **i18n:** `i18n/config.ts` is tested to ensure locale loading and fallback behaviour.
 
 ### API Mocking with MSW
 
@@ -525,14 +538,15 @@ GitHub Actions runs on **push and pull requests to `main`**.
 
 ```
 quality ──┬──▶ storybook
-          ├──▶ build ──▶ e2e
-test    ──┘
+          ├──▶ test ──▶ coverage
+          └──▶ build ──▶ e2e
 ```
 
 | Job           | Description                                                                                                  |
 | ------------- | ------------------------------------------------------------------------------------------------------------ |
 | **quality**   | format check → lint → typecheck → security audit → commitlint validation (PR only)                           |
-| **test**      | full unit/component suite with v8 coverage report; coverage artifact uploaded (7-day retention)              |
+| **test**      | unit/component suite (Vitest, no coverage thresholds)                                                        |
+| **coverage**  | same test suite with v8 coverage report and threshold enforcement; HTML report uploaded as artifact          |
 | **storybook** | static Storybook build to catch configuration or story errors                                                |
 | **build**     | production build; bundle-size summary posted to job summary; build artifact packaged as tarball and uploaded |
 | **e2e**       | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)           |
@@ -542,6 +556,10 @@ test    ──┘
 - Jobs that upload or download artifacts are granted `actions: write` permissions.
 - Build and report artifacts are retained for **7 days**.
 - `.next/cache` is cached between runs using `actions/cache@v4`.
+
+### Coverage Artifacts
+
+The `coverage` job generates an HTML report and uploads it as a downloadable artifact. This allows reviewers to inspect per-file coverage without running tests locally. The report is available from the GitHub Actions "Summary" tab for any workflow run.
 
 ### Concurrency
 
@@ -622,3 +640,13 @@ Next.js 16 renamed the legacy `middleware.ts` convention to `proxy.ts`. **Do not
 ### `npm ci` failures with peer dependencies
 
 If you see `ERESOLVE` errors during `npm ci`, check `.github/dependabot.yml` for any `ignore` rules that document known ecosystem incompatibilities. Never use `--legacy-peer-deps` or `--force` as a workaround; the correct fix is to wait for the upstream plugin to support the newer version, or to pin the dependency range in `package.json`.
+
+### Coverage policy
+
+- **CSS Modules** (`*.module.css`) are excluded from coverage because they contain no executable JavaScript logic. Including them would artificially lower the metric.
+- **Per-file thresholds** are enforced. If you add a new file, it must reach 70% coverage on its own. You cannot rely on other files to compensate.
+- **Console output in tests:** If a component intentionally logs to `console.error` (e.g. an error boundary), wrap the render in a `vi.spyOn(console, 'error').mockImplementation(() => {})` to prevent Vitest from treating it as a test runner error.
+
+### Lint-staged performance
+
+ESLint and Stylelint run with `--cache` in the pre-commit hook. The first commit after cloning may take longer as caches are built; subsequent commits are significantly faster. Cache files (`.eslintcache`, `.stylelintcache`) are gitignored and safe to delete at any time.

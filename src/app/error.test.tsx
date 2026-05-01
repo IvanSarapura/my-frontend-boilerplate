@@ -5,6 +5,7 @@ import ErrorComponent from './error';
 
 describe('Error boundary', () => {
   it('renders error message and reset button', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     vi.stubEnv('NODE_ENV', 'production');
     const error = new Error('Test error');
     const reset = vi.fn();
@@ -17,14 +18,17 @@ describe('Error boundary', () => {
       screen.getByRole('button', { name: /try again/i }),
     ).toBeInTheDocument();
     vi.unstubAllEnvs();
+    consoleSpy.mockRestore();
   });
 
   it('calls reset when clicking the button', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const error = new Error('Test error');
     const reset = vi.fn();
     render(<ErrorComponent error={error} reset={reset} />);
     fireEvent.click(screen.getByRole('button', { name: /try again/i }));
     expect(reset).toHaveBeenCalledTimes(1);
+    consoleSpy.mockRestore();
   });
 
   it('logs error to console', () => {
