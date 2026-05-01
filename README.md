@@ -19,6 +19,7 @@ A professional, minimal Next.js frontend boilerplate with a complete DX and CI/C
 | Husky           | 9       | Git hooks                         |
 | lint-staged     | 16      | Pre-commit quality checks         |
 | commitlint      | 19      | Conventional commit enforcement   |
+| stylelint       | 17      | CSS linting (standard config)     |
 
 ## Getting Started
 
@@ -52,6 +53,8 @@ Open [http://localhost:3000](http://localhost:3000).
 | `npm run test:coverage` | Run tests with coverage report   |
 | `npm run test:e2e`      | Run Playwright E2E tests         |
 | `npm run test:e2e:ui`   | Open Playwright UI mode          |
+| `npm run stylelint`     | Lint CSS files with stylelint    |
+| `npm run stylelint:fix` | Auto-fix stylelint violations    |
 
 ## Environment Variables
 
@@ -77,48 +80,62 @@ chore: upgrade vitest to v4
 
 **Allowed types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`, `ci`, `build`, `revert`
 
+## Internationalisation
+
+Routes are locale-prefixed: `/en/...` (English, default) and `/es/...` (Spanish).  
+Visiting `/` redirects to `/en` automatically via `src/proxy.ts`.
+
+To add a new locale:
+
+1. Add it to `locales` in `src/i18n/config.ts`
+2. Create `src/i18n/messages/<locale>.json`
+3. Add a loader entry in `src/app/[locale]/dictionaries.ts`
+
 ## Project Structure
 
 ```
 src/
   app/
-    api/health/route.ts      # Health check endpoint → GET /api/health
-    posts/
-      page.tsx               # Posts via JSONPlaceholder API (use cache + cacheLife)
-      posts.module.css
-      mock/
-        page.tsx             # Posts from local static data
-        mock-data.ts         # Static mock dataset
-    layout.tsx               # Root layout — OG/Twitter metadata, skip-to-content
-    page.tsx                 # Home page
+    [locale]/
+      dictionaries.ts        # server-only message loader (per locale)
+      layout.tsx             # locale validation + generateStaticParams
+      page.tsx               # Home page (translated)
+      error.tsx              # Error boundary (Client Component)
+      not-found.tsx          # 404 page
+      loading.tsx            # Loading spinner
+      posts/
+        page.tsx             # Posts via JSONPlaceholder API (use cache)
+    api/health/route.ts      # Health check → GET /api/health
+    layout.tsx               # Root layout — JSON-LD, OG metadata, fonts
     globals.css              # @layer reset/base/utilities + CSS design tokens
-    error.tsx                # Error boundary (Client Component)
-    not-found.tsx            # 404 page
-    loading.tsx              # Loading state with accessible spinner
+    error.tsx                # Global fallback error boundary
+    not-found.tsx            # Global 404
     manifest.ts              # Web app manifest
     robots.ts                # robots.txt
     sitemap.ts               # sitemap.xml
     opengraph-image.tsx      # Auto-generated OG image (ImageResponse)
   components/
     ui/
-      button.tsx             # Button component (primary / secondary / ghost)
+      button.tsx             # Button (primary / secondary / ghost × sm / md / lg)
     layouts/
       container.tsx          # Responsive max-width container
   hooks/
     use-media-query.ts       # Reactive media query hook
     use-toggle.ts            # Boolean toggle with explicit setter
   i18n/
-    config.ts                # Locale types + getMessages() loader
+    config.ts                # Locale types, defaultLocale, getMessages()
     messages/en.json
     messages/es.json
   lib/
-    env.ts                   # Zod env schema (throws on invalid config)
-    utils.ts                 # cx() utility for conditional CSS classes
-    json-ld.ts               # generateWebsiteJsonLd() for structured data
+    env.ts                   # Zod env schema — throws on invalid config at startup
+    utils.ts                 # cx() for conditional CSS classes
+    json-ld.ts               # generateWebsiteJsonLd() structured data helper
+  proxy.ts                   # Locale routing — redirects / → /en
   types/
     index.ts                 # Shared TypeScript utility types
 e2e/
-  home.spec.ts               # Playwright E2E — homepage title + heading
+  home.spec.ts               # Locale routing + heading assertions
+  smoke.spec.ts              # Health endpoint + 404 + skip-link
 ```
 
 ## CI/CD
@@ -127,13 +144,14 @@ GitHub Actions runs on push/PR to `main` and `develop`.
 
 ```
 quality ──┐
-           ├──▶ build
+           ├──▶ build ──▶ e2e
 test    ──┘
 ```
 
-- **quality** — format check → lint → typecheck → security audit → commitlint (PR only)
-- **test** — full test suite with v8 coverage (artifact uploaded, 7-day retention)
-- **build** — production build (runs only if both quality and test pass)
+- **quality** — format check → lint → stylelint → typecheck → security audit → commitlint (PR only)
+- **test** — full unit suite with v8 coverage (artifact uploaded, 7-day retention)
+- **build** — production build; bundle-size summary posted to job summary; build artifact uploaded
+- **e2e** — Playwright Chromium tests against the built artifact; report uploaded (7-day retention)
 
 `.next/cache` is cached between runs using `actions/cache@v4` keyed on `package-lock.json` + source files.
 

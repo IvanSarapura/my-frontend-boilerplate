@@ -9,7 +9,10 @@ describe('Error boundary', () => {
     const reset = vi.fn();
     render(<ErrorComponent error={error} reset={reset} />);
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-    expect(screen.getByText('Test error')).toBeInTheDocument();
+    // NODE_ENV=test is not 'development', so the generic message is shown
+    expect(
+      screen.getByText('An unexpected error occurred. Please try again later.'),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: /try again/i }),
     ).toBeInTheDocument();

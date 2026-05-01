@@ -19,10 +19,13 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
+    "stylelint": "stylelint \"src/**/*.css\"",
+    "stylelint:fix": "stylelint \"src/**/*.css\" --fix",
     "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx,mts}": "eslint --fix",
+    "*.css": "stylelint --fix",
     "*.{ts,tsx,mts,css,json,md}": "prettier --write"
   },
   "dependencies": {
@@ -56,6 +59,8 @@
     "jsdom": "^29.1.0",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.3",
+    "stylelint": "^17.9.1",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "^5",
     "vitest": "^4.1.5"
   }

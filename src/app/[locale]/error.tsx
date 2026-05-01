@@ -2,11 +2,11 @@
 
 import { useEffect } from 'react';
 
-import styles from './error.module.css';
+import styles from '../error.module.css';
 
 const isDev = process.env.NODE_ENV === 'development';
 
-export default function Error({
+export default function LocaleError({
   error,
   reset,
 }: {
@@ -14,7 +14,6 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Replace with your error monitoring service (e.g. Sentry.captureException(error))
     console.error('[Error boundary]', error);
   }, [error]);
 

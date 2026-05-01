@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { env } from '@/lib/env';
+import { generateWebsiteJsonLd } from '@/lib/json-ld';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -47,15 +48,31 @@ export const metadata: Metadata = {
     title: env.NEXT_PUBLIC_APP_NAME,
     description: APP_DESCRIPTION,
   },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = generateWebsiteJsonLd({
+    name: env.NEXT_PUBLIC_APP_NAME,
+    url: env.NEXT_PUBLIC_APP_URL,
+    description: APP_DESCRIPTION,
+  });
+
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body>
         <a href="#main-content" className="sr-only">
           Skip to main content
