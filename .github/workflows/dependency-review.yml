@@ -1,0 +1,39 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  dependency-review:
+    name: Scan PR dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          # Fail on any vulnerability, even low severity.
+          # The project security posture is strict: no new vulnerable
+          # dependencies may be introduced via PR.
+          fail-on-severity: low
+
+          # Only scan runtime and development scopes.
+          # Unknown scopes are treated as suspicious.
+          fail-on-scopes: runtime, development
+
+          # Show OpenSSF Scorecard scores for added dependencies
+          # so reviewers can evaluate supply-chain health at a glance.
+          show-openssf-scorecard: true
+
+          # Post a summary comment to the PR when vulnerabilities are found.
+          # Requires pull-requests: write permission.
+          comment-summary-in-pr: on-failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

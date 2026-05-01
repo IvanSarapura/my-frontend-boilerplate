@@ -250,6 +250,22 @@ Dependabot is configured to keep dependencies up to date without creating noise.
 
 This means you receive **at most 2 PRs per month** from Dependabot, each with a clean `chore(deps)` prefix. If you prefer manual control, delete `.github/dependabot.yml` and run `npm audit` periodically.
 
+### Peer dependency protection
+
+`.npmrc` enforces `strict-peer-deps=true`. This hardens npm so that any peer dependency conflict (for example, a plugin that does not yet support a new major version of its host package) fails the install immediately instead of silently producing a broken dependency tree.
+
+> **Why this matters:** Without `strict-peer-deps`, npm 7+ attempts to auto-resolve peer conflicts. This can result in a lockfile that installs successfully but contains incompatible versions that break at runtime. The strict flag forces the issue to surface during `npm ci`, protecting both CI and local development.
+
+### Dependency Review (PR security gate)
+
+Every Pull Request triggers a `dependency-review` job that scans added or updated dependencies for:
+
+- **Known vulnerabilities** (GitHub Advisory Database)
+- **Invalid or unexpected open-source licenses**
+- **Low OpenSSF Scorecard scores** (supply-chain health)
+
+If the PR introduces a vulnerable package, the check fails and a summary comment is posted to the PR. This prevents broken or insecure dependency updates from ever reaching `main`, complementing the `ignore` rules in `dependabot.yml`.
+
 > **Note:** Dependabot branches are deleted automatically when their PR is closed or merged. If old branches remain, remove them manually from the repo settings.
 
 ## CI/CD
