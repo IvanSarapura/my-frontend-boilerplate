@@ -26,6 +26,8 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)',
+    // Exclude API routes, static assets, image optimizations, metadata files,
+    // and automatically-generated manifests / OG images from locale routing.
+    '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|manifest.webmanifest|opengraph-image).*)',
   ],
 };
