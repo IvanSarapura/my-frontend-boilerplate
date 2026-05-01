@@ -52,6 +52,7 @@ export function Modal({
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
           ),
         );
+        /* v8 ignore next -- modal always renders a close button */
         if (focusable.length === 0) return;
         const first = focusable[0]!;
         const last = focusable[focusable.length - 1]!;

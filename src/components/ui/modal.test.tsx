@@ -78,4 +78,43 @@ describe('Modal', () => {
     );
     expect(screen.getByRole('button', { name: 'Action' })).toBeInTheDocument();
   });
+
+  it('renders footer when provided', () => {
+    render(
+      <Modal
+        open
+        title="T"
+        onClose={vi.fn()}
+        footer={<button type="button">Save</button>}
+      >
+        Content
+      </Modal>,
+    );
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+  });
+
+  it('wraps Tab forward: from last focusable element back to first', () => {
+    render(
+      <Modal open title="T" onClose={vi.fn()}>
+        <button type="button">Inner</button>
+      </Modal>,
+    );
+    // Focusable order: "Close dialog" (index 0), "Inner" (index 1)
+    screen.getByRole('button', { name: 'Inner' }).focus();
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: false });
+    expect(document.activeElement).toBe(screen.getByLabelText('Close dialog'));
+  });
+
+  it('wraps Shift+Tab backward: from first focusable element to last', () => {
+    render(
+      <Modal open title="T" onClose={vi.fn()}>
+        <button type="button">Inner</button>
+      </Modal>,
+    );
+    screen.getByLabelText('Close dialog').focus();
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+    expect(document.activeElement).toBe(
+      screen.getByRole('button', { name: 'Inner' }),
+    );
+  });
 });

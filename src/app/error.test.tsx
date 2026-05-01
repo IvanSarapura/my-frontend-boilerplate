@@ -38,4 +38,14 @@ describe('Error boundary', () => {
     expect(consoleSpy).toHaveBeenCalledWith('[Error boundary]', error);
     consoleSpy.mockRestore();
   });
+
+  it('shows raw error message in development', () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    vi.stubEnv('NODE_ENV', 'development');
+    const error = new Error('Detailed dev message');
+    render(<ErrorComponent error={error} reset={vi.fn()} />);
+    expect(screen.getByText('Detailed dev message')).toBeInTheDocument();
+    vi.unstubAllEnvs();
+    consoleSpy.mockRestore();
+  });
 });

@@ -4,8 +4,6 @@ import { useEffect } from 'react';
 
 import styles from './error.module.css';
 
-const isDev = process.env.NODE_ENV === 'development';
-
 export default function Error({
   error,
   reset,
@@ -22,7 +20,7 @@ export default function Error({
     <div className={styles.container}>
       <h1 className={styles.title}>Something went wrong</h1>
       <p className={styles.message}>
-        {isDev
+        {process.env.NODE_ENV === 'development'
           ? error.message
           : 'An unexpected error occurred. Please try again later.'}
       </p>

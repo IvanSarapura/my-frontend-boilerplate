@@ -3,6 +3,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 import LocalePage from './page';
 
+vi.mock('next/navigation', () => ({
+  notFound: vi.fn(),
+}));
+
 vi.mock('./dictionaries', () => ({
   getDictionary: vi.fn().mockResolvedValue({
     home: { title: 'Frontend Boilerplate', subtitle: 'Next.js · TypeScript' },
@@ -28,5 +32,11 @@ describe('Locale home page', () => {
     });
     render(jsx);
     expect(screen.getByText('Next.js · TypeScript')).toBeInTheDocument();
+  });
+
+  it('calls notFound for an unknown locale', async () => {
+    const { notFound } = await import('next/navigation');
+    await LocalePage({ params: Promise.resolve({ locale: 'fr' }) });
+    expect(notFound).toHaveBeenCalledTimes(1);
   });
 });
