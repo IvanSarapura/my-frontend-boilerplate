@@ -211,9 +211,50 @@ e2e/
 
 > **Note on `src/proxy.ts`:** Next.js 16 renamed the legacy `middleware.ts` convention to `proxy.ts`. Do not rename this file to `middleware` — it will not be recognised by the framework.
 
+## Branching Strategy
+
+This repository follows **GitHub Flow** (not Git Flow). There is no `develop` branch.
+
+```
+feature/my-change  ──▶  Pull Request  ──▶  main
+                               │
+                               ▼
+                    CI runs: format, lint,
+                    typecheck, test, build, e2e
+```
+
+### Why no `develop` branch?
+
+In modern CI/CD, a long-lived `develop` branch creates more problems than it solves:
+
+- **Delayed integration**: Changes sit in `develop` for days or weeks, increasing merge risk.
+- **Double maintenance**: You must keep CI green on two branches instead of one.
+- **Decision fatigue**: Contributors constantly ask "do I target `develop` or `main`?"
+- **Obsolete model**: Vincent Driessen, creator of Git Flow (2010), no longer recommends it for most teams.
+
+Instead, **Pull Requests to `main` act as your quality gate**. The CI pipeline runs the full suite before anything can merge. If you need a staging environment, use deploy previews (Vercel, Netlify, Cloudflare Pages) or a dedicated `staging` branch — not `develop`.
+
+### Protected branches
+
+- **`main`** requires CI to pass before merging.
+- Force-pushes to `main` are disabled.
+
+## Dependency Management
+
+Dependabot is configured to keep dependencies up to date without creating noise.
+
+| Ecosystem                      | Frequency | Grouping                          | Max open PRs |
+| ------------------------------ | --------- | --------------------------------- | ------------ |
+| **npm** (package.json)         | Monthly   | All dependencies in a single PR   | 1            |
+| **GitHub Actions** (workflows) | Monthly   | All action updates in a single PR | 1            |
+
+This means you receive **at most 2 PRs per month** from Dependabot, each with a clean `chore(deps)` prefix. If you prefer manual control, delete `.github/dependabot.yml` and run `npm audit` periodically.
+
+> **Note:** Dependabot branches are deleted automatically when their PR is closed or merged. If old branches remain, remove them manually from the repo settings.
+
 ## CI/CD
 
-GitHub Actions runs on push/PR to `main` and `develop`.
+GitHub Actions runs on push and pull requests to `main`.
 
 ```
 quality ──┐
@@ -221,12 +262,12 @@ quality ──┐
 test    ──┘
 ```
 
-| Job         | What it does                                                                                                         |
-| ----------- | -------------------------------------------------------------------------------------------------------------------- |
-| **quality** | format check → lint → typecheck → security audit → commitlint validation (PR only)                                   |
-| **test**    | full unit/component suite with v8 coverage report; coverage artifact uploaded (7-day retention)                      |
-| **build**   | production build; bundle-size summary posted to job summary; build artifact uploaded with `if-no-files-found: error` |
-| **e2e**     | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)                   |
+| Job         | What it does                                                                                                 |
+| ----------- | ------------------------------------------------------------------------------------------------------------ |
+| **quality** | format check → lint → typecheck → security audit → commitlint validation (PR only)                           |
+| **test**    | full unit/component suite with v8 coverage report; coverage artifact uploaded (7-day retention)              |
+| **build**   | production build; bundle-size summary posted to job summary; build artifact packaged as tarball and uploaded |
+| **e2e**     | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)           |
 
 ### Artifact strategy
 
