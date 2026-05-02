@@ -23,6 +23,7 @@
 - [Development Workflow](#development-workflow)
   - [Branching Model](#branching-model)
   - [Making Changes](#making-changes)
+  - [Adding a New Feature](#adding-a-new-feature)
   - [Pre-commit Checks](#pre-commit-checks)
 - [Commit Message Guidelines](#commit-message-guidelines)
   - [Format](#format)
@@ -133,6 +134,7 @@ src/features/<name>/
 - A feature must export its public API via `index.ts`.
 - Components inside a feature can import from `components/ui/` but not from other features.
 - If logic is needed by multiple features, move it to `lib/` or `components/ui/`.
+- If your feature fetches data at the page level, use async Server Components with the `use cache` directive instead of `useEffect` or client-side fetching.
 
 ### Pre-commit Checks
 
@@ -145,17 +147,19 @@ This project uses **Husky** and **lint-staged** to enforce quality before every 
 
 **What lint-staged runs:**
 
-- **ESLint** (`--fix`) on `*.{ts,tsx,mts}`
+- **ESLint** (`--fix --cache`) on `*.{ts,tsx,mts}`
+- **Stylelint** (`--fix --cache`) on `*.css`
 - **Prettier** (`--write`) on `*.{ts,tsx,mts,css,json,md}`
-- **Stylelint** (`--fix`) on `*.css`
 
-> **Tip:** If you need to bypass hooks in an emergency (not recommended), use `git commit --no-verify`. You will still need to fix issues before the PR can merge.
+Caches (`.eslintcache`, `.stylelintcache`) are gitignored. The first commit after cloning builds them; subsequent commits are significantly faster.
+
+> **Emergency bypass (not recommended):** `git commit --no-verify`. You will still need to fix issues before the CI pipeline allows the PR to merge.
 
 ---
 
 ## Commit Message Guidelines
 
-We enforce [Conventional Commits](https://www.conventionalcommits.org/). This standard enables automatic changelog generation and clear history.
+We enforce [Conventional Commits](https://www.conventionalcommits.org/). This standard enables automatic changelog generation and a clear, queryable history.
 
 ### Format
 
@@ -271,15 +275,16 @@ npm run stylelint
 # Run unit and component tests
 npm test
 
-# Run with coverage report
+# Run with coverage report (enforces per-file thresholds)
 npm run test:coverage
 
 # Run in watch mode (useful during development)
 npm run test:watch
 
-# Run E2E tests (requires dev server running in another terminal)
-npm run dev          # Terminal 1
-npm run test:e2e     # Terminal 2
+# Run E2E tests against a production build
+npm run build       # Terminal 1: build once
+npm start           # Terminal 1: serve the build
+npm run test:e2e    # Terminal 2: run Playwright
 
 # Open Playwright UI mode for debugging
 npm run test:e2e:ui
@@ -288,7 +293,7 @@ npm run test:e2e:ui
 npm run storybook:build
 ```
 
-> **Coverage thresholds:** The project enforces a minimum coverage threshold. If your PR reduces coverage significantly, you may need to add tests.
+> **Coverage thresholds:** Every file must individually reach 70% coverage for statements, branches, functions, and lines. If you add a new file, add matching tests. You cannot rely on other files to compensate.
 
 ### Build Verification
 
@@ -307,7 +312,10 @@ ls -la .next/
 ### Before Submitting
 
 - [ ] Branch is up to date with `main` (`git pull origin main`)
-- [ ] All local quality checks pass (`npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run storybook:build`)
+- [ ] All local quality checks pass:
+  ```bash
+  npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run storybook:build
+  ```
 - [ ] Commit messages follow Conventional Commits
 - [ ] Changes are focused and atomic (one concern per PR)
 - [ ] Tests added or updated for new functionality
@@ -315,29 +323,33 @@ ls -la .next/
 
 ### PR Requirements
 
-1. **Use the PR template** (if available) or provide:
-   - A clear description of what changed and why
-   - Steps to test or verify the change
-   - Screenshots or GIFs for UI changes
-   - References to related issues (`Closes #123`, `Relates to #456`)
+This repository includes a **PR template** (`.github/pull_request_template.md`) that is auto-populated when you open a pull request on GitHub. Fill in all sections:
 
-2. **Keep PRs small and focused.** A PR that touches 50 files and adds 3 unrelated features is hard to review. Split large changes into multiple PRs.
+- **Summary** — what changed and why
+- **Changes** — a bullet list of the specific modifications
+- **Test Plan** — which checks you ran locally
 
-3. **All CI jobs must pass.** The pipeline runs:
-   - Format / Lint / Typecheck
-   - Unit tests with coverage
+Additionally:
+
+1. **Keep PRs small and focused.** A PR that touches 50 files and adds 3 unrelated features is hard to review. Split large changes into multiple PRs.
+
+2. **All CI jobs must pass.** The pipeline runs:
+   - Format / Lint / Typecheck / Security audit
+   - Unit tests and per-file coverage thresholds
    - Storybook build
    - Production build
-   - E2E tests
+   - Playwright E2E tests
    - Dependency security review
-   - Commit message validation
+   - Commit message validation (PR only)
+
+3. **Add screenshots or screen recordings** for any visible UI changes.
 
 ### Review Process
 
 - A maintainer will review your PR as soon as possible.
 - Address review feedback with additional commits on the same branch.
 - Once approved and CI is green, a maintainer will merge.
-- **Do not force-push** after review has started — it makes it harder to track changes.
+- **Do not force-push** after review has started — it makes diff tracking harder.
 
 ---
 
@@ -349,7 +361,7 @@ Found a bug or have a suggestion? We'd love to hear it.
 2. **Open a new issue** with:
    - A clear, descriptive title
    - Steps to reproduce (for bugs)
-   - Expected vs. actual behavior (for bugs)
+   - Expected vs. actual behaviour (for bugs)
    - Your environment (Node version, OS, browser if relevant)
    - Screenshots or code snippets if applicable
 
@@ -366,7 +378,7 @@ This project adheres to a standard of respectful, constructive collaboration:
 - Accept constructive criticism gracefully.
 - Focus on what is best for the project and its users.
 
-Harassment, trolling, or discriminatory behavior of any kind will not be tolerated.
+Harassment, trolling, or discriminatory behaviour of any kind will not be tolerated.
 
 ---
 

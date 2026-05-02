@@ -42,7 +42,7 @@
   - [Custom Design System](#custom-design-system)
   - [Type-Safe API Client](#type-safe-api-client)
 - [Data Fetching & State Management](#data-fetching--state-management)
-  - [Server Components](#server-components)
+  - [Server Components & use cache](#server-components--use-cache)
   - [TanStack Query](#tanstack-query)
   - [Server Actions + React Hook Form](#server-actions--react-hook-form)
 - [Testing Strategy](#testing-strategy)
@@ -85,16 +85,16 @@ Key principles:
 
 | Feature                        | Description                                                   |
 | ------------------------------ | ------------------------------------------------------------- |
-| **Next.js 16 App Router**      | Server Components by default, React 19, Turbopack             |
+| **Next.js 16 App Router**      | Server Components by default, React 19, React Compiler        |
 | **Domain-Driven Architecture** | `src/features/` keeps business logic organized and scalable   |
 | **Custom Design System**       | 9 primitive UI components built from scratch with CSS Modules |
 | **Type-Safe API Client**       | Generic `fetch` wrapper with optional Zod runtime validation  |
 | **Server Actions**             | Modern form mutations with validation end-to-end              |
 | **React Hook Form**            | Performant form handling integrated with Zod                  |
 | **TanStack Query**             | Client-side server state with prefetching and caching         |
-| **i18n (en/es)**               | Locale-prefixed routes with dictionary loading                |
+| **i18n (en/es)**               | Locale-prefixed routes with `Accept-Language` detection       |
 | **MSW**                        | Deterministic tests by mocking network requests               |
-| **Storybook**                  | Living styleguide for every UI primitive                      |
+| **Storybook**                  | Living styleguide with a11y audits and Chromatic integration  |
 | **Complete SEO**               | JSON-LD, Open Graph, sitemap, robots, manifest                |
 | **Security Headers**           | CSP, HSTS, X-Frame-Options, Permissions-Policy                |
 | **3-Level Testing**            | Unit (Vitest), Component (Testing Library), E2E (Playwright)  |
@@ -170,7 +170,7 @@ npm run storybook   # Opens at http://localhost:6006
 
 | Script                    | Description                           |
 | ------------------------- | ------------------------------------- |
-| `npm run dev`             | Start development server (Turbopack)  |
+| `npm run dev`             | Start development server              |
 | `npm run build`           | Build for production                  |
 | `npm start`               | Start production server               |
 | `npm run lint`            | Run ESLint across the project         |
@@ -197,7 +197,8 @@ my-frontend-boilerplate/
 │   ├── workflows/
 │   │   ├── ci.yml                   # Main CI pipeline
 │   │   └── dependency-review.yml    # PR dependency security scan
-│   └── dependabot.yml               # Automated dependency updates
+│   ├── dependabot.yml               # Automated dependency updates
+│   └── pull_request_template.md     # PR description template
 ├── .storybook/                      # Storybook configuration
 │   ├── main.ts
 │   └── preview.ts
@@ -278,7 +279,7 @@ my-frontend-boilerplate/
 │   ├── mocks/
 │   │   ├── handlers.ts              # MSW request handlers
 │   │   └── node.ts                  # MSW server setup for Vitest
-│   ├── proxy.ts                     # Locale routing — redirects / → /en
+│   ├── proxy.ts                     # Locale routing — detects Accept-Language, redirects to /[locale]
 │   └── types/
 │       └── index.ts
 ├── .env.local.example
@@ -344,9 +345,20 @@ const user = await apiClient('/api/user', { schema: userSchema });
 
 ## Data Fetching & State Management
 
-### Server Components
+### Server Components & `use cache`
 
-The default in Next.js 16. Use `async` Server Components + `fetch` for data needed at page load. The `posts` feature demonstrates this with `cacheLife('minutes')` for ISR-like caching.
+The default in Next.js 16. Use `async` Server Components and `fetch` for data needed at page load. The `posts` feature demonstrates this with the `use cache` directive and `cacheLife('minutes')` for fine-grained ISR-like caching per component:
+
+```ts
+// src/app/[locale]/posts/page.tsx
+async function fetchPosts() {
+  'use cache';
+  cacheLife('minutes');
+  return apiClient('https://api.example.com/posts');
+}
+```
+
+This is enabled by `cacheComponents: true` in `next.config.ts`.
 
 ### TanStack Query
 
@@ -412,8 +424,10 @@ npm run storybook:build  # Static build for deployment
 ```
 
 - **Co-located stories:** `button.tsx` → `button.stories.tsx`
-- **Accessible by default:** `@storybook/addon-a11y` audits WCAG violations
+- **Accessible by default:** `@storybook/addon-a11y` audits WCAG violations on every story
+- **In-browser Vitest:** `@storybook/addon-vitest` runs the unit test suite inside the Storybook UI
 - **Design tokens:** Storybook imports `globals.css` so components render with the exact same tokens as the app
+- **Chromatic ready:** `@chromatic-com/storybook` is installed for visual regression testing and UI review
 
 ### Why `:6006`?
 
@@ -532,14 +546,15 @@ chore(deps): upgrade vitest to v4.1.5
 
 ## CI / CD
 
-GitHub Actions runs on **push and pull requests to `main`**.
+GitHub Actions runs on **push and pull requests to `main` and `develop`**.
 
 ### Pipeline
 
 ```
 quality ──┬──▶ storybook
-          ├──▶ test ──▶ coverage
-          └──▶ build ──▶ e2e
+          ├──▶ test ──▶ coverage ──┐
+          │                        ▼
+          └──▶ ─────────────────▶ build ──▶ e2e
 ```
 
 | Job           | Description                                                                                                  |
@@ -590,7 +605,7 @@ Every Pull Request triggers a `dependency-review` job that scans added or update
 
 ## Branching Strategy
 
-This repository follows **GitHub Flow** (not Git Flow). There is no `develop` branch.
+This repository follows **GitHub Flow** (not Git Flow). There is no long-lived `develop` branch for features.
 
 ```
 feature/my-change  ──▶  Pull Request  ──▶  main
@@ -607,8 +622,9 @@ feature/my-change  ──▶  Pull Request  ──▶  main
 
 ## Internationalisation
 
-Routes are locale-prefixed: `/en/...` (English, default) and `/es/...` (Spanish).  
-Visiting `/` redirects to `/en` automatically via `src/proxy.ts`.
+Routes are locale-prefixed: `/en/...` (English, default) and `/es/...` (Spanish).
+
+Visiting `/` triggers `src/proxy.ts`, which reads the `Accept-Language` request header and redirects to the best-matching locale (falling back to `en` when the browser preference is not supported).
 
 ### Adding a New Locale
 
@@ -635,11 +651,15 @@ Variables are validated at startup with Zod (`src/lib/env.ts`). Missing or malfo
 
 ### `src/proxy.ts`
 
-Next.js 16 renamed the legacy `middleware.ts` convention to `proxy.ts`. **Do not rename this file to `middleware`** — it will not be recognised by the framework.
+Next.js 16 uses `proxy.ts` (exporting a `proxy` function) instead of the legacy `middleware.ts` convention. **Do not rename this file or its export** — the framework will not recognise it.
+
+The `proxy` function reads the `Accept-Language` header to detect the visitor's preferred locale and redirects `/(path)` to `/[locale]/(path)` before the request reaches any page. API routes, static assets, and metadata files are excluded via the `matcher` config.
 
 ### `npm ci` failures with peer dependencies
 
 If you see `ERESOLVE` errors during `npm ci`, check `.github/dependabot.yml` for any `ignore` rules that document known ecosystem incompatibilities. Never use `--legacy-peer-deps` or `--force` as a workaround; the correct fix is to wait for the upstream plugin to support the newer version, or to pin the dependency range in `package.json`.
+
+> **ESLint v9 pin:** `eslint-plugin-import` does not yet support ESLint v10. Dependabot's major-version bump for ESLint is blocked in `.github/dependabot.yml` until upstream compatibility is confirmed. Do not manually upgrade ESLint past v9.
 
 ### Coverage policy
 
