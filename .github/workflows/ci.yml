@@ -53,7 +53,10 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Security audit
+      - name: Security audit — production dependencies
+        run: npm audit --audit-level=high --omit=dev
+
+      - name: Security audit — all dependencies
         run: npm audit --audit-level=high
 
       - name: Validate commit messages
