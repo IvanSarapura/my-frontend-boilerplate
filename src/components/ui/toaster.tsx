@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useToast } from '@/components/providers/toast-provider';
 import { cx } from '@/lib/utils';
 
-import { useToast } from './toast-context';
 import styles from './toaster.module.css';
 
 function useIsClient() {

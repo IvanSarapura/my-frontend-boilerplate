@@ -26,8 +26,7 @@ export function proxy(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Exclude API routes, static assets, image optimizations, metadata files,
-    // and automatically-generated manifests / OG images from locale routing.
+    // skip Next.js internals, static assets, and metadata files — locale redirect for real pages only
     '/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|manifest.webmanifest|opengraph-image).*)',
   ],
 };

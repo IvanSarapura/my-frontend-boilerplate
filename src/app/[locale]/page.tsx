@@ -2,9 +2,9 @@ import { notFound } from 'next/navigation';
 
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
+import { getDictionary } from '@/i18n/dictionaries';
 
 import styles from '../page.module.css';
-import { getDictionary } from './dictionaries';
 
 export default async function LocalePage({
   params,

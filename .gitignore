@@ -60,3 +60,6 @@ Thumbs.db
 
 *storybook.log
 storybook-static
+
+# agents
+.agents/

@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 import { getPosts, PostComments, PostList } from '@/features/posts';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
+import { getDictionary } from '@/i18n/dictionaries';
 
-import { getDictionary } from '../dictionaries';
 import styles from './posts.module.css';
 
 export async function generateMetadata({

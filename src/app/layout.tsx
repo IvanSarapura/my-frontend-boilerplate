@@ -4,7 +4,7 @@ import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { QueryProvider } from '@/components/providers/query-provider';
-import { ToastProvider } from '@/components/ui/toast-context';
+import { ToastProvider } from '@/components/providers/toast-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { env } from '@/lib/env';
 import { generateWebsiteJsonLd } from '@/lib/json-ld';

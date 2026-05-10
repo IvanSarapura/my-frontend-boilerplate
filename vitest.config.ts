@@ -20,9 +20,7 @@ export default defineConfig({
     },
     coverage: {
       provider: 'v8',
-      // CSS Modules contain no executable JavaScript logic; including them
-      // artificially dilutes coverage metrics. Stories, mocks, and test files
-      // are also excluded as they are not production code.
+      // css modules, stories, and mocks have no testable logic — skip them
       exclude: [
         '**/*.module.css',
         '**/*.stories.tsx',
@@ -37,8 +35,7 @@ export default defineConfig({
         functions: 70,
         branches: 70,
         statements: 70,
-        // Enforce per file so a single well-covered file cannot mask
-        // another with 0% coverage.
+        // per-file: a green aggregate can hide files with 0% coverage
         perFile: true,
       },
     },

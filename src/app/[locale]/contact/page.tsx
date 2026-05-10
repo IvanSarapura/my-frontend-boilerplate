@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 import { ContactForm } from '@/features/contact';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
+import { getDictionary } from '@/i18n/dictionaries';
 
-import { getDictionary } from '../dictionaries';
 import styles from './contact.module.css';
 
 export async function generateMetadata({

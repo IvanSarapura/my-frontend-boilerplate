@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useActionState, useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { useToast } from '@/components/providers/toast-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { useToast } from '@/components/ui/toast-context';
 
 import { submitContactAction } from '../actions';
 import type { ContactFormData } from '../schemas';

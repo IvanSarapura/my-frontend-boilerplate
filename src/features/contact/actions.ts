@@ -25,10 +25,10 @@ export async function submitContactAction(
     };
   }
 
-  // Simulate a network delay and store/forward logic
+  // TODO: remove stub delay once delivery is wired up
   await new Promise((resolve) => setTimeout(resolve, 1200));
 
-  // In a real app you would send an email or save to a database here.
+  // TODO: send via transactional email (Resend, Postmark, etc.)
 
   console.log('[Server Action] Contact form submitted:', parsed.data);
 

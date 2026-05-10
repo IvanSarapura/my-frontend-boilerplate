@@ -9,7 +9,7 @@ const securityHeaders = [
     value: 'camera=(), microphone=(), geolocation=()',
   },
   {
-    // For self-hosting. Vercel adds this automatically.
+    // Vercel sets this automatically; only needed for self-hosted deploys
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload',
   },
@@ -17,8 +17,7 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: [
       "default-src 'self'",
-      // unsafe-eval and unsafe-inline are required by Next.js dev/build tooling.
-      // For production hardening, migrate to nonce-based CSP:
+      // Next.js HMR needs unsafe-eval/inline — swap for nonce-based CSP before shipping:
       // https://nextjs.org/docs/app/building-your-application/configuring/content-security-policy
       "script-src 'self' 'unsafe-eval' 'unsafe-inline'",
       "style-src 'self' 'unsafe-inline'",

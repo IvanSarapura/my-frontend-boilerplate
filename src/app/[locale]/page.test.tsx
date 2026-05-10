@@ -7,7 +7,7 @@ vi.mock('next/navigation', () => ({
   notFound: vi.fn(),
 }));
 
-vi.mock('./dictionaries', () => ({
+vi.mock('@/i18n/dictionaries', () => ({
   getDictionary: vi.fn().mockResolvedValue({
     home: { title: 'Frontend Boilerplate', subtitle: 'Next.js · TypeScript' },
     common: {},

@@ -12,7 +12,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Replace with your error monitoring service (e.g. Sentry.captureException(error))
+    // TODO: hook into Sentry before going live
     console.error('[Error boundary]', error);
   }, [error]);
 
