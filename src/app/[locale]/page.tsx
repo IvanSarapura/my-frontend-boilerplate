@@ -4,7 +4,7 @@ import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 
-import styles from '../page.module.css';
+import styles from './page.module.css';
 
 export default async function LocalePage({
   params,
