@@ -214,7 +214,6 @@ my-frontend-boilerplate/
 │   │   │   │   ├── mock/
 │   │   │   │   │   └── page.tsx     # Mock posts page
 │   │   │   │   └── page.tsx         # Posts via JSONPlaceholder API
-│   │   │   ├── dictionaries.ts      # Server-only message loader
 │   │   │   ├── layout.tsx           # Locale validation + generateStaticParams
 │   │   │   ├── page.tsx             # Home page (translated)
 │   │   │   ├── error.tsx            # Error boundary (Client Component)
@@ -232,18 +231,18 @@ my-frontend-boilerplate/
 │   │   └── opengraph-image.tsx      # Auto-generated OG image
 │   ├── components/
 │   │   ├── providers/
-│   │   │   └── query-provider.tsx   # TanStack Query provider
-│   │   ├── ui/                      # Primitive UI components (100% custom CSS Modules)
-│   │   │   ├── badge.tsx
-│   │   │   ├── button.tsx
-│   │   │   ├── card.tsx
-│   │   │   ├── input.tsx
-│   │   │   ├── modal.tsx
-│   │   │   ├── select.tsx
-│   │   │   ├── spinner.tsx
-│   │   │   ├── textarea.tsx
-│   │   │   ├── toast-context.tsx
-│   │   │   └── toaster.tsx
+│   │   │   ├── query-provider.tsx   # TanStack Query provider
+│   │   │   └── toast-provider.tsx   # Toast context + useToast hook
+│   │   ├── ui/                      # Primitive UI components — folder-per-component
+│   │   │   ├── badge/               #   badge.tsx · badge.module.css · index.ts
+│   │   │   ├── button/              #   button.tsx · button.test.tsx · button.stories.tsx · …
+│   │   │   ├── card/
+│   │   │   ├── input/
+│   │   │   ├── modal/
+│   │   │   ├── select/
+│   │   │   ├── spinner/
+│   │   │   ├── textarea/
+│   │   │   └── toaster/
 │   │   └── layouts/
 │   │       └── container.tsx        # Responsive max-width container
 │   ├── features/                    # Domain-driven features (autocontained)
@@ -265,9 +264,11 @@ my-frontend-boilerplate/
 │   │       └── index.ts             # Public barrel exports
 │   ├── hooks/
 │   │   ├── use-media-query.ts
+│   │   ├── use-modal-behavior.ts    # Focus, keyboard, backdrop behavior for Modal
 │   │   └── use-toggle.ts
 │   ├── i18n/
 │   │   ├── config.ts
+│   │   ├── dictionaries.ts          # Server-only message loader
 │   │   ├── messages/en.json
 │   │   └── messages/es.json
 │   ├── lib/
@@ -315,6 +316,8 @@ features/
 ### Custom Design System
 
 Every primitive in `components/ui/` is built from scratch with **CSS Modules** and **design tokens** from `globals.css`. No Tailwind, no external UI libraries, zero runtime CSS-in-JS overhead.
+
+Each component lives in its own subdirectory (`button/button.tsx`, `button/button.test.tsx`, `button/button.stories.tsx`, `button/button.module.css`, `button/index.ts`). Adding a new component never pollutes the parent directory. Context providers (`QueryProvider`, `ToastProvider`) live in `components/providers/` — separate from the stateless visual primitives in `components/ui/`. Complex interactive behavior is extracted into `src/hooks/` as dedicated hooks (e.g. `useModalBehavior`), keeping components responsible for rendering only.
 
 | Component  | Purpose                              |
 | ---------- | ------------------------------------ |
@@ -557,14 +560,14 @@ quality ──┬──▶ storybook
           └──▶ ─────────────────▶ build ──▶ e2e
 ```
 
-| Job           | Description                                                                                                  |
-| ------------- | ------------------------------------------------------------------------------------------------------------ |
-| **quality**   | format check → lint → typecheck → security audit → commitlint validation (PR only)                           |
-| **test**      | unit/component suite (Vitest, no coverage thresholds)                                                        |
-| **coverage**  | same test suite with v8 coverage report and threshold enforcement; HTML report uploaded as artifact          |
-| **storybook** | static Storybook build to catch configuration or story errors                                                |
-| **build**     | production build; bundle-size summary posted to job summary; build artifact packaged as tarball and uploaded |
-| **e2e**       | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)           |
+| Job           | Description                                                                                                                             |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **quality**   | format check → lint → typecheck → security audit (prod gate: `--omit=dev`; full-tree audit: all deps) → commitlint validation (PR only) |
+| **test**      | unit/component suite (Vitest, no coverage thresholds)                                                                                   |
+| **coverage**  | same test suite with v8 coverage report and threshold enforcement; HTML report uploaded as artifact                                     |
+| **storybook** | static Storybook build to catch configuration or story errors                                                                           |
+| **build**     | production build; bundle-size summary posted to job summary; build artifact packaged as tarball and uploaded                            |
+| **e2e**       | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)                                      |
 
 ### Artifact Strategy
 
@@ -630,7 +633,7 @@ Visiting `/` triggers `src/proxy.ts`, which reads the `Accept-Language` request 
 
 1. Add it to `locales` in `src/i18n/config.ts`
 2. Create `src/i18n/messages/<locale>.json`
-3. Add a loader entry in `src/app/[locale]/dictionaries.ts`
+3. Add a loader entry in `src/i18n/dictionaries.ts`
 
 ---
 

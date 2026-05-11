@@ -3,7 +3,10 @@
 import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useToast } from '@/components/providers/toast-provider';
+import {
+  TOAST_DURATION_MS,
+  useToast,
+} from '@/components/providers/toast-provider';
 import { cx } from '@/lib/utils';
 
 import styles from './toaster.module.css';
@@ -46,6 +49,9 @@ const icons = {
   ),
 };
 
+const TOAST_FADE_START_MS = TOAST_DURATION_MS - 500;
+const TOAST_REMOVE_DELAY_MS = 200;
+
 function ToastItem({
   id,
   title,
@@ -62,13 +68,13 @@ function ToastItem({
   const [leaving, setLeaving] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLeaving(true), 4500);
+    const timer = setTimeout(() => setLeaving(true), TOAST_FADE_START_MS);
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
     if (!leaving) return;
-    const timer = setTimeout(() => onRemove(id), 200);
+    const timer = setTimeout(() => onRemove(id), TOAST_REMOVE_DELAY_MS);
     return () => clearTimeout(timer);
   }, [leaving, id, onRemove]);
 

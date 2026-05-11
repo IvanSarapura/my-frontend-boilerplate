@@ -17,6 +17,8 @@ type ToastContextValue = {
   removeToast: (id: string) => void;
 };
 
+export const TOAST_DURATION_MS = 5000;
+
 const ToastContext = createContext<ToastContextValue | null>(null);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
@@ -27,7 +29,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     setToasts((prev) => [...prev, { ...toast, id }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
-    }, 5000);
+    }, TOAST_DURATION_MS);
   }, []);
 
   const removeToast = useCallback((id: string) => {

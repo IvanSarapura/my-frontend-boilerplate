@@ -6,8 +6,8 @@ import { PostList } from './post-list';
 describe('PostList', () => {
   it('renders a list of posts', () => {
     const posts = [
-      { id: 1, title: 'One', body: 'Body one' },
-      { id: 2, title: 'Two', body: 'Body two' },
+      { id: 1, title: 'One', body: 'Body one', userId: 1 },
+      { id: 2, title: 'Two', body: 'Body two', userId: 1 },
     ];
 
     render(<PostList posts={posts} />);

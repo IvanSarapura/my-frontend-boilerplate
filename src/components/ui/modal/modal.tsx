@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { createPortal } from 'react-dom';
 
+import { useModalBehavior } from '@/hooks/use-modal-behavior';
 import { cx } from '@/lib/utils';
 
 import styles from './modal.module.css';
@@ -25,58 +26,8 @@ export function Modal({
   className,
 }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
-  const previousFocus = useRef<HTMLElement | null>(null);
 
-  useEffect(() => {
-    if (open) {
-      previousFocus.current = document.activeElement as HTMLElement;
-      const focusable = overlayRef.current?.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      focusable?.[0]?.focus();
-    } else {
-      previousFocus.current?.focus();
-    }
-  }, [open]);
-
-  useEffect(() => {
-    if (!open) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
-      if (e.key === 'Tab' && overlayRef.current) {
-        const focusable = Array.from(
-          overlayRef.current.querySelectorAll<HTMLElement>(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-          ),
-        );
-        /* v8 ignore next -- modal always renders a close button */
-        if (focusable.length === 0) return;
-        const first = focusable[0]!;
-        const last = focusable[focusable.length - 1]!;
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [open, onClose]);
-
-  useEffect(() => {
-    if (!open) return;
-    const handlePointerDown = (e: PointerEvent) => {
-      if (e.target === overlayRef.current) onClose();
-    };
-    document.addEventListener('pointerdown', handlePointerDown);
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [open, onClose]);
+  useModalBehavior(open, onClose, overlayRef);
 
   if (!open) return null;
 

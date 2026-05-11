@@ -3,6 +3,8 @@ import { z } from 'zod';
 
 import { apiClient } from '@/lib/api/client';
 
+const JSONPLACEHOLDER_API = 'https://jsonplaceholder.typicode.com';
+
 import type { Post } from '../types';
 
 const postSchema = z.object({
@@ -16,13 +18,7 @@ export async function getPosts(): Promise<Post[]> {
   'use cache';
   cacheLife('minutes');
 
-  return apiClient('https://jsonplaceholder.typicode.com/posts?_limit=10', {
+  return apiClient(`${JSONPLACEHOLDER_API}/posts?_limit=10`, {
     schema: z.array(postSchema),
   });
-}
-
-export async function getComments(postId: number) {
-  return apiClient(
-    `https://jsonplaceholder.typicode.com/posts/${postId}/comments`,
-  );
 }

@@ -1,11 +1,6 @@
+import type { Post } from '../types';
 import { PostCard } from './post-card';
 import styles from './post-list.module.css';
-
-type Post = {
-  id: number;
-  title: string;
-  body: string;
-};
 
 type PostListProps = {
   posts: Post[];

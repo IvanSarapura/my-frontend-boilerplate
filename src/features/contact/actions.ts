@@ -2,7 +2,7 @@
 
 import { contactSchema } from './schemas';
 
-type ContactState =
+export type ContactState =
   | { success: false; errors: Record<string, string[]> }
   | { success: true; message: string };
 
@@ -25,12 +25,7 @@ export async function submitContactAction(
     };
   }
 
-  // TODO: remove stub delay once delivery is wired up
-  await new Promise((resolve) => setTimeout(resolve, 1200));
-
   // TODO: send via transactional email (Resend, Postmark, etc.)
-
-  console.log('[Server Action] Contact form submitted:', parsed.data);
 
   return {
     success: true,
