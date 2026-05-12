@@ -1,0 +1,144 @@
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.labelText {
+  font-size: var(--text-sm);
+  color: var(--foreground);
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Track container (the <label> element) */
+.switch {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+/* Sizes */
+.sm {
+  width: 40px;
+  height: 22px;
+}
+
+.md {
+  width: 52px;
+  height: 28px;
+}
+
+.lg {
+  width: 64px;
+  height: 36px;
+}
+
+/* Hidden native checkbox — full-size overlay keeps it interactive */
+.input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* Visual track */
+.slider {
+  position: absolute;
+  inset: 0;
+  background-color: var(--card-border);
+  transition:
+    background-color 0.25s ease,
+    box-shadow 0.15s ease;
+  pointer-events: none;
+}
+
+/* Thumb */
+.slider::before {
+  position: absolute;
+  content: '';
+  background-color: #fff;
+  transition: transform 0.25s ease;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
+}
+
+/* sm thumb: 16×16 with 3px inset */
+.sm .slider::before {
+  width: 16px;
+  height: 16px;
+  left: 3px;
+  bottom: 3px;
+}
+
+/* md thumb: 20×20 with 4px inset */
+.md .slider::before {
+  width: 20px;
+  height: 20px;
+  left: 4px;
+  bottom: 4px;
+}
+
+/* lg thumb: 28×28 with 4px inset */
+.lg .slider::before {
+  width: 28px;
+  height: 28px;
+  left: 4px;
+  bottom: 4px;
+}
+
+/* Checked: accent track */
+.input:checked ~ .slider {
+  background-color: var(--accent);
+}
+
+/* Checked: slide thumb to end — translateX = track - thumb - (inset * 2) */
+.sm .input:checked ~ .slider::before {
+  transform: translateX(18px); /* 40 - 16 - 6 */
+}
+
+.md .input:checked ~ .slider::before {
+  transform: translateX(24px); /* 52 - 20 - 8 */
+}
+
+.lg .input:checked ~ .slider::before {
+  transform: translateX(28px); /* 64 - 28 - 8 */
+}
+
+/* Focus ring on the track */
+.input:focus-visible ~ .slider {
+  box-shadow:
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--accent);
+}
+
+/* Disabled */
+.input:disabled ~ .slider {
+  opacity: 0.5;
+}
+
+.switch:has(.input:disabled) {
+  cursor: not-allowed;
+}
+
+/* Variant: rounded (pill track + circular thumb) */
+.rounded {
+  border-radius: var(--radius-full);
+}
+
+.rounded::before {
+  border-radius: 50%;
+}
+
+/* Variant: rectangular */
+.rectangular {
+  border-radius: var(--radius-sm);
+}
+
+.rectangular::before {
+  border-radius: calc(var(--radius-sm) - 1px);
+}

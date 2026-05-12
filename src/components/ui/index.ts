@@ -7,3 +7,4 @@ export { Select } from './select';
 export { Spinner } from './spinner';
 export { Textarea } from './textarea';
 export { Toaster } from './toaster';
+export { ToggleSwitch } from './toggle-switch';

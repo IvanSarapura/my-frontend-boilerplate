@@ -62,6 +62,7 @@
   - [Artifact Strategy](#artifact-strategy)
 - [Dependency Management](#dependency-management)
 - [Branching Strategy](#branching-strategy)
+  - [Branch Protection](#branch-protection)
 - [Internationalisation](#internationalisation)
 - [Environment Variables](#environment-variables)
 - [Important Notes](#important-notes)
@@ -620,6 +621,35 @@ feature/my-change  ──▶  Pull Request  ──▶  main
 
 - **`main`** requires CI to pass before merging.
 - Force-pushes to `main` are disabled.
+
+### Branch Protection
+
+For production-grade use, configure GitHub's Classic Branch Protection on `main` to enforce the rules above at the repository level. Without this, the CI pipeline runs but cannot prevent a merge if checks fail.
+
+**Settings → Branches → Add branch protection rule → Branch name pattern: `main`**
+
+| Setting                               | Value                        | Why                                |
+| ------------------------------------- | ---------------------------- | ---------------------------------- |
+| Require a pull request before merging | ✅ On                        | No direct pushes to `main`         |
+| Required approvals                    | 1                            | At least one review before merge   |
+| Dismiss stale reviews on new commits  | ✅ On                        | Re-approval required after changes |
+| Require status checks to pass         | ✅ On                        | CI must be green before merge      |
+| Require branches to be up to date     | ✅ On                        | No merging stale branches          |
+| Required status checks                | `quality`, `coverage`, `e2e` | Full pipeline gate (see below)     |
+| Require conversation resolution       | ✅ On                        | No unresolved PR comments          |
+| Do not allow bypassing settings       | ✅ On                        | Admins also subject to rules       |
+| Do not allow force pushes             | ✅ On                        | Protects commit history            |
+| Do not allow deletions                | ✅ On                        | Prevents accidental branch removal |
+
+**Why those three status checks?** They are the terminal nodes of the CI DAG:
+
+- `quality` — format, lint, typecheck, security audit
+- `coverage` — full test suite with per-file thresholds
+- `e2e` — only runs if `build` passed, which only runs if `quality` + `coverage` passed
+
+Requiring `quality`, `coverage`, and `e2e` implicitly gates the entire pipeline without listing all six jobs.
+
+> **First-time setup note:** Status check names only appear in the GitHub search field after the CI workflow has run at least once on a PR branch. Push any change in a PR first to register the check names, then add them to the required list.
 
 ---
 
