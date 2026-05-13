@@ -8,6 +8,7 @@ export { Input } from './input';
 export { Modal } from './modal';
 export { Radio, RadioGroup } from './radio';
 export { Select } from './select';
+export { Skeleton } from './skeleton';
 export { Spinner } from './spinner';
 export { Textarea } from './textarea';
 export { Toaster } from './toaster';
