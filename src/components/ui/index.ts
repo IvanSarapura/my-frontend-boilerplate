@@ -14,6 +14,7 @@ export type { IconName } from './icon';
 export { Icon } from './icon';
 export { Input } from './input';
 export { Modal } from './modal';
+export { Pagination } from './pagination';
 export { Radio, RadioGroup } from './radio';
 export { Select } from './select';
 export { Skeleton } from './skeleton';
