@@ -5,9 +5,9 @@ import { type IconName, icons } from './icons';
 
 type IconProps = {
   name: IconName;
-  size?: number;
-  className?: string;
-  'aria-label'?: string;
+  size?: number | undefined;
+  className?: string | undefined;
+  'aria-label'?: string | undefined;
 };
 
 export function Icon({

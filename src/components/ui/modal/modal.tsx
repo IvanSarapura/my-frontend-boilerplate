@@ -3,6 +3,7 @@
 import { useRef } from 'react';
 import { createPortal } from 'react-dom';
 
+import { Icon } from '@/components/ui/icon';
 import { useModalBehavior } from '@/hooks/use-modal-behavior';
 import { cx } from '@/lib/utils';
 
@@ -50,19 +51,7 @@ export function Modal({
             onClick={onClose}
             aria-label="Close dialog"
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+            <Icon name="close" size={20} />
           </button>
         </div>
         <div className={styles.body}>{children}</div>

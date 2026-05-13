@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { Icon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
 
 import styles from './select.module.css';
@@ -96,17 +97,7 @@ export function Select({
         <span className={!selectedLabel ? styles.placeholder : undefined}>
           {selectedLabel ?? placeholder}
         </span>
-        <svg
-          className={styles.chevron}
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </svg>
+        <Icon name="chevron-down" className={styles.chevron} />
       </button>
       {open && (
         <ul className={styles.menu} role="listbox">
