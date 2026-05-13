@@ -88,7 +88,7 @@ Key principles:
 | ------------------------------ | -------------------------------------------------------------- |
 | **Next.js 16 App Router**      | Server Components by default, React 19, React Compiler         |
 | **Domain-Driven Architecture** | `src/features/` keeps business logic organized and scalable    |
-| **Custom Design System**       | 10 primitive UI components built from scratch with CSS Modules |
+| **Custom Design System**       | 15 primitive UI components built from scratch with CSS Modules |
 | **Type-Safe API Client**       | Generic `fetch` wrapper with optional Zod runtime validation   |
 | **Server Actions**             | Modern form mutations with validation end-to-end               |
 | **React Hook Form**            | Performant form handling integrated with Zod                   |
@@ -235,12 +235,17 @@ my-frontend-boilerplate/
 │   │   │   ├── query-provider.tsx   # TanStack Query provider
 │   │   │   └── toast-provider.tsx   # Toast context + useToast hook
 │   │   ├── ui/                      # Primitive UI components — folder-per-component
+│   │   │   ├── accordion/           #   compound: Accordion + Item + Trigger + Content
 │   │   │   ├── badge/               #   badge.tsx · badge.module.css · index.ts
 │   │   │   ├── button/              #   button.tsx · button.test.tsx · button.stories.tsx · …
 │   │   │   ├── card/
+│   │   │   ├── checkbox/
+│   │   │   ├── icon/                #   centralized SVG icon registry (chevrons, status, etc.)
 │   │   │   ├── input/
 │   │   │   ├── modal/
+│   │   │   ├── radio/               #   Radio + RadioGroup (context-driven)
 │   │   │   ├── select/
+│   │   │   ├── skeleton/
 │   │   │   ├── spinner/
 │   │   │   ├── textarea/
 │   │   │   ├── toaster/
