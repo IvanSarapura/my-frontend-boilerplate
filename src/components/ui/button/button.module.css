@@ -71,3 +71,27 @@
 .ghost:not(:disabled):hover {
   background: var(--card-bg);
 }
+
+/* icon variant: square button, intended for a single <Icon> child */
+.icon {
+  background: transparent;
+  color: var(--foreground);
+  aspect-ratio: 1;
+  border-radius: var(--radius-md);
+}
+
+.icon:not(:disabled):hover {
+  background: var(--card-bg);
+}
+
+.icon.sm {
+  padding: var(--space-1);
+}
+
+.icon.md {
+  padding: var(--space-2);
+}
+
+.icon.lg {
+  padding: var(--space-3);
+}

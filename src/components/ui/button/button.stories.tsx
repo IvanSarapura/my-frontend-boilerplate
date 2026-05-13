@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
+import { Icon } from '@/components/ui/icon';
+
 import { Button } from './button';
 
 const meta = {
@@ -9,7 +11,7 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['primary', 'secondary', 'ghost'],
+      options: ['primary', 'secondary', 'ghost', 'icon'],
     },
     size: {
       control: { type: 'select' },
@@ -68,5 +70,41 @@ export const Disabled: Story = {
     variant: 'primary',
     size: 'md',
     disabled: true,
+  },
+};
+
+export const IconChevronLeft: Story = {
+  args: {
+    children: <Icon name="chevron-left" />,
+    variant: 'icon',
+    size: 'md',
+    'aria-label': 'Previous page',
+  },
+};
+
+export const IconClose: Story = {
+  args: {
+    children: <Icon name="close" />,
+    variant: 'icon',
+    size: 'md',
+    'aria-label': 'Close',
+  },
+};
+
+export const IconSmall: Story = {
+  args: {
+    children: <Icon name="chevron-right" size={16} />,
+    variant: 'icon',
+    size: 'sm',
+    'aria-label': 'Next',
+  },
+};
+
+export const IconLarge: Story = {
+  args: {
+    children: <Icon name="info" size={24} />,
+    variant: 'icon',
+    size: 'lg',
+    'aria-label': 'More info',
   },
 };

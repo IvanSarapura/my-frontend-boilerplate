@@ -6,7 +6,7 @@ import { cx } from '@/lib/utils';
 
 import styles from './button.module.css';
 
-type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'icon';
 type ButtonSize = 'sm' | 'md' | 'lg';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {

@@ -44,4 +44,15 @@ describe('Button', () => {
     render(<Button className="custom">X</Button>);
     expect(screen.getByRole('button')).toHaveClass('custom');
   });
+
+  it('applies icon variant class', () => {
+    render(
+      <Button variant="icon" aria-label="back">
+        <svg data-testid="child-icon" />
+      </Button>,
+    );
+    const btn = screen.getByRole('button', { name: 'back' });
+    expect(btn).toHaveClass('icon');
+    expect(screen.getByTestId('child-icon')).toBeInTheDocument();
+  });
 });
