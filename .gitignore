@@ -58,6 +58,7 @@ Thumbs.db
 /playwright-report/
 /playwright/.cache/
 
+# storybook
 *storybook.log
 storybook-static
 

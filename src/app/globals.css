@@ -56,6 +56,9 @@
     --z-sticky: 200;
     --z-modal: 300;
     --z-toast: 400;
+
+    /* Motion */
+    --transition-fast: 0.15s ease;
   }
 
   @media (prefers-color-scheme: dark) {

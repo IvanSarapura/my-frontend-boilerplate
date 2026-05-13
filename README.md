@@ -84,21 +84,21 @@ Key principles:
 
 ## What's Included
 
-| Feature                        | Description                                                   |
-| ------------------------------ | ------------------------------------------------------------- |
-| **Next.js 16 App Router**      | Server Components by default, React 19, React Compiler        |
-| **Domain-Driven Architecture** | `src/features/` keeps business logic organized and scalable   |
-| **Custom Design System**       | 9 primitive UI components built from scratch with CSS Modules |
-| **Type-Safe API Client**       | Generic `fetch` wrapper with optional Zod runtime validation  |
-| **Server Actions**             | Modern form mutations with validation end-to-end              |
-| **React Hook Form**            | Performant form handling integrated with Zod                  |
-| **TanStack Query**             | Client-side server state with prefetching and caching         |
-| **i18n (en/es)**               | Locale-prefixed routes with `Accept-Language` detection       |
-| **MSW**                        | Deterministic tests by mocking network requests               |
-| **Storybook**                  | Living styleguide with a11y audits and Chromatic integration  |
-| **Complete SEO**               | JSON-LD, Open Graph, sitemap, robots, manifest                |
-| **Security Headers**           | CSP, HSTS, X-Frame-Options, Permissions-Policy                |
-| **3-Level Testing**            | Unit (Vitest), Component (Testing Library), E2E (Playwright)  |
+| Feature                        | Description                                                    |
+| ------------------------------ | -------------------------------------------------------------- |
+| **Next.js 16 App Router**      | Server Components by default, React 19, React Compiler         |
+| **Domain-Driven Architecture** | `src/features/` keeps business logic organized and scalable    |
+| **Custom Design System**       | 10 primitive UI components built from scratch with CSS Modules |
+| **Type-Safe API Client**       | Generic `fetch` wrapper with optional Zod runtime validation   |
+| **Server Actions**             | Modern form mutations with validation end-to-end               |
+| **React Hook Form**            | Performant form handling integrated with Zod                   |
+| **TanStack Query**             | Client-side server state with prefetching and caching          |
+| **i18n (en/es)**               | Locale-prefixed routes with `Accept-Language` detection        |
+| **MSW**                        | Deterministic tests by mocking network requests                |
+| **Storybook**                  | Living styleguide with a11y audits and Chromatic integration   |
+| **Complete SEO**               | JSON-LD, Open Graph, sitemap, robots, manifest                 |
+| **Security Headers**           | CSP, HSTS, X-Frame-Options, Permissions-Policy                 |
+| **3-Level Testing**            | Unit (Vitest), Component (Testing Library), E2E (Playwright)   |
 
 ---
 
@@ -243,7 +243,8 @@ my-frontend-boilerplate/
 │   │   │   ├── select/
 │   │   │   ├── spinner/
 │   │   │   ├── textarea/
-│   │   │   └── toaster/
+│   │   │   ├── toaster/
+│   │   │   └── toggle-switch/
 │   │   └── layouts/
 │   │       └── container.tsx        # Responsive max-width container
 │   ├── features/                    # Domain-driven features (autocontained)
@@ -320,17 +321,18 @@ Every primitive in `components/ui/` is built from scratch with **CSS Modules** a
 
 Each component lives in its own subdirectory (`button/button.tsx`, `button/button.test.tsx`, `button/button.stories.tsx`, `button/button.module.css`, `button/index.ts`). Adding a new component never pollutes the parent directory. Context providers (`QueryProvider`, `ToastProvider`) live in `components/providers/` — separate from the stateless visual primitives in `components/ui/`. Complex interactive behavior is extracted into `src/hooks/` as dedicated hooks (e.g. `useModalBehavior`), keeping components responsible for rendering only.
 
-| Component  | Purpose                              |
-| ---------- | ------------------------------------ |
-| `Button`   | Variants (primary, secondary, ghost) |
-| `Input`    | Text input with label, error, helper |
-| `Textarea` | Multi-line input                     |
-| `Select`   | Custom accessible dropdown           |
-| `Card`     | Container with variants              |
-| `Badge`    | Status indicators                    |
-| `Modal`    | Focus-trapped dialog (portal)        |
-| `Toast`    | Notification system (context + hook) |
-| `Spinner`  | Loading indicator                    |
+| Component      | Purpose                                             |
+| -------------- | --------------------------------------------------- |
+| `Button`       | Variants (primary, secondary, ghost)                |
+| `Input`        | Text input with label, error, helper                |
+| `Textarea`     | Multi-line input                                    |
+| `Select`       | Custom accessible dropdown                          |
+| `Card`         | Container with variants                             |
+| `Badge`        | Status indicators                                   |
+| `Modal`        | Focus-trapped dialog (portal)                       |
+| `Toast`        | Notification system (context + hook)                |
+| `Spinner`      | Loading indicator                                   |
+| `ToggleSwitch` | On/off toggle with rounded and rectangular variants |
 
 ### Type-Safe API Client
 
