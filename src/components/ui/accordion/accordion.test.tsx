@@ -159,4 +159,26 @@ describe('Accordion', () => {
     expect(region.id).toBe(controlsId);
     expect(region.getAttribute('aria-labelledby')).toBe(one.id);
   });
+
+  it('throws when sub-component is rendered outside <Accordion>', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    expect(() =>
+      render(<AccordionTrigger>Trigger without Accordion</AccordionTrigger>),
+    ).toThrow('Accordion sub-components must be used inside <Accordion>.');
+    spy.mockRestore();
+  });
+
+  it('throws when sub-component is rendered outside <AccordionItem>', () => {
+    const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    expect(() =>
+      render(
+        <Accordion>
+          <AccordionTrigger>Trigger without Item</AccordionTrigger>
+        </Accordion>,
+      ),
+    ).toThrow(
+      'AccordionTrigger and AccordionContent must be used inside <AccordionItem>.',
+    );
+    spy.mockRestore();
+  });
 });
