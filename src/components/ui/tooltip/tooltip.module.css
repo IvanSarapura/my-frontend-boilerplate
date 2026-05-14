@@ -1,0 +1,34 @@
+.tooltip {
+  background: var(--foreground);
+  color: var(--background);
+  font-size: var(--text-xs);
+  line-height: 1.4;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  max-width: 14rem;
+  overflow-wrap: break-word;
+  z-index: var(--z-dropdown);
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  animation: tooltip-fade-in 0.1s ease;
+}
+
+.arrow {
+  fill: var(--foreground);
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tooltip {
+    animation: none;
+  }
+}

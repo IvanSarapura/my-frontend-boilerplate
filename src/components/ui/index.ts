@@ -23,3 +23,4 @@ export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Textarea } from './textarea';
 export { Toaster } from './toaster';
 export { ToggleSwitch } from './toggle-switch';
+export { Tooltip } from './tooltip';
