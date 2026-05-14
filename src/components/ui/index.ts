@@ -19,6 +19,7 @@ export { Radio, RadioGroup } from './radio';
 export { Select } from './select';
 export { Skeleton } from './skeleton';
 export { Spinner } from './spinner';
+export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Textarea } from './textarea';
 export { Toaster } from './toaster';
 export { ToggleSwitch } from './toggle-switch';

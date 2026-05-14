@@ -1,0 +1,115 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.rootVertical {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+/* ── Tab list ─────────────────────────────────────────── */
+
+.list {
+  display: flex;
+  flex-shrink: 0;
+  border-bottom: 2px solid var(--card-border);
+}
+
+.listVertical {
+  flex-direction: column;
+  border-bottom: none;
+  border-right: 2px solid var(--card-border);
+}
+
+/* ── Tab trigger ──────────────────────────────────────── */
+
+.trigger {
+  position: relative;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  outline: none;
+  transition: color var(--transition-fast);
+}
+
+.trigger::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: transparent;
+  transition: background var(--transition-fast);
+}
+
+/* Active state — classes applied via cx() */
+.triggerActive {
+  color: var(--accent);
+}
+
+.triggerActive::after {
+  background: var(--accent);
+}
+
+/* Interaction states — higher specificity, ordered after active */
+.trigger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+  border-radius: var(--radius-sm);
+}
+
+.trigger:not(:disabled):hover {
+  color: var(--foreground);
+}
+
+.triggerActive:not(:disabled):hover {
+  color: var(--accent);
+}
+
+/* Vertical — indicator on the right side */
+.triggerVertical::after {
+  inset: 0 -2px auto auto;
+  width: 2px;
+  height: 100%;
+}
+
+/* ── Tab panel ────────────────────────────────────────── */
+
+.panel {
+  flex: 1;
+  padding: var(--space-4) 0;
+  outline: none;
+}
+
+.panel:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+.panel[hidden] {
+  display: none;
+}
+
+/* ── Reduced motion ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .trigger,
+  .trigger::after {
+    transition: none;
+  }
+}
