@@ -23,7 +23,9 @@ export function AccordionContent({
       aria-labelledby={triggerId}
       className={cx(styles.content, isOpen && styles.contentOpen)}
     >
-      <div className={cx(styles.contentInner, className)}>{children}</div>
+      <div className={styles.contentInner}>
+        <div className={cx(styles.contentBody, className)}>{children}</div>
+      </div>
     </div>
   );
 }
