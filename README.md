@@ -368,6 +368,8 @@ Each component lives in its own subdirectory (`button/button.tsx`, `button/butto
 | `Tooltip`      | Hover/focus tooltip powered by `@floating-ui/react`              |
 
 > **`@floating-ui/react`** is the single approved exception to the zero-UI-dependency policy. It powers only `Tooltip` and `Dropdown`. See `.agents/ANALYSIS-STATUS.md` §10 for the full rationale.
+>
+> **Floating-ui animation constraint:** floating-ui positions elements via an inline `transform: translate(x, y)`. CSS `@keyframes` declarations override inline styles for the same property during the animation. Never use `transform: translateY()` in entry/exit animations for floating-ui components — use the independent CSS `translate` property instead (`translate: 0 -4px`), which composes on top of the positioning transform without interfering. See `ONBOARDING.md` §17 for the full root-cause analysis.
 
 ### Typography
 

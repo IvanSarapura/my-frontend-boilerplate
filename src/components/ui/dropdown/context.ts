@@ -17,6 +17,7 @@ export type DropdownContextValue = {
   refs: FloatingRefs;
   floatingStyles: React.CSSProperties;
   context: FloatingContext;
+  isPositioned: boolean;
   getReferenceProps: InteractionHandlers['getReferenceProps'];
   getFloatingProps: InteractionHandlers['getFloatingProps'];
   getItemProps: InteractionHandlers['getItemProps'];

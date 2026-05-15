@@ -4,12 +4,21 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  overflow: hidden;
-  background: var(--card-bg);
   color: var(--foreground);
   font-weight: 600;
   user-select: none;
   vertical-align: middle;
+}
+
+.media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+  background: var(--card-bg);
 }
 
 .image {
@@ -92,12 +101,6 @@
 
 .status-busy {
   background: var(--color-error);
-}
-
-/* square shape: keep the status dot squared-off-friendly */
-.square .status {
-  right: -2px;
-  bottom: -2px;
 }
 
 .overlap {

@@ -1,6 +1,6 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
+# ── Dependencies ──
 /node_modules
 /.pnp
 .pnp.*
@@ -10,57 +10,76 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# ── Build outputs ──
 /.next/
 /out/
-
-# production
 /build
 
-# misc
-.DS_Store
-*.pem
+# ── Testing ──
+/coverage
+/test-results/
+/playwright-report/
+/playwright/.cache/
 
-# debug
+# ── Storybook ──
+*storybook.log
+storybook-static
+
+# ── Environment ──
+.env*
+
+# ── Editor ──
+*.swp
+*.swo
+*~
+Session.vim
+.netrwhist
+.idea/
+*.sublime-workspace
+*.sublime-project
+.cursor/
+*.kate-swp
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# ── OS ──
+.DS_Store
+Thumbs.db
+
+# ── Backups ──
+*.bak
+*.orig
+
+# ── Linting & Formatting ──
+.eslintcache
+.stylelintcache
+
+# ── Debug ──
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
+# ── TypeScript ──
 *.tsbuildinfo
 tsconfig.tsbuildinfo
 next-env.d.ts
 
-# linter caches
-.eslintcache
-.stylelintcache
+# ── CI ──
+next-build.tar.gz
 
-# editor
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+# ── Vitest ──
+vitest.config.*.timestamp-*.mjs
 
-# os
-Thumbs.db
+# ── Platform ──
+.vercel
 
-# playwright
-/test-results/
-/playwright-report/
-/playwright/.cache/
+# ── Security ──
+*.pem
 
-# storybook
-*storybook.log
-storybook-static
+# ── Claude Code ──
+.claude/settings.local.json
 
-# agents
+# ── Agents ──
 .agents/

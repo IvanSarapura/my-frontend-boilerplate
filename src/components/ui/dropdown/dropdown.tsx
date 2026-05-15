@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  autoUpdate,
   flip,
   offset,
   type Placement,
@@ -44,11 +45,12 @@ export function Dropdown({
     onOpenChange?.(nextOpen);
   };
 
-  const { refs, floatingStyles, context } = useFloating({
+  const { refs, floatingStyles, context, isPositioned } = useFloating({
     open,
     onOpenChange: handleOpenChange,
     placement,
     middleware: [offset(4), flip(), shift({ padding: 8 })],
+    whileElementsMounted: autoUpdate,
   });
 
   const click = useClick(context);
@@ -73,6 +75,7 @@ export function Dropdown({
         refs,
         floatingStyles,
         context,
+        isPositioned,
         getReferenceProps,
         getFloatingProps,
         getItemProps,

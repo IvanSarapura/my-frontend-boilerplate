@@ -18,8 +18,15 @@ type DropdownContentProps = {
 };
 
 export function DropdownContent({ children, className }: DropdownContentProps) {
-  const { open, refs, floatingStyles, context, getFloatingProps, listRef } =
-    useDropdownContext();
+  const {
+    open,
+    refs,
+    floatingStyles,
+    context,
+    getFloatingProps,
+    listRef,
+    isPositioned,
+  } = useDropdownContext();
 
   if (!open) return null;
 
@@ -29,7 +36,10 @@ export function DropdownContent({ children, className }: DropdownContentProps) {
         <div
           // eslint-disable-next-line react-hooks/refs -- floating-ui callback ref, reads DOM node outside render
           ref={refs.setFloating}
-          style={floatingStyles}
+          style={{
+            ...floatingStyles,
+            visibility: isPositioned ? 'visible' : 'hidden',
+          }}
           className={cx(styles.content, className)}
           {...getFloatingProps()}
         >

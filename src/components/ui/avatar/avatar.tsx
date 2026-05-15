@@ -45,19 +45,21 @@ export function Avatar({
       aria-label={alt}
       className={cx(styles.avatar, styles[size], styles[shape], className)}
     >
-      {showImage ? (
-        // eslint-disable-next-line @next/next/no-img-element -- Avatar accepts arbitrary external URLs; next/image would require per-domain config that is not the boilerplate's responsibility.
-        <img
-          src={src}
-          alt=""
-          className={styles.image}
-          onError={() => setHasError(true)}
-        />
-      ) : (
-        <span className={styles.initials} aria-hidden="true">
-          {getInitials(name)}
-        </span>
-      )}
+      <span className={styles.media}>
+        {showImage ? (
+          // eslint-disable-next-line @next/next/no-img-element -- Avatar accepts arbitrary external URLs; next/image would require per-domain config that is not the boilerplate's responsibility.
+          <img
+            src={src}
+            alt=""
+            className={styles.image}
+            onError={() => setHasError(true)}
+          />
+        ) : (
+          <span className={styles.initials} aria-hidden="true">
+            {getInitials(name)}
+          </span>
+        )}
+      </span>
       {status && (
         <span
           className={cx(styles.status, styles[`status-${status}`])}
