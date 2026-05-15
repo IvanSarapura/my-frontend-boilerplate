@@ -31,11 +31,17 @@ describe('Error boundary', () => {
     consoleSpy.mockRestore();
   });
 
-  it('logs error to console', () => {
+  it('reports error through the observability hook with boundary context', () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const error = new Error('Log test');
+    vi.stubEnv('NODE_ENV', 'development');
+    const error = Object.assign(new Error('Log test'), { digest: 'd-42' });
     render(<ErrorComponent error={error} reset={vi.fn()} />);
-    expect(consoleSpy).toHaveBeenCalledWith('[Error boundary]', error);
+    expect(consoleSpy).toHaveBeenCalledWith('[observability]', {
+      error,
+      source: 'root-error-boundary',
+      digest: 'd-42',
+    });
+    vi.unstubAllEnvs();
     consoleSpy.mockRestore();
   });
 

@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { reportError } from '@/lib/observability';
+
 import styles from '../error.module.css';
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -14,7 +16,10 @@ export default function LocaleError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('[Error boundary]', error);
+    reportError(error, {
+      source: 'locale-error-boundary',
+      digest: error.digest,
+    });
   }, [error]);
 
   return (

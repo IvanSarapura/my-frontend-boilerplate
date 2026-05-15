@@ -2,6 +2,8 @@
 
 import { useEffect } from 'react';
 
+import { reportError } from '@/lib/observability';
+
 import styles from './error.module.css';
 
 export default function Error({
@@ -12,8 +14,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    // TODO: hook into Sentry before going live
-    console.error('[Error boundary]', error);
+    reportError(error, { source: 'root-error-boundary', digest: error.digest });
   }, [error]);
 
   return (

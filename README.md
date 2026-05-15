@@ -40,6 +40,7 @@
 - [Architecture](#architecture)
   - [Domain-Driven Features](#domain-driven-features)
   - [Custom Design System](#custom-design-system)
+  - [Tri-State Theming](#tri-state-theming)
   - [Type-Safe API Client](#type-safe-api-client)
 - [Data Fetching & State Management](#data-fetching--state-management)
   - [Server Components & use cache](#server-components--use-cache)
@@ -52,6 +53,7 @@
 - [Storybook — Visual Documentation](#storybook--visual-documentation)
 - [Optional Integrations](#optional-integrations)
   - [TanStack Query Devtools](#tanstack-query-devtools)
+  - [Error Tracking (Sentry / Rollbar / Bugsnag / …)](#error-tracking-sentry--rollbar--bugsnag--)
 - [Git Conventions](#git-conventions)
   - [Commit Format](#commit-format)
   - [Allowed Types](#allowed-types)
@@ -84,21 +86,23 @@ Key principles:
 
 ## What's Included
 
-| Feature                        | Description                                                    |
-| ------------------------------ | -------------------------------------------------------------- |
-| **Next.js 16 App Router**      | Server Components by default, React 19, React Compiler         |
-| **Domain-Driven Architecture** | `src/features/` keeps business logic organized and scalable    |
-| **Custom Design System**       | 18 primitive UI components built from scratch with CSS Modules |
-| **Type-Safe API Client**       | Generic `fetch` wrapper with optional Zod runtime validation   |
-| **Server Actions**             | Modern form mutations with validation end-to-end               |
-| **React Hook Form**            | Performant form handling integrated with Zod                   |
-| **TanStack Query**             | Client-side server state with prefetching and caching          |
-| **i18n (en/es)**               | Locale-prefixed routes with `Accept-Language` detection        |
-| **MSW**                        | Deterministic tests by mocking network requests                |
-| **Storybook**                  | Living styleguide with a11y audits and Chromatic integration   |
-| **Complete SEO**               | JSON-LD, Open Graph, sitemap, robots, manifest                 |
-| **Security Headers**           | CSP, HSTS, X-Frame-Options, Permissions-Policy                 |
-| **3-Level Testing**            | Unit (Vitest), Component (Testing Library), E2E (Playwright)   |
+| Feature                           | Description                                                        |
+| --------------------------------- | ------------------------------------------------------------------ |
+| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler             |
+| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable        |
+| **Custom Design System**          | 23 primitive UI components built from scratch with CSS Modules     |
+| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC    |
+| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK |
+| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation       |
+| **Server Actions**                | Modern form mutations with validation end-to-end                   |
+| **React Hook Form**               | Performant form handling integrated with Zod                       |
+| **TanStack Query**                | Client-side server state with prefetching and caching              |
+| **i18n (en/es)**                  | Locale-prefixed routes with `Accept-Language` detection            |
+| **MSW**                           | Deterministic tests by mocking network requests                    |
+| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration       |
+| **Complete SEO**                  | JSON-LD, Open Graph, sitemap, robots, manifest                     |
+| **Security Headers**              | CSP, HSTS, X-Frame-Options, Permissions-Policy                     |
+| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)       |
 
 ---
 
@@ -233,6 +237,7 @@ my-frontend-boilerplate/
 │   ├── components/
 │   │   ├── providers/
 │   │   │   ├── query-provider.tsx   # TanStack Query provider
+│   │   │   ├── theme-provider.tsx   # Tri-state theming (useSyncExternalStore + anti-FOUC)
 │   │   │   └── toast-provider.tsx   # Toast context + useToast hook
 │   │   ├── ui/                      # Primitive UI components — folder-per-component
 │   │   │   ├── accordion/           #   compound: Accordion + Item + Trigger + Content
@@ -242,7 +247,8 @@ my-frontend-boilerplate/
 │   │   │   ├── button/              #   button.tsx · button.test.tsx · button.stories.tsx · …
 │   │   │   ├── card/
 │   │   │   ├── checkbox/
-│   │   │   ├── icon/                #   centralized SVG icon registry (chevrons, status, etc.)
+│   │   │   ├── dropdown/            #   @floating-ui compound: Trigger + Content + Item + Separator
+│   │   │   ├── icon/                #   centralized SVG icon registry (chevrons, status, sun/moon/monitor, …)
 │   │   │   ├── input/
 │   │   │   ├── modal/
 │   │   │   ├── pagination/          #   accessible nav with ellipsis collapsing
@@ -250,9 +256,12 @@ my-frontend-boilerplate/
 │   │   │   ├── select/
 │   │   │   ├── skeleton/
 │   │   │   ├── spinner/
+│   │   │   ├── tabs/                #   compound + roving tabindex + manual activation
 │   │   │   ├── textarea/
+│   │   │   ├── theme-toggle/        #   cycles light → dark → system with dynamic ARIA
 │   │   │   ├── toaster/
-│   │   │   └── toggle-switch/
+│   │   │   ├── toggle-switch/
+│   │   │   └── tooltip/             #   @floating-ui hover/focus + viewport-aware positioning
 │   │   └── layouts/
 │   │       └── container.tsx        # Responsive max-width container
 │   ├── features/                    # Domain-driven features (autocontained)
@@ -275,6 +284,7 @@ my-frontend-boilerplate/
 │   ├── hooks/
 │   │   ├── use-media-query.ts
 │   │   ├── use-modal-behavior.ts    # Focus, keyboard, backdrop behavior for Modal
+│   │   ├── use-theme.ts             # Re-export of useTheme from theme-provider
 │   │   └── use-toggle.ts
 │   ├── i18n/
 │   │   ├── config.ts
@@ -285,8 +295,9 @@ my-frontend-boilerplate/
 │   │   ├── api/
 │   │   │   └── client.ts            # Generic type-safe fetch client
 │   │   ├── env.ts
-│   │   ├── utils.ts
-│   │   └── json-ld.ts
+│   │   ├── json-ld.ts
+│   │   ├── observability.ts         # Vendor-agnostic reportError hook (no-op in prod)
+│   │   └── utils.ts
 │   ├── mocks/
 │   │   ├── handlers.ts              # MSW request handlers
 │   │   └── node.ts                  # MSW server setup for Vitest
@@ -329,18 +340,64 @@ Every primitive in `components/ui/` is built from scratch with **CSS Modules** a
 
 Each component lives in its own subdirectory (`button/button.tsx`, `button/button.test.tsx`, `button/button.stories.tsx`, `button/button.module.css`, `button/index.ts`). Adding a new component never pollutes the parent directory. Context providers (`QueryProvider`, `ToastProvider`) live in `components/providers/` — separate from the stateless visual primitives in `components/ui/`. Complex interactive behavior is extracted into `src/hooks/` as dedicated hooks (e.g. `useModalBehavior`), keeping components responsible for rendering only.
 
-| Component      | Purpose                                             |
-| -------------- | --------------------------------------------------- |
-| `Button`       | Variants (primary, secondary, ghost)                |
-| `Input`        | Text input with label, error, helper                |
-| `Textarea`     | Multi-line input                                    |
-| `Select`       | Custom accessible dropdown                          |
-| `Card`         | Container with variants                             |
-| `Badge`        | Status indicators                                   |
-| `Modal`        | Focus-trapped dialog (portal)                       |
-| `Toast`        | Notification system (context + hook)                |
-| `Spinner`      | Loading indicator                                   |
-| `ToggleSwitch` | On/off toggle with rounded and rectangular variants |
+| Component      | Purpose                                                          |
+| -------------- | ---------------------------------------------------------------- |
+| `Accordion`    | Compound: `Accordion` + `Item` + `Trigger` + `Content`           |
+| `Alert`        | Info / success / warning / error with dismissible variant        |
+| `Avatar`       | Image with automatic initials fallback + status indicator        |
+| `Badge`        | Status indicators                                                |
+| `Button`       | Variants (primary, secondary, ghost, icon) — 3 sizes             |
+| `Card`         | Container with variants                                          |
+| `Checkbox`     | Form field with label / error / helper                           |
+| `Dropdown`     | Compound menu powered by `@floating-ui/react`                    |
+| `Icon`         | Centralised SVG registry (chevrons, status, sun/moon/monitor, …) |
+| `Input`        | Text input with label, error, helper                             |
+| `Modal`        | Focus-trapped dialog (portal)                                    |
+| `Pagination`   | Accessible nav with MUI-style ellipsis collapsing                |
+| `Radio`        | `Radio` + `RadioGroup` with context (controlled / uncontrolled)  |
+| `Select`       | Custom accessible dropdown with keyboard navigation              |
+| `Skeleton`     | Shimmer placeholder, respects `prefers-reduced-motion`           |
+| `Spinner`      | Loading indicator                                                |
+| `Tabs`         | Compound + roving tabindex + manual activation                   |
+| `Textarea`     | Multi-line input following the `Input` pattern                   |
+| `ThemeToggle`  | Cycles light → dark → system with dynamic ARIA label             |
+| `Toast`        | Notification system (context + hook)                             |
+| `ToggleSwitch` | On/off toggle (rounded and rectangular variants)                 |
+| `Tooltip`      | Hover/focus tooltip powered by `@floating-ui/react`              |
+
+> **`@floating-ui/react`** is the single approved exception to the zero-UI-dependency policy. It powers only `Tooltip` and `Dropdown`. See `.agents/ANALYSIS-STATUS.md` §10 for the full rationale.
+
+### Tri-State Theming
+
+A first-class theming layer with three explicit choices: `light`, `dark`, and `system` (follow the OS preference). The architecture is intentionally SSR-safe and free of common anti-patterns.
+
+**Pieces:**
+
+| File                                          | Responsibility                                                       |
+| --------------------------------------------- | -------------------------------------------------------------------- |
+| `src/components/providers/theme-provider.tsx` | `ThemeProvider` (uses `useSyncExternalStore`) + `useTheme` hook      |
+| `src/components/ui/theme-toggle/`             | `ThemeToggle` primitive that cycles light → dark → system            |
+| `src/hooks/use-theme.ts`                      | Re-export of `useTheme` for ergonomic feature-side imports           |
+| `src/app/globals.css`                         | CSS contract with `:root` tokens and `[data-theme="dark"]` overrides |
+| `src/app/layout.tsx`                          | Provider mount + inline anti-FOUC script in `<head>`                 |
+
+**Why `useSyncExternalStore` instead of `useState + useEffect`?** The latter pattern produces a render-then-flash on every load because the effect runs _after_ the first paint. `useSyncExternalStore` keeps SSR and CSR consistent: the server snapshot is the neutral `system` baseline, and the client snapshot reads `localStorage` synchronously without an extra render.
+
+**Why a module-scoped memory fallback?** When `localStorage` is unreadable (private mode, strict cookie policies, quota errors), the in-memory variable keeps the chosen theme alive for the current session.
+
+**Why an inline script in `<head>`?** It runs synchronously before the first paint and applies `data-theme` from `localStorage`, eliminating the flash of incorrect theme on reload. The script is kept in sync with the provider via the shared storage key.
+
+```tsx
+'use client';
+import { useTheme } from '@/hooks/use-theme';
+
+function ThemeIndicator() {
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  // theme: 'light' | 'dark' | 'system'  — what the user picked
+  // resolvedTheme: 'light' | 'dark'     — what the DOM actually shows
+  return <ThemeToggle />; // or build your own UI on top of setTheme()
+}
+```
 
 ### Type-Safe API Client
 
@@ -471,6 +528,42 @@ export function QueryProvider({ children }) {
   );
 }
 ```
+
+### Error Tracking (Sentry / Rollbar / Bugsnag / …)
+
+The boilerplate ships a **vendor-agnostic error reporting hook** instead of bundling an SDK. The choice of vendor belongs to the product, not to the platform — locking it in by default would compromise "Zero-config DX" and impose a bundle cost on every clone.
+
+```ts
+// src/lib/observability.ts — already wired into both error.tsx boundaries
+export function reportError(error: unknown, context?: ErrorContext): void;
+```
+
+In development the call surfaces a structured payload through `console.error('[observability]', …)`. In production it is a deliberate no-op. To adopt a vendor, replace **only the body** of `reportError` — every caller in the app keeps its current signature:
+
+```ts
+// After adopting Sentry
+import * as Sentry from '@sentry/nextjs';
+
+export function reportError(error: unknown, context: ErrorContext = {}): void {
+  if (process.env.NODE_ENV !== 'production') {
+    console.error('[observability]', { error, ...context });
+    return;
+  }
+  Sentry.captureException(error, {
+    tags: { source: context.source, digest: context.digest },
+    extra: context.extra,
+  });
+}
+```
+
+Then:
+
+```bash
+npm install @sentry/nextjs
+npx @sentry/wizard@latest -i nextjs   # creates sentry.*.config.ts + instrumentation.ts
+```
+
+> **When to add it**, **when not to**, and the full architectural reasoning live in `.agents/ANALYSIS-STATUS.md` §11. **Rule of thumb:** any new surface that may throw at runtime (Error Boundaries, Server Actions, route handlers, jobs) should route errors through `reportError` — never `console.error` directly in production code.
 
 ---
 
