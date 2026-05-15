@@ -1,0 +1,14 @@
+<!--
+  Loads Geist + Geist Mono into Storybook's preview iframe. Storybook (Vite)
+  does not transform `next/font` imports, so the @font-face rules that
+  Next.js generates via SWC are absent here. Loading them from Google Fonts
+  keeps the font definition framework-agnostic without adding npm deps or
+  binaries to the repo. This file affects DEV TOOLING ONLY — Next.js
+  production builds still use `next/font/google` (self-hosted, preloaded).
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
+/>

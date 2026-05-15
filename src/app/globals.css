@@ -8,6 +8,24 @@
     padding: 0;
     margin: 0;
   }
+
+  /*
+   * Form controls do not inherit `font-family`, `font-size`, `line-height`,
+   * or `color` from their ancestors by default — the UA applies its own
+   * built-in stylesheet. Force inheritance so they match the document's
+   * typography (and the design tokens) without each component CSS module
+   * having to repeat `font-family: inherit`.
+   */
+  button,
+  input,
+  optgroup,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
 }
 
 @layer base {
@@ -35,7 +53,28 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
-    /* Typography scale */
+    /*
+     * Typography — font families.
+     * `--font-sans` / `--font-mono` are the public, framework-agnostic aliases
+     * every consumer reads. The inline `var(name, fallback)` lets a single
+     * declaration resolve in both runtimes:
+     * - Next.js: `next/font` defines `--font-geist-sans` on `<html>` with a
+     *   hashed family name; the var() resolves to that and wins.
+     * - Storybook: `--font-geist-sans` is undefined (the SWC plugin does not
+     *   run under Vite), so the fallback `'Geist'` is used — that literal
+     *   name matches the @font-face loaded by `.storybook/preview-head.html`.
+     * To swap the typeface, replace the `next/font` binding in `layout.tsx`
+     * and the Google Fonts URL in `preview-head.html` — no component CSS
+     * needs to change.
+     */
+    --font-sans:
+      var(--font-geist-sans, 'Geist'), -apple-system, 'BlinkMacSystemFont',
+      'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    --font-mono:
+      var(--font-geist-mono, 'Geist Mono'), ui-monospace, 'SFMono-Regular',
+      'SF Mono', 'Menlo', 'Consolas', 'Liberation Mono', monospace;
+
+    /* Typography — raw size scale (primitives). */
     --text-xs: 0.75rem;
     --text-sm: 0.875rem;
     --text-base: 1rem;
@@ -44,6 +83,72 @@
     --text-2xl: 1.5rem;
     --text-3xl: 1.875rem;
     --text-4xl: 2.25rem;
+    --text-5xl: 3rem;
+    --text-6xl: 3.75rem;
+
+    /* Typography — letter-spacing tokens. */
+    --tracking-tight: -0.04em;
+    --tracking-snug: -0.03em;
+    --tracking-normal: -0.01em;
+    --tracking-wide: 0.02em;
+    --tracking-wider: 0.05em;
+
+    /* Typography — line-height tokens. */
+    --leading-none: 1;
+    --leading-tight: 1.1;
+    --leading-snug: 1.25;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.625;
+
+    /* Typography — weight tokens. */
+    --weight-regular: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+    --weight-bold: 700;
+
+    /*
+     * Typography — semantic scale (purpose, not size).
+     * Each token bundles size + line-height + weight + tracking so consumers
+     * stay declarative: `font-size: var(--font-heading-1)` + matching lh/weight/tracking.
+     * Sizes use clamp() to scale fluidly between mobile and desktop.
+     */
+    --font-display-1: clamp(2.75rem, 6vw, 4.5rem);
+    --font-display-1-lh: var(--leading-none);
+    --font-display-1-weight: var(--weight-bold);
+    --font-display-1-tracking: var(--tracking-tight);
+    --font-display-2: clamp(2.25rem, 5vw, 3.5rem);
+    --font-display-2-lh: var(--leading-none);
+    --font-display-2-weight: var(--weight-bold);
+    --font-display-2-tracking: var(--tracking-tight);
+    --font-heading-1: clamp(2rem, 4vw, 3rem);
+    --font-heading-1-lh: var(--leading-tight);
+    --font-heading-1-weight: var(--weight-bold);
+    --font-heading-1-tracking: var(--tracking-snug);
+    --font-heading-2: clamp(1.5rem, 3vw, 2.25rem);
+    --font-heading-2-lh: 1.15;
+    --font-heading-2-weight: var(--weight-semibold);
+    --font-heading-2-tracking: var(--tracking-snug);
+    --font-heading-3: clamp(1.25rem, 2vw, 1.5rem);
+    --font-heading-3-lh: 1.2;
+    --font-heading-3-weight: var(--weight-semibold);
+    --font-heading-3-tracking: var(--tracking-normal);
+    --font-heading-4: var(--text-lg);
+    --font-heading-4-lh: 1.3;
+    --font-heading-4-weight: var(--weight-semibold);
+    --font-heading-4-tracking: var(--tracking-normal);
+    --font-body-lg: var(--text-lg);
+    --font-body-lg-lh: var(--leading-normal);
+    --font-body-lg-weight: var(--weight-regular);
+    --font-body: var(--text-base);
+    --font-body-lh: var(--leading-normal);
+    --font-body-weight: var(--weight-regular);
+    --font-body-sm: var(--text-sm);
+    --font-body-sm-lh: var(--leading-normal);
+    --font-body-sm-weight: var(--weight-regular);
+    --font-caption: var(--text-xs);
+    --font-caption-lh: 1.4;
+    --font-caption-weight: var(--weight-regular);
+    --font-caption-tracking: var(--tracking-wide);
 
     /* Border radius */
     --radius-sm: 4px;
@@ -114,9 +219,72 @@
     flex-direction: column;
     color: var(--foreground);
     background: var(--background);
-    font-family: var(--font-geist-sans), system-ui, sans-serif;
+    font-family: var(--font-sans);
+    font-size: var(--font-body);
+    line-height: var(--font-body-lh);
+    font-weight: var(--font-body-weight);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizelegibility;
+  }
+
+  /*
+   * Default heading + paragraph styles wire the semantic scale to the bare
+   * tags. Consumers can opt out by setting `font: inherit` or by using a
+   * module class — the tokens stay the single source of truth.
+   */
+  h1 {
+    font-size: var(--font-heading-1);
+    line-height: var(--font-heading-1-lh);
+    font-weight: var(--font-heading-1-weight);
+    letter-spacing: var(--font-heading-1-tracking);
+  }
+
+  h2 {
+    font-size: var(--font-heading-2);
+    line-height: var(--font-heading-2-lh);
+    font-weight: var(--font-heading-2-weight);
+    letter-spacing: var(--font-heading-2-tracking);
+  }
+
+  h3 {
+    font-size: var(--font-heading-3);
+    line-height: var(--font-heading-3-lh);
+    font-weight: var(--font-heading-3-weight);
+    letter-spacing: var(--font-heading-3-tracking);
+  }
+
+  h4 {
+    font-size: var(--font-heading-4);
+    line-height: var(--font-heading-4-lh);
+    font-weight: var(--font-heading-4-weight);
+    letter-spacing: var(--font-heading-4-tracking);
+  }
+
+  h5,
+  h6 {
+    font-size: var(--font-body);
+    line-height: var(--font-body-lh);
+    font-weight: var(--weight-semibold);
+  }
+
+  p {
+    font-size: var(--font-body);
+    line-height: var(--font-body-lh);
+  }
+
+  small {
+    font-size: var(--font-caption);
+    line-height: var(--font-caption-lh);
+    letter-spacing: var(--font-caption-tracking);
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
   }
 
   a {

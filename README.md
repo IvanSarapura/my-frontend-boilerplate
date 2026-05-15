@@ -40,6 +40,7 @@
 - [Architecture](#architecture)
   - [Domain-Driven Features](#domain-driven-features)
   - [Custom Design System](#custom-design-system)
+  - [Typography](#typography)
   - [Tri-State Theming](#tri-state-theming)
   - [Type-Safe API Client](#type-safe-api-client)
 - [Data Fetching & State Management](#data-fetching--state-management)
@@ -206,7 +207,8 @@ my-frontend-boilerplate/
 │   └── pull_request_template.md     # PR description template
 ├── .storybook/                      # Storybook configuration
 │   ├── main.ts
-│   └── preview.ts
+│   ├── preview.ts
+│   └── preview-head.html            # Loads Geist into the preview iframe (Storybook is Vite, not SWC)
 ├── e2e/
 │   ├── home.spec.ts                 # Locale routing + heading assertions
 │   └── smoke.spec.ts                # Health endpoint + 404 + skip-link
@@ -367,6 +369,27 @@ Each component lives in its own subdirectory (`button/button.tsx`, `button/butto
 
 > **`@floating-ui/react`** is the single approved exception to the zero-UI-dependency policy. It powers only `Tooltip` and `Dropdown`. See `.agents/ANALYSIS-STATUS.md` §10 for the full rationale.
 
+### Typography
+
+The typography system is a three-layer scale in `src/app/globals.css`: raw size primitives (`--text-xs` … `--text-6xl`), semantic tokens (`--font-display-*`, `--font-heading-*`, `--font-body-*`, `--font-caption`) that bundle size + line-height + weight + letter-spacing, and base styles on `h1..h6 / p / small` that consume those tokens. Components should reach for the semantic tokens (`var(--font-heading-2)`) rather than raw sizes, so changes to the scale propagate consistently.
+
+**Fonts: Geist + Geist Mono via a dual-runtime architecture.**
+
+| Runtime             | How Geist is loaded                                                                                   | What defines the family                               |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Next.js (prod/dev)  | `next/font/google` in `src/app/layout.tsx` (SWC plugin generates self-hosted `@font-face` + preloads) | `--font-geist-sans` / `--font-geist-mono` on `<html>` |
+| Storybook (`:6006`) | `<link rel="stylesheet">` to Google Fonts in `.storybook/preview-head.html` (Vite has no SWC plugin)  | `@font-face { font-family: 'Geist'; … }`              |
+
+`globals.css` reconciles both with a single declaration using inline `var()` fallback:
+
+```css
+--font-sans:
+  var(--font-geist-sans, 'Geist'), -apple-system, 'BlinkMacSystemFont',
+  'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+```
+
+In Next.js, the hashed family name from `next/font` wins. In Storybook, that var is undefined and the literal `'Geist'` resolves against the `@font-face` injected by `preview-head.html`. Single source of truth, no decorators, no patches. To swap the typeface, edit the `next/font` binding in `layout.tsx` and the Google Fonts URL in `preview-head.html` — no component CSS needs to change.
+
 ### Tri-State Theming
 
 A first-class theming layer with three explicit choices: `light`, `dark`, and `system` (follow the OS preference). The architecture is intentionally SSR-safe and free of common anti-patterns.
@@ -498,6 +521,7 @@ npm run storybook:build  # Static build for deployment
 - **Accessible by default:** `@storybook/addon-a11y` audits WCAG violations on every story
 - **In-browser Vitest:** `@storybook/addon-vitest` runs the unit test suite inside the Storybook UI
 - **Design tokens:** Storybook imports `globals.css` so components render with the exact same tokens as the app
+- **Same typography as the app:** `.storybook/preview-head.html` loads Geist + Geist Mono into the preview iframe (Storybook's Vite pipeline does not run the Next.js SWC plugin, so `next/font` is inert here — see the [Typography](#typography) section for the full architecture)
 - **Chromatic ready:** `@chromatic-com/storybook` is installed for visual regression testing and UI review
 
 ### Why `:6006`?
