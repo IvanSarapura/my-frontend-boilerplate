@@ -62,6 +62,9 @@ describe('Icon', () => {
       'error',
       'warning',
       'info',
+      'sun',
+      'moon',
+      'monitor',
     ] as const;
 
     names.forEach((name) => {

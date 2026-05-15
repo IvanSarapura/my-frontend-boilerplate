@@ -67,13 +67,29 @@
     --transition-fast: 0.15s ease;
   }
 
+  /*
+   * Theming contract: tri-state (light / dark / system).
+   * - No `data-theme` attribute: system mode — follows `prefers-color-scheme`.
+   * - `data-theme="light"`: explicit override — stays light regardless of OS.
+   * - `data-theme="dark"`: explicit override — stays dark regardless of OS.
+   * The dark token block is shared by the OS preference (system mode) and the
+   * explicit override; light is the default state of `:root` so no extra rule
+   * is needed for `data-theme="light"`.
+   */
   @media (prefers-color-scheme: dark) {
-    :root {
+    :root:not([data-theme='light']) {
       --background: #0a0a0a;
       --foreground: #ededed;
       --card-bg: #1a1a1a;
       --card-border: #2e2e2e;
     }
+  }
+
+  :root[data-theme='dark'] {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+    --card-bg: #1a1a1a;
+    --card-border: #2e2e2e;
   }
 
   @keyframes spin {
@@ -109,9 +125,17 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    html {
+    html:not([data-theme='light']) {
       color-scheme: dark;
     }
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  html[data-theme='light'] {
+    color-scheme: light;
   }
 }
 
