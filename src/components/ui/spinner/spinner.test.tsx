@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { Spinner } from './spinner';
@@ -9,28 +9,60 @@ describe('Spinner', () => {
     expect(container.firstChild).toBeInTheDocument();
   });
 
-  it('has aria-hidden="true" always', () => {
+  it('has role="status" for accessibility', () => {
+    render(<Spinner />);
+    expect(screen.getByRole('status')).toBeInTheDocument();
+  });
+
+  it('announces "Loading" by default', () => {
+    render(<Spinner />);
+    expect(screen.getByRole('status')).toHaveAccessibleName('Loading');
+  });
+
+  it('announces a custom label', () => {
+    render(<Spinner label="Saving changes" />);
+    expect(screen.getByRole('status')).toHaveAccessibleName('Saving changes');
+  });
+
+  it('renders the SVG as aria-hidden', () => {
     const { container } = render(<Spinner />);
-    expect(container.firstChild).toHaveAttribute('aria-hidden', 'true');
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('aria-hidden', 'true');
   });
 
-  it('applies md size by default', () => {
-    const { container } = render(<Spinner />);
-    expect(container.firstChild).toHaveStyle({ width: '2rem', height: '2rem' });
+  it('applies sm size class', () => {
+    render(<Spinner size="sm" />);
+    expect(screen.getByRole('status')).toHaveClass('sm');
   });
 
-  it('applies sm size', () => {
-    const { container } = render(<Spinner size="sm" />);
-    expect(container.firstChild).toHaveStyle({ width: '1rem', height: '1rem' });
+  it('applies md size class by default', () => {
+    render(<Spinner />);
+    expect(screen.getByRole('status')).toHaveClass('md');
   });
 
-  it('applies lg size', () => {
-    const { container } = render(<Spinner size="lg" />);
-    expect(container.firstChild).toHaveStyle({ width: '3rem', height: '3rem' });
+  it('applies lg size class', () => {
+    render(<Spinner size="lg" />);
+    expect(screen.getByRole('status')).toHaveClass('lg');
+  });
+
+  it('applies muted variant class', () => {
+    render(<Spinner variant="muted" />);
+    expect(screen.getByRole('status')).toHaveClass('muted');
+  });
+
+  it('applies white variant class', () => {
+    render(<Spinner variant="white" />);
+    expect(screen.getByRole('status')).toHaveClass('white');
+  });
+
+  it('does not add a variant class for default variant', () => {
+    render(<Spinner variant="default" />);
+    const el = screen.getByRole('status');
+    expect(el).not.toHaveClass('default');
   });
 
   it('forwards custom className', () => {
-    const { container } = render(<Spinner className="my-class" />);
-    expect(container.firstChild).toHaveClass('my-class');
+    render(<Spinner className="my-class" />);
+    expect(screen.getByRole('status')).toHaveClass('my-class');
   });
 });

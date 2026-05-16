@@ -65,6 +65,10 @@ describe('Icon', () => {
       'sun',
       'moon',
       'monitor',
+      'autorenew',
+      'bookmark',
+      'cached',
+      'menu',
     ] as const;
 
     names.forEach((name) => {

@@ -2,18 +2,33 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
   padding: 0;
   background: transparent;
   color: var(--foreground);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
   cursor: pointer;
+  flex-shrink: 0;
   transition:
     background-color var(--transition-fast),
     border-color var(--transition-fast),
     color var(--transition-fast);
+}
+
+/* ── Sizes — button and icon scale in lockstep via ICON_SIZE in TSX ───── */
+.sm {
+  width: 28px;
+  height: 28px;
+}
+
+.md {
+  width: 36px;
+  height: 36px;
+}
+
+.lg {
+  width: 44px;
+  height: 44px;
 }
 
 .toggle:disabled {

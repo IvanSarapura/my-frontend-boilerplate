@@ -16,7 +16,10 @@ const meta = {
     ),
   ],
   argTypes: {
-    size: { control: { type: 'number', min: 12, max: 48, step: 2 } },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'md', 'lg'],
+    },
   },
 } satisfies Meta<typeof ThemeToggle>;
 
@@ -24,15 +27,22 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: { size: 20 },
+  args: { size: 'md' },
 };
 
-export const Large: Story = {
-  args: { size: 32 },
+export const AllSizes: Story = {
+  args: {},
+  render: () => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+      <ThemeToggle size="sm" />
+      <ThemeToggle size="md" />
+      <ThemeToggle size="lg" />
+    </div>
+  ),
 };
 
 export const InToolbar: Story = {
-  args: { size: 20 },
+  args: { size: 'sm' },
   render: (args) => (
     <div
       style={{

@@ -62,9 +62,9 @@ function ToastItem({
     <div
       className={cx(styles.toast, styles[variant], leaving && styles.leaving)}
     >
-      <span className={styles.icon}>
-        <Icon name={VARIANT_ICONS[variant]} size={24} />
-      </span>
+      <div className={styles.iconWrapper}>
+        <Icon name={VARIANT_ICONS[variant]} size={20} />
+      </div>
       <div className={styles.content}>
         <p className={styles.title}>{title}</p>
         {description && <p className={styles.description}>{description}</p>}

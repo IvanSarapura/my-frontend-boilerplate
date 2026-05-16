@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
+import { Button } from '@/components/ui/button';
+
 import { Modal } from './modal';
 
 const meta = {
@@ -23,9 +25,39 @@ export const Default: Story = {
     onClose: () => {},
     footer: (
       <>
-        <button type="button">Cancel</button>
-        <button type="button">Confirm</button>
+        <Button variant="secondary" onClick={() => {}}>
+          Cancel
+        </Button>
+        <Button onClick={() => {}}>Confirm</Button>
       </>
     ),
+  },
+};
+
+export const Destructive: Story = {
+  args: {
+    open: true,
+    title: 'Delete Item',
+    children:
+      'This will permanently delete the item and all associated data. This action cannot be undone.',
+    onClose: () => {},
+    footer: (
+      <>
+        <Button variant="secondary" onClick={() => {}}>
+          Cancel
+        </Button>
+        <Button onClick={() => {}}>Delete</Button>
+      </>
+    ),
+  },
+};
+
+export const WithoutFooter: Story = {
+  args: {
+    open: true,
+    title: 'Information',
+    children:
+      'This modal presents information only and requires no action from the user.',
+    onClose: () => {},
   },
 };

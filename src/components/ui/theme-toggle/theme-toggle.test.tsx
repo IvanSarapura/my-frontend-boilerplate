@@ -100,13 +100,22 @@ describe('ThemeToggle', () => {
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
   });
 
-  it('respects the size prop on the inner icon', () => {
-    const { container } = render(
-      <ThemeProvider>
-        <ThemeToggle size={32} />
-      </ThemeProvider>,
-    );
-    const svg = container.querySelector('svg');
-    expect(svg).toHaveAttribute('width', '32');
+  it('applies the correct size class and icon dimensions for each size', () => {
+    const cases: Array<{ size: 'sm' | 'md' | 'lg'; iconPx: string }> = [
+      { size: 'sm', iconPx: '14' },
+      { size: 'md', iconPx: '18' },
+      { size: 'lg', iconPx: '22' },
+    ];
+
+    for (const { size, iconPx } of cases) {
+      const { container, unmount } = render(
+        <ThemeProvider>
+          <ThemeToggle size={size} />
+        </ThemeProvider>,
+      );
+      expect(screen.getByRole('button')).toHaveClass(size);
+      expect(container.querySelector('svg')).toHaveAttribute('width', iconPx);
+      unmount();
+    }
   });
 });

@@ -10,11 +10,13 @@ import { cx } from '@/lib/utils';
 
 import styles from './theme-toggle.module.css';
 
+type ThemeToggleSize = 'sm' | 'md' | 'lg';
+
 type ThemeToggleProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   'children' | 'aria-label'
 > & {
-  size?: number;
+  size?: ThemeToggleSize;
 };
 
 const CYCLE: Record<Theme, Theme> = {
@@ -35,8 +37,15 @@ const LABEL: Record<Theme, string> = {
   system: 'Current theme: system. Switch to light.',
 };
 
+/** Icon pixel size paired to each button size so both scale in lockstep. */
+const ICON_SIZE: Record<ThemeToggleSize, number> = {
+  sm: 14,
+  md: 18,
+  lg: 22,
+};
+
 export function ThemeToggle({
-  size = 20,
+  size = 'md',
   className,
   onClick,
   ...props
@@ -47,7 +56,7 @@ export function ThemeToggle({
   return (
     <button
       type="button"
-      className={cx(styles.toggle, className)}
+      className={cx(styles.toggle, styles[size], className)}
       aria-label={label}
       title={label}
       onClick={(e) => {
@@ -56,7 +65,7 @@ export function ThemeToggle({
       }}
       {...props}
     >
-      <Icon name={ICON[theme]} size={size} />
+      <Icon name={ICON[theme]} size={ICON_SIZE[size]} />
     </button>
   );
 }

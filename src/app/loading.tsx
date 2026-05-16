@@ -4,7 +4,7 @@ import styles from './loading.module.css';
 
 export default function Loading() {
   return (
-    <div role="status" aria-label="Loading" className={styles.container}>
+    <div className={styles.container}>
       <Spinner size="lg" />
       <span className="sr-only">Loading...</span>
     </div>
