@@ -91,7 +91,7 @@ Key principles:
 | --------------------------------- | ------------------------------------------------------------------ |
 | **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler             |
 | **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable        |
-| **Custom Design System**          | 23 primitive UI components built from scratch with CSS Modules     |
+| **Custom Design System**          | 22 primitive UI components + 80-icon registry, all CSS Modules     |
 | **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC    |
 | **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK |
 | **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation       |
@@ -250,7 +250,7 @@ my-frontend-boilerplate/
 │   │   │   ├── card/
 │   │   │   ├── checkbox/
 │   │   │   ├── dropdown/            #   @floating-ui compound: Trigger + Content + Item + Separator
-│   │   │   ├── icon/                #   centralized SVG icon registry (chevrons, status, sun/moon/monitor, …)
+│   │   │   ├── icon/                #   80-icon registry: Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants
 │   │   │   ├── input/
 │   │   │   ├── modal/
 │   │   │   ├── pagination/          #   accessible nav with ellipsis collapsing
@@ -306,6 +306,8 @@ my-frontend-boilerplate/
 │   ├── proxy.ts                     # Locale routing — detects Accept-Language, redirects to /[locale]
 │   └── types/
 │       └── index.ts
+├── public/
+│   └── placeholder.svg              # Structural anchor — keeps public/ tracked so Storybook staticDirs resolves
 ├── .env.local.example
 ├── .npmrc
 ├── next.config.ts
@@ -342,30 +344,30 @@ Every primitive in `components/ui/` is built from scratch with **CSS Modules** a
 
 Each component lives in its own subdirectory (`button/button.tsx`, `button/button.test.tsx`, `button/button.stories.tsx`, `button/button.module.css`, `button/index.ts`). Adding a new component never pollutes the parent directory. Context providers (`QueryProvider`, `ToastProvider`) live in `components/providers/` — separate from the stateless visual primitives in `components/ui/`. Complex interactive behavior is extracted into `src/hooks/` as dedicated hooks (e.g. `useModalBehavior`), keeping components responsible for rendering only.
 
-| Component      | Purpose                                                          |
-| -------------- | ---------------------------------------------------------------- |
-| `Accordion`    | Compound: `Accordion` + `Item` + `Trigger` + `Content`           |
-| `Alert`        | Info / success / warning / error with dismissible variant        |
-| `Avatar`       | Image with automatic initials fallback + status indicator        |
-| `Badge`        | Status indicators                                                |
-| `Button`       | Variants (primary, secondary, ghost, icon) — 3 sizes             |
-| `Card`         | Container with variants                                          |
-| `Checkbox`     | Form field with label / error / helper                           |
-| `Dropdown`     | Compound menu powered by `@floating-ui/react`                    |
-| `Icon`         | Centralised SVG registry (chevrons, status, sun/moon/monitor, …) |
-| `Input`        | Text input with label, error, helper                             |
-| `Modal`        | Focus-trapped dialog (portal)                                    |
-| `Pagination`   | Accessible nav with MUI-style ellipsis collapsing                |
-| `Radio`        | `Radio` + `RadioGroup` with context (controlled / uncontrolled)  |
-| `Select`       | Custom accessible dropdown with keyboard navigation              |
-| `Skeleton`     | Shimmer placeholder, respects `prefers-reduced-motion`           |
-| `Spinner`      | Loading indicator                                                |
-| `Tabs`         | Compound + roving tabindex + manual activation                   |
-| `Textarea`     | Multi-line input following the `Input` pattern                   |
-| `ThemeToggle`  | Cycles light → dark → system with dynamic ARIA label             |
-| `Toast`        | Notification system (context + hook)                             |
-| `ToggleSwitch` | On/off toggle (rounded and rectangular variants)                 |
-| `Tooltip`      | Hover/focus tooltip powered by `@floating-ui/react`              |
+| Component      | Purpose                                                                                                                                 |
+| -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `Accordion`    | Compound: `Accordion` + `Item` + `Trigger` + `Content`                                                                                  |
+| `Alert`        | Info / success / warning / error with dismissible variant                                                                               |
+| `Avatar`       | Image with automatic initials fallback + status indicator                                                                               |
+| `Badge`        | Status indicators                                                                                                                       |
+| `Button`       | Variants (primary, secondary, ghost, icon) — 3 sizes                                                                                    |
+| `Card`         | Container with variants                                                                                                                 |
+| `Checkbox`     | Form field with label / error / helper                                                                                                  |
+| `Dropdown`     | Compound menu powered by `@floating-ui/react`                                                                                           |
+| `Icon`         | 80-icon registry (Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants like `thumb-up` ↻180° = `thumb-down`) |
+| `Input`        | Text input with label, error, helper                                                                                                    |
+| `Modal`        | Focus-trapped dialog (portal)                                                                                                           |
+| `Pagination`   | Accessible nav with MUI-style ellipsis collapsing                                                                                       |
+| `Radio`        | `Radio` + `RadioGroup` with context (controlled / uncontrolled)                                                                         |
+| `Select`       | Custom accessible dropdown with keyboard navigation                                                                                     |
+| `Skeleton`     | Shimmer placeholder, respects `prefers-reduced-motion`                                                                                  |
+| `Spinner`      | Loading indicator                                                                                                                       |
+| `Tabs`         | Compound + roving tabindex + manual activation                                                                                          |
+| `Textarea`     | Multi-line input following the `Input` pattern                                                                                          |
+| `ThemeToggle`  | Cycles light → dark → system with dynamic ARIA label                                                                                    |
+| `Toast`        | Notification system (context + hook)                                                                                                    |
+| `ToggleSwitch` | On/off toggle (rounded and rectangular variants)                                                                                        |
+| `Tooltip`      | Hover/focus tooltip powered by `@floating-ui/react`                                                                                     |
 
 > **`@floating-ui/react`** is the single approved exception to the zero-UI-dependency policy. It powers only `Tooltip` and `Dropdown`. See `.agents/ANALYSIS-STATUS.md` §10 for the full rationale.
 >
@@ -832,3 +834,13 @@ If you see `ERESOLVE` errors during `npm ci`, check `.github/dependabot.yml` for
 ### Lint-staged performance
 
 ESLint and Stylelint run with `--cache` in the pre-commit hook. The first commit after cloning may take longer as caches are built; subsequent commits are significantly faster. Cache files (`.eslintcache`, `.stylelintcache`) are gitignored and safe to delete at any time.
+
+### Pre-commit Node heap
+
+`.husky/pre-commit` exports `NODE_OPTIONS='--max-old-space-size=4096'` before invoking `lint-staged`. This raises V8's heap ceiling so eslint/prettier/stylelint can process large files without being killed by the OS (`SIGKILL`). The Icon registry alone is ~800 lines of JSX, and combined with `eslint-plugin-react-compiler`'s type-aware analysis the default ~2 GB heap is insufficient. Raise the limit further (e.g. `6144`) only if the symptom returns; do not bypass it by skipping the hook.
+
+> **Why exported in the hook, not inline in `lint-staged`?** `lint-staged` does **not** run commands through a shell, so an env-var prefix like `NODE_OPTIONS=... eslint --fix` is interpreted as a binary name and fails with `ENOENT`. Exporting the variable in the hook makes it available to every child process (eslint, prettier, stylelint) without depending on shell-quoting.
+
+### Structural files in `public/`
+
+`public/placeholder.svg` is a 1×1 transparent SVG whose only purpose is to keep the `public/` directory tracked by git. Git does not track empty directories, and Storybook's `staticDirs: ['../public']` config fails fast with `parseStaticDir` ENOENT on fresh CI clones if the directory is missing. **Do not delete this file** unless you replace it with a real static asset.
