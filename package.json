@@ -27,7 +27,7 @@
     "build-storybook": "storybook build"
   },
   "lint-staged": {
-    "*.{ts,tsx,mts}": "NODE_OPTIONS='--max-old-space-size=4096' eslint --fix --cache",
+    "*.{ts,tsx,mts}": "eslint --fix --cache",
     "*.css": "stylelint --fix --cache",
     "*.{ts,tsx,mts,css,json,md}": "prettier --write"
   },
