@@ -69,7 +69,7 @@
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 50%;
-  background: #fff;
+  background: var(--background);
   transform: scale(0);
   transition: transform var(--transition-fast);
 }
@@ -88,13 +88,17 @@
   outline-offset: 2px;
 }
 
+.row:hover:not(.disabled) .box {
+  border-color: var(--accent);
+}
+
 .boxError {
-  border-color: var(--color-error, #ef4444);
+  border-color: var(--color-error);
 }
 
 .input:checked + .boxError {
-  background: var(--color-error, #ef4444);
-  border-color: var(--color-error, #ef4444);
+  background: var(--color-error);
+  border-color: var(--color-error);
 }
 
 .label {
@@ -108,5 +112,14 @@
 
 .errorText {
   font-size: var(--text-xs);
-  color: var(--color-error, #ef4444);
+  color: var(--color-error);
+}
+
+/* ── Reduced motion ───────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .box,
+  .dot {
+    transition: none;
+  }
 }
