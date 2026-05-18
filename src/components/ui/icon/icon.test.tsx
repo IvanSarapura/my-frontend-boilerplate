@@ -2,6 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 
 import { Icon } from './icon';
+import { type IconName, icons } from './icons';
 
 describe('Icon', () => {
   it('renders an svg element', () => {
@@ -51,25 +52,7 @@ describe('Icon', () => {
   });
 
   it('renders the correct shapes for each icon name', () => {
-    const names = [
-      'chevron-up',
-      'chevron-down',
-      'chevron-left',
-      'chevron-right',
-      'close',
-      'check',
-      'success',
-      'error',
-      'warning',
-      'info',
-      'sun',
-      'moon',
-      'monitor',
-      'autorenew',
-      'bookmark',
-      'cached',
-      'menu',
-    ] as const;
+    const names = Object.keys(icons) as IconName[];
 
     names.forEach((name) => {
       const { container, unmount } = render(<Icon name={name} />);
