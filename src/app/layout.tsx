@@ -2,24 +2,15 @@ import './globals.css';
 
 import type { Metadata, Viewport } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
-import { headers } from 'next/headers';
+import { Suspense } from 'react';
 
+import { HeadScripts } from '@/components/head-scripts';
 import { QueryProvider } from '@/components/providers/query-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ToastProvider } from '@/components/providers/toast-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { defaultLocale, locales } from '@/i18n/config';
 import { env } from '@/lib/env';
-import {
-  generateOrganizationJsonLd,
-  generateWebsiteJsonLd,
-} from '@/lib/json-ld';
-
-// Inline anti-FOUC script: runs synchronously before the first paint so the
-// document's `data-theme` matches the user's stored preference, eliminating
-// the flash of unstyled (light) content on dark-mode reload. Keep this in
-// sync with the contract defined in src/components/providers/theme-provider.
-const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`;
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -73,22 +64,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const nonce = (await headers()).get('x-nonce') ?? undefined;
-  const websiteJsonLd = generateWebsiteJsonLd({
-    name: env.NEXT_PUBLIC_APP_NAME,
-    url: env.NEXT_PUBLIC_APP_URL,
-    description: APP_DESCRIPTION,
-  });
-  const organizationJsonLd = generateOrganizationJsonLd({
-    name: env.NEXT_PUBLIC_APP_NAME,
-    url: env.NEXT_PUBLIC_APP_URL,
-  });
-
   return (
     <html
       lang="en"
@@ -96,22 +76,18 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <head>
-        <script
-          nonce={nonce}
-          dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
-        />
-        <script
-          nonce={nonce}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
-        />
-        <script
-          nonce={nonce}
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationJsonLd),
-          }}
-        />
+        {/*
+          HeadScripts reads the CSP nonce via headers() — must stay inside
+          <Suspense> so the layout shell remains pre-renderable (PPR).
+          See src/components/head-scripts/head-scripts.tsx for rationale.
+        */}
+        <Suspense fallback={null}>
+          <HeadScripts
+            appName={env.NEXT_PUBLIC_APP_NAME}
+            appUrl={env.NEXT_PUBLIC_APP_URL}
+            description={APP_DESCRIPTION}
+          />
+        </Suspense>
       </head>
       <body>
         <a href="#main-content" className="sr-only">

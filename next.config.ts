@@ -21,10 +21,10 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
-  // Note: nonce-based CSP forces dynamic rendering on routes that emit
-  // inline scripts (the root layout does — anti-FOUC + JSON-LD). Cached
-  // components inside those routes still cache; only the dynamic shell
-  // pays the cost. See ONBOARDING.md §14 for the full trade-off rationale.
+  // cacheComponents stays enabled. The root layout's nonced inline scripts
+  // are isolated inside <Suspense> in src/components/head-scripts/, so the
+  // shell pre-renders normally and only the <script nonce> tags resolve per
+  // request. See ONBOARDING.md §14 for the full architecture.
   cacheComponents: true,
   async headers() {
     return [
