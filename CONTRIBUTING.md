@@ -24,6 +24,7 @@
   - [Branching Model](#branching-model)
   - [Making Changes](#making-changes)
   - [Adding a New Feature](#adding-a-new-feature)
+  - [Barrel Exports](#barrel-exports)
   - [Images and Static Assets](#images-and-static-assets)
   - [Pre-commit Checks](#pre-commit-checks)
 - [Commit Message Guidelines](#commit-message-guidelines)
@@ -136,6 +137,42 @@ src/features/<name>/
 - Components inside a feature can import from `components/ui/` but not from other features.
 - If logic is needed by multiple features, move it to `lib/` or `components/ui/`.
 - If your feature fetches data at the page level, use async Server Components with the `use cache` directive instead of `useEffect` or client-side fetching.
+
+### Barrel Exports
+
+Each feature and shared module exposes its public API through an `index.ts` (a "barrel"). Treat this file as a deliberate contract — what you export becomes the surface that other modules depend on; what you keep internal can be refactored, renamed, or removed without breaking consumers.
+
+**What to export**
+
+- Components consumed outside the module (cross-feature, app routes, providers).
+- Hooks reusable beyond a single component.
+- Public types used in props, return values, or arguments of exported APIs.
+- Service entry points (`getPosts`, `getPostById`, Server Actions, etc.).
+
+**What to keep internal (do not export)**
+
+- Component-local helpers — `get-initials.ts` is used only by `Avatar`; `get-pagination-range.ts` is used only by `Pagination`. They live next to their consumer and are never imported from outside.
+- Sub-components a compound parent already re-exports through itself.
+- CSS modules — always imported relatively from the consuming file.
+- Zod schemas when the inferred type (`z.infer<>`) is what callers need (keep the schema private, export the type).
+- Test fixtures and `*.test.*` files.
+- Internal infrastructure used only by services (`apiClient` lives in `src/lib/api/`; features call it through their own typed services, not through the barrel).
+
+**Example — `src/components/ui/index.ts`:**
+
+```ts
+export { Pagination } from './pagination'; // ✅ consumed by app routes
+// export { getPaginationRange } from './pagination/get-pagination-range';
+//                                          // ❌ internal helper — keep private
+```
+
+**Anti-patterns to avoid**
+
+- **Re-exporting third-party libs** (`export * from '@floating-ui/react'`) — leaks the dependency into your module's public API and prevents future swaps. The `@floating-ui/react` exception documented in `ANALYSIS-STATUS.md §10.6` is enforced precisely because Tooltip and Dropdown encapsulate it.
+- **Barrel-of-barrels** (`export * from './subdir'`) — opaque, hostile to tree-shaking, easy to accidentally widen the public surface during refactors.
+- **Circular re-exports between sibling barrels** — fragile, confusing for tooling, and a common source of obscure module-resolution errors.
+
+**Rule of thumb**: before adding a new export to a barrel, grep `src/` for at least one consumer outside the owning module. If there is none, keep it internal until there is. Adding to a barrel is cheap; removing from a barrel is a breaking change for anyone who imported it.
 
 ### Images and Static Assets
 
