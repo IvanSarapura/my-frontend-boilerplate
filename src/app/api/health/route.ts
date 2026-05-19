@@ -7,10 +7,14 @@
 // IMPORTANT: this permissive policy is scoped to /api/health alone. Any other
 // route under /api/ must declare its own (more restrictive) CORS headers and
 // MUST NOT copy these blindly.
+// 1 day — browsers cache the CORS preflight result this long before re-asking.
+const CORS_PREFLIGHT_MAX_AGE_SECONDS = '86400';
+const HTTP_NO_CONTENT = 204;
+
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
-  'Access-Control-Max-Age': '86400',
+  'Access-Control-Max-Age': CORS_PREFLIGHT_MAX_AGE_SECONDS,
 } as const;
 
 export async function GET() {
@@ -24,5 +28,5 @@ export async function GET() {
 }
 
 export function OPTIONS() {
-  return new Response(null, { status: 204, headers: CORS_HEADERS });
+  return new Response(null, { status: HTTP_NO_CONTENT, headers: CORS_HEADERS });
 }

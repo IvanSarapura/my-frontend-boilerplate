@@ -18,6 +18,9 @@ export function truncate(str: string, max: number): string {
 
   const slice = str.slice(0, max);
   const lastSpace = slice.lastIndexOf(' ');
+  // `lastSpace === 0` means the only space sits at index 0 (leading whitespace
+  // before one long word). No useful word-boundary exists, so fall back to a
+  // hard cut at `max`.
   const cutAt = lastSpace > 0 ? lastSpace : max;
   return `${slice.slice(0, cutAt).trimEnd()}…`;
 }

@@ -30,6 +30,7 @@ export function Spinner({
         className,
       )}
     >
+      {/* 24×24 viewBox matches the icon set; r=9 leaves ~3px stroke breathing room. */}
       <svg className={styles.svg} viewBox="0 0 24 24" aria-hidden="true">
         <circle className={styles.track} cx="12" cy="12" r="9" />
         <circle className={styles.arc} cx="12" cy="12" r="9" />
