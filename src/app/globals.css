@@ -70,6 +70,24 @@
     --color-warning: #f59e0b;
     --color-error: #ef4444;
 
+    /*
+     * Interactive state tokens.
+     * Centralize focus + disabled appearance so a11y refinements and theme
+     * swaps are single-line changes. The focus ring aliases --accent by
+     * default — overriding it does not require touching component CSS.
+     *
+     * Hover/active are intentionally NOT tokenized: those states are highly
+     * context-dependent (button-hover ≠ link-hover ≠ card-hover). Components
+     * derive them per-case with color-mix(in srgb, ...) instead — this keeps
+     * the global token surface tight and avoids over-constraining design.
+     */
+    --color-focus-ring: var(--accent);
+    --color-focus-ring-width: 2px;
+    --color-focus-ring-offset: 2px;
+    --color-disabled-fg: var(--muted);
+    --color-disabled-bg: var(--card-bg);
+    --opacity-disabled: 0.6;
+
     /* Spacing scale */
     --space-1: 0.25rem;
     --space-2: 0.5rem;
@@ -366,7 +384,7 @@
 
   /* Focus ring utility for interactive elements */
   .focus-ring:focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 2px;
+    outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+    outline-offset: var(--color-focus-ring-offset);
   }
 }
