@@ -6,6 +6,9 @@ import { getPostById, getPosts } from '@/features/posts';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
+import { truncate } from '@/lib/string';
+
+const META_DESCRIPTION_MAX = 160;
 
 import styles from './post-detail.module.css';
 
@@ -39,7 +42,18 @@ export async function generateMetadata({
 
   if (!post) return {};
 
-  return { title: `${post.title} | ${dict.posts.title}` };
+  const description = truncate(post.body, META_DESCRIPTION_MAX);
+
+  return {
+    title: `${post.title} | ${dict.posts.title}`,
+    description,
+    openGraph: {
+      title: post.title,
+      description,
+      type: 'article',
+      locale,
+    },
+  };
 }
 
 export default async function PostDetailPage({ params }: PageProps) {

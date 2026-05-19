@@ -78,6 +78,19 @@ describe('Post detail page', () => {
     expect(meta.title).toBe('First Post | Posts');
   });
 
+  it('generateMetadata enriches the response with description and openGraph', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en', id: '1' }),
+    });
+    expect(meta.description).toBe('Body one');
+    expect(meta.openGraph).toEqual({
+      title: 'First Post',
+      description: 'Body one',
+      type: 'article',
+      locale: 'en',
+    });
+  });
+
   it('generateMetadata returns empty metadata for a missing post', async () => {
     const meta = await generateMetadata({
       params: Promise.resolve({ locale: 'en', id: '9999' }),
