@@ -67,6 +67,8 @@ export function Pagination({
               disabled={disabled || isFirst}
               aria-label="First page"
             >
+              {/* Two chevrons stacked via .tight margin render the "<<" affordance
+                  without adding a chevrons-left-double icon to the registry. */}
               <Icon name="chevron-left" size={14} />
               <Icon name="chevron-left" size={14} className={styles.tight} />
             </button>
@@ -112,6 +114,7 @@ export function Pagination({
               disabled={disabled || isLast}
               aria-label="Last page"
             >
+              {/* Mirror of the "<<" pattern above — see First page comment. */}
               <Icon name="chevron-right" size={14} />
               <Icon name="chevron-right" size={14} className={styles.tight} />
             </button>

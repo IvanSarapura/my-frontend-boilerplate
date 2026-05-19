@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Icon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
@@ -36,7 +36,10 @@ export function Select({
   const [open, setOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const selectedLabel = options.find((o) => o.value === value)?.label;
+  const selectedLabel = useMemo(
+    () => options.find((o) => o.value === value)?.label,
+    [options, value],
+  );
 
   const close = useCallback(() => {
     setOpen(false);

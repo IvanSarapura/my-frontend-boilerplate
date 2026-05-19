@@ -7,8 +7,8 @@ import styles from './post-card.module.css';
 type PostCardProps = {
   title: string;
   body: string;
-  className?: string;
-  href?: string;
+  className?: string | undefined;
+  href?: string | undefined;
 };
 
 export function PostCard({ title, body, className, href }: PostCardProps) {

@@ -15,7 +15,7 @@ export function PostList({ posts, getHref }: PostListProps) {
           <PostCard
             title={post.title}
             body={post.body}
-            {...(getHref ? { href: getHref(post) } : {})}
+            href={getHref?.(post)}
           />
         </li>
       ))}

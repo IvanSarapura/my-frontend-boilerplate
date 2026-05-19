@@ -31,7 +31,7 @@ export function Icon({
       strokeLinejoin="round"
       role={isDecorative ? undefined : 'img'}
       aria-label={ariaLabel}
-      aria-hidden={isDecorative || undefined}
+      aria-hidden={isDecorative ? true : undefined}
       focusable={false}
     >
       {icons[name]}
