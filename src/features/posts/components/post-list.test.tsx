@@ -19,4 +19,20 @@ describe('PostList', () => {
     render(<PostList posts={[]} />);
     expect(screen.getByRole('list')).toBeEmptyDOMElement();
   });
+
+  it('forwards an href derived from getHref to each PostCard', () => {
+    const posts = [
+      { id: 1, title: 'One', body: 'Body one', userId: 1 },
+      { id: 2, title: 'Two', body: 'Body two', userId: 1 },
+    ];
+
+    render(
+      <PostList posts={posts} getHref={(post) => `/en/posts/${post.id}`} />,
+    );
+
+    const links = screen.getAllByRole('link');
+    expect(links).toHaveLength(2);
+    expect(links[0]).toHaveAttribute('href', '/en/posts/1');
+    expect(links[1]).toHaveAttribute('href', '/en/posts/2');
+  });
 });
