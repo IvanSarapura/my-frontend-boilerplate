@@ -21,11 +21,11 @@ export async function apiClient<T>(
   const { schema, ...fetchOptions } = options;
 
   const res = await fetch(url, {
+    ...fetchOptions,
     headers: {
       'Content-Type': 'application/json',
       ...fetchOptions.headers,
     },
-    ...fetchOptions,
   });
 
   if (!res.ok) {
