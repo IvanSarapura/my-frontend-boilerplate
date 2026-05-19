@@ -16,4 +16,16 @@ describe('PostCard', () => {
     render(<PostCard title="T" body="B" className="custom" />);
     expect(screen.getByRole('article')).toHaveClass('custom');
   });
+
+  it('does not render a link wrapper when href is omitted', () => {
+    render(<PostCard title="T" body="B" />);
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('wraps the article in a link when href is provided', () => {
+    render(<PostCard title="T" body="B" href="/en/posts/1" />);
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', '/en/posts/1');
+    expect(link.querySelector('article')).not.toBeNull();
+  });
 });

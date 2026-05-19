@@ -5,6 +5,17 @@
   padding: var(--space-4) var(--space-6);
 }
 
+.link {
+  color: inherit;
+  display: block;
+  text-decoration: none;
+}
+
+.link:hover .card,
+.link:focus-visible .card {
+  border-color: var(--accent);
+}
+
 .title {
   font-size: var(--text-base);
   font-weight: 600;
