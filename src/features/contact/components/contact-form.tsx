@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useActionState, useEffect, useRef } from 'react';
+import { useActionState, useEffect, useMemo, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useToast } from '@/components/providers/toast-provider';
@@ -11,8 +11,8 @@ import { Textarea } from '@/components/ui/textarea';
 
 import type { ContactState } from '../actions';
 import { submitContactAction } from '../actions';
-import type { ContactFormData } from '../schemas';
-import { contactSchema } from '../schemas';
+import type { ContactErrorMessages, ContactFormData } from '../schemas';
+import { getContactSchema } from '../schemas';
 import styles from './contact-form.module.css';
 
 function getServerError(
@@ -23,7 +23,11 @@ function getServerError(
   return undefined;
 }
 
-export function ContactForm() {
+type ContactFormProps = {
+  errorMessages: ContactErrorMessages;
+};
+
+export function ContactForm({ errorMessages }: ContactFormProps) {
   const [state, formAction, pending] = useActionState(
     submitContactAction,
     null,
@@ -31,12 +35,17 @@ export function ContactForm() {
   const formRef = useRef<HTMLFormElement>(null);
   const { addToast } = useToast();
 
+  const schema = useMemo(
+    () => getContactSchema(errorMessages),
+    [errorMessages],
+  );
+
   const {
     register,
     formState: { errors },
     reset,
   } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(schema),
     mode: 'onBlur',
   });
 

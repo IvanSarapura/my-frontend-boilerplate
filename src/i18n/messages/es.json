@@ -28,5 +28,12 @@
     "messageLabel": "Mensaje",
     "messagePlaceholder": "¿Cómo podemos ayudarte?",
     "successMessage": "¡Gracias! Tu mensaje ha sido enviado."
+  },
+  "errors": {
+    "contact": {
+      "nameMin": "El nombre debe tener al menos 2 caracteres",
+      "emailInvalid": "Por favor ingresa un correo electrónico válido",
+      "messageMin": "El mensaje debe tener al menos 10 caracteres"
+    }
   }
 }
