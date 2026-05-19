@@ -25,6 +25,7 @@
   - [Making Changes](#making-changes)
   - [Adding a New Feature](#adding-a-new-feature)
   - [Barrel Exports](#barrel-exports)
+  - [Environment Variables](#environment-variables)
   - [Images and Static Assets](#images-and-static-assets)
   - [Pre-commit Checks](#pre-commit-checks)
 - [Commit Message Guidelines](#commit-message-guidelines)
@@ -36,6 +37,7 @@
 - [Running Quality Checks Locally](#running-quality-checks-locally)
   - [Code Quality](#code-quality)
   - [Testing](#testing)
+  - [Debugging E2E Tests](#debugging-e2e-tests)
   - [Build Verification](#build-verification)
 - [Pull Request Process](#pull-request-process)
   - [Before Submitting](#before-submitting)
@@ -173,6 +175,45 @@ export { Pagination } from './pagination'; // ✅ consumed by app routes
 - **Circular re-exports between sibling barrels** — fragile, confusing for tooling, and a common source of obscure module-resolution errors.
 
 **Rule of thumb**: before adding a new export to a barrel, grep `src/` for at least one consumer outside the owning module. If there is none, keep it internal until there is. Adding to a barrel is cheap; removing from a barrel is a breaking change for anyone who imported it.
+
+### Environment Variables
+
+The project splits environment variable access into two modules along the client/server boundary. Use the one that matches where your code runs — never `process.env.<NAME>` directly, because that bypasses validation and may leak secrets into the client bundle.
+
+| Module                  | Use for                               | Safe to import from                                                |
+| ----------------------- | ------------------------------------- | ------------------------------------------------------------------ |
+| `src/lib/env.ts`        | Variables prefixed `NEXT_PUBLIC_*`    | Any code (client + server)                                         |
+| `src/lib/env.server.ts` | Secrets without `NEXT_PUBLIC_` prefix | Server code only (RSC, Route Handlers, Server Actions, `proxy.ts`) |
+
+`env.server.ts` starts with `import 'server-only'`, which makes Next.js fail the build if any Client Component (or anything transitively imported by one) reaches the module. That guarantee replaces ad-hoc discipline with a compile-time check.
+
+**Adding a new public variable:**
+
+```ts
+// src/lib/env.ts
+const envSchema = z.object({
+  NEXT_PUBLIC_APP_NAME: z.string().min(1).default('My App'),
+  NEXT_PUBLIC_API_URL: z.string().url(), // ← new
+});
+```
+
+Then add `NEXT_PUBLIC_API_URL=https://...` to `.env.example` and `.env.local`.
+
+**Adding a new server-only secret:**
+
+```ts
+// src/lib/env.server.ts
+const serverEnvSchema = z.object({
+  DATABASE_URL: z.string().url(), // ← new
+});
+```
+
+Then add a placeholder to `.env.example` (so other developers know it exists) and the real value to `.env.local` (which is gitignored).
+
+**Why a default is sometimes acceptable for `NEXT_PUBLIC_*` but never for secrets:**
+
+- Public variables have safe defaults that let `npm run dev` succeed from a fresh clone (zero-config DX).
+- Secrets have no safe default — if the server is missing `DATABASE_URL`, it should refuse to start with a clear error rather than silently fall back to something broken.
 
 ### Images and Static Assets
 
@@ -374,6 +415,59 @@ npm run storybook:build
 ```
 
 > **Coverage thresholds:** Every file must individually reach 70% coverage for statements, branches, functions, and lines. If you add a new file, add matching tests. You cannot rely on other files to compensate.
+
+### Debugging E2E Tests
+
+Playwright tests fail differently from unit tests — the failure often depends on timing, navigation, or DOM state at a specific moment. The Playwright tooling gives you four levels of escalation; reach for whichever matches your situation.
+
+**1. UI mode (preferred for iterative debugging)**
+
+```bash
+npm run test:e2e:ui
+```
+
+Opens the Playwright test runner UI with a time-travel debugger: every action records a DOM snapshot you can scrub through, plus a built-in locator picker for testing selectors against the running page. Watch mode reruns on save. This is the default tool — start here.
+
+**2. Headed + slow-mo (when you want to watch the browser)**
+
+```bash
+npx playwright test --headed --project=chromium --workers=1 \
+  e2e/contact.spec.ts -g "happy path"
+```
+
+Useful when UI mode is too much friction (e.g., running a single test or filtering by title). `--workers=1` keeps execution serial so the browser windows don't fight for focus.
+
+**3. Trace viewer (for CI-only failures)**
+
+`playwright.config.ts` enables `trace: 'on-first-retry'`. When a test fails in CI, the `e2e` GitHub Actions job uploads `playwright-report/` as an artifact. To inspect it:
+
+1. Open the failed CI run on GitHub → scroll to the bottom of the `e2e` job → download the `playwright-report` artifact.
+2. Unzip and run:
+
+   ```bash
+   npx playwright show-trace playwright-report/data/<trace-id>.zip
+   ```
+
+   The viewer shows network, console, source, and a video timeline. Almost every CI flake reveals its cause within seconds here.
+
+**4. Interactive inspector (`page.pause()`)**
+
+Drop `await page.pause();` anywhere inside a test and run with `--headed`. Playwright opens its inspector at that line — you can step through subsequent actions one at a time, evaluate locators against the live page, and resume.
+
+```ts
+test('something', async ({ page }) => {
+  await page.goto('/en');
+  await page.pause(); // ← inspector opens here, browser stays live
+  await page.click('text=Submit');
+});
+```
+
+Remove the `page.pause()` before committing. ESLint does not flag it, but it would block the test in CI indefinitely.
+
+> **Common debugging mistakes:**
+>
+> - **Don't add `await page.waitForTimeout(<ms>)` as a quick fix.** Replace it with a `await expect(locator).toBeVisible()` or similar auto-waiting assertion. Hard-coded timeouts are the #1 source of flake.
+> - **If a locator is ambiguous, narrow it with role/name** (`getByRole('button', { name: 'Submit' })`) rather than CSS classes. Class names are brittle; ARIA names are stable contracts.
 
 ### Build Verification
 
