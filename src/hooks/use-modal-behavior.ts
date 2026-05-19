@@ -2,6 +2,9 @@
 
 import { type RefObject, useEffect, useRef } from 'react';
 
+const FOCUSABLE_SELECTOR =
+  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
 export function useModalBehavior(
   open: boolean,
   onClose: () => void,
@@ -14,9 +17,8 @@ export function useModalBehavior(
       if (document.activeElement instanceof HTMLElement) {
         previousFocus.current = document.activeElement;
       }
-      const focusable = overlayRef.current?.querySelectorAll<HTMLElement>(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
+      const focusable =
+        overlayRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR);
       focusable?.[0]?.focus();
     } else {
       previousFocus.current?.focus();
@@ -32,9 +34,7 @@ export function useModalBehavior(
       }
       if (e.key === 'Tab' && overlayRef.current) {
         const focusable = Array.from(
-          overlayRef.current.querySelectorAll<HTMLElement>(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-          ),
+          overlayRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
         );
         /* v8 ignore next -- modal always renders a close button */
         if (focusable.length === 0) return;
