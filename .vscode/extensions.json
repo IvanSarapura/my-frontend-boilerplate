@@ -1,7 +1,13 @@
 {
+  // Extensions VS Code / Cursor recommend automatically when opening this repo.
+  // Trigger: open the project → "This workspace has recommendations" prompt → Install All.
+  // Keep this list aligned with the actual tooling in package.json — every entry
+  // mirrors a CLI tool the project already uses, so no surprise installs.
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
+    "stylelint.vscode-stylelint",
+    "ms-playwright.playwright",
     "ms-vscode.vscode-typescript-next",
     "vitest.explorer",
     "usernamehw.errorlens",
