@@ -7,6 +7,7 @@ import { QueryProvider } from '@/components/providers/query-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ToastProvider } from '@/components/providers/toast-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { defaultLocale, locales } from '@/i18n/config';
 import { env } from '@/lib/env';
 import { generateWebsiteJsonLd } from '@/lib/json-ld';
 
@@ -46,6 +47,10 @@ export const metadata: Metadata = {
   description: APP_DESCRIPTION,
   alternates: {
     canonical: '/',
+    languages: {
+      ...Object.fromEntries(locales.map((l) => [l, `/${l}`])),
+      'x-default': `/${defaultLocale}`,
+    },
   },
   openGraph: {
     title: env.NEXT_PUBLIC_APP_NAME,
