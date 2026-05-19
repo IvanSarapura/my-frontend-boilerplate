@@ -8,9 +8,18 @@ import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 import { truncate } from '@/lib/string';
 
+import styles from './post-detail.module.css';
+
 const META_DESCRIPTION_MAX = 160;
 
-import styles from './post-detail.module.css';
+type ValidParams = { locale: Locale; numericId: number };
+
+function parseParams(locale: string, id: string): ValidParams | null {
+  if (!(locales as readonly string[]).includes(locale)) return null;
+  const numericId = Number(id);
+  if (!Number.isInteger(numericId) || numericId <= 0) return null;
+  return { locale: locale as Locale, numericId };
+}
 
 // Cache Components composes [locale] from the parent layout's generateStaticParams
 // automatically — this child only needs to enumerate [id]. Build output: 2 × 10 = 20 paths.
@@ -29,15 +38,13 @@ type PageProps = {
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const { locale, id } = await params;
-  if (!(locales as readonly string[]).includes(locale)) return {};
-
-  const numericId = Number(id);
-  if (!Number.isInteger(numericId) || numericId <= 0) return {};
+  const raw = await params;
+  const parsed = parseParams(raw.locale, raw.id);
+  if (!parsed) return {};
 
   const [dict, post] = await Promise.all([
-    getDictionary(locale as Locale),
-    getPostById(numericId),
+    getDictionary(parsed.locale),
+    getPostById(parsed.numericId),
   ]);
 
   if (!post) return {};
@@ -51,26 +58,24 @@ export async function generateMetadata({
       title: post.title,
       description,
       type: 'article',
-      locale,
+      locale: parsed.locale,
     },
   };
 }
 
 export default async function PostDetailPage({ params }: PageProps) {
-  const { locale, id } = await params;
-  if (!(locales as readonly string[]).includes(locale)) notFound();
+  const raw = await params;
+  const parsed = parseParams(raw.locale, raw.id);
+  if (!parsed) notFound();
 
-  const numericId = Number(id);
-  if (!Number.isInteger(numericId) || numericId <= 0) notFound();
-
-  const post = await getPostById(numericId);
+  const post = await getPostById(parsed.numericId);
   if (!post) notFound();
 
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(parsed.locale);
 
   return (
     <main className={styles.main}>
-      <Link href={`/${locale}/posts`} className={styles.back}>
+      <Link href={`/${parsed.locale}/posts`} className={styles.back}>
         ← {dict.posts.title}
       </Link>
       <article className={styles.article}>
