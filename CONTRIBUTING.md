@@ -24,6 +24,7 @@
   - [Branching Model](#branching-model)
   - [Making Changes](#making-changes)
   - [Adding a New Feature](#adding-a-new-feature)
+  - [Images and Static Assets](#images-and-static-assets)
   - [Pre-commit Checks](#pre-commit-checks)
 - [Commit Message Guidelines](#commit-message-guidelines)
   - [Format](#format)
@@ -135,6 +136,48 @@ src/features/<name>/
 - Components inside a feature can import from `components/ui/` but not from other features.
 - If logic is needed by multiple features, move it to `lib/` or `components/ui/`.
 - If your feature fetches data at the page level, use async Server Components with the `use cache` directive instead of `useEffect` or client-side fetching.
+
+### Images and Static Assets
+
+**Always use `next/image`** for any raster image (PNG, JPG, WebP, AVIF). Do not use `<img>` for content imagery. `next/image` provides automatic format negotiation (serves AVIF/WebP when supported), lazy loading by default, responsive `srcset` generation, and layout-shift prevention via the required `width`/`height` or `fill` props.
+
+```tsx
+import Image from 'next/image';
+
+<Image
+  src="/hero.jpg"
+  alt="Descriptive alt text"
+  width={1200}
+  height={630}
+  priority // only for above-the-fold / LCP images
+/>;
+```
+
+**Required props on every `<Image>`:**
+
+- `alt` — descriptive, never empty (use `alt=""` only for truly decorative images).
+- `width` + `height`, OR `fill` (the parent must have `position: relative`).
+- `priority` **only** on the LCP image of a page (typically a hero). Never on multiple images per route — multiple priority hints defeat the purpose.
+- `sizes` when using `fill` or responsive layouts, to avoid serving 2x assets to mobile.
+
+**Where to put the file:**
+
+- Static assets bundled with the app live in `public/` and are referenced as `/file.png`.
+- For icons, prefer the central `Icon` registry in `src/components/ui/icon/` over inline SVG or PNG sprites. The registry handles ARIA, sizing, and currentColor inheritance for you.
+
+**External images** (CMS, CDN, S3): add the host to `images.remotePatterns` in `next.config.ts`:
+
+```ts
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: 'cdn.example.com' }],
+  },
+};
+```
+
+Without this entry, `next/image` throws at runtime when it sees a foreign hostname. This is intentional — it forces explicit allowlisting and prevents abuse of the optimization endpoint.
+
+> **Enforced by lint:** the project extends `eslint-config-next/core-web-vitals`, which activates `@next/next/no-img-element`. Any raw `<img>` element fails lint and is blocked by the pre-commit hook. The only accepted exception is inline `<svg>…</svg>` markup (which is not an `<img>` element).
 
 ### Pre-commit Checks
 
