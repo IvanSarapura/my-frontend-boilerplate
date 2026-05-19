@@ -9,7 +9,10 @@ import { ToastProvider } from '@/components/providers/toast-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { defaultLocale, locales } from '@/i18n/config';
 import { env } from '@/lib/env';
-import { generateWebsiteJsonLd } from '@/lib/json-ld';
+import {
+  generateOrganizationJsonLd,
+  generateWebsiteJsonLd,
+} from '@/lib/json-ld';
 
 // Inline anti-FOUC script: runs synchronously before the first paint so the
 // document's `data-theme` matches the user's stored preference, eliminating
@@ -74,10 +77,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jsonLd = generateWebsiteJsonLd({
+  const websiteJsonLd = generateWebsiteJsonLd({
     name: env.NEXT_PUBLIC_APP_NAME,
     url: env.NEXT_PUBLIC_APP_URL,
     description: APP_DESCRIPTION,
+  });
+  const organizationJsonLd = generateOrganizationJsonLd({
+    name: env.NEXT_PUBLIC_APP_NAME,
+    url: env.NEXT_PUBLIC_APP_URL,
   });
 
   return (
@@ -90,7 +97,13 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }} />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationJsonLd),
+          }}
         />
       </head>
       <body>
