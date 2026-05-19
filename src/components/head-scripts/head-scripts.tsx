@@ -44,19 +44,28 @@ export async function HeadScripts({
     url: appUrl,
   });
 
+  // `suppressHydrationWarning` is required on every <script nonce> tag.
+  // Per CSP3 spec (§6.6.4.6), browsers strip the nonce attribute from the
+  // DOM after using it for enforcement, so `getAttribute('nonce')` returns
+  // "" at hydration time even though the server rendered the actual value.
+  // Without this prop, React 19 logs a (benign) hydration mismatch warning.
+  // See: https://www.w3.org/TR/CSP3/#security-considerations
   return (
     <>
       <script
         nonce={nonce}
+        suppressHydrationWarning
         dangerouslySetInnerHTML={{ __html: THEME_INIT_SCRIPT }}
       />
       <script
         nonce={nonce}
+        suppressHydrationWarning
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
       />
       <script
         nonce={nonce}
+        suppressHydrationWarning
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(organizationJsonLd),

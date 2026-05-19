@@ -94,4 +94,24 @@ describe('HeadScripts', () => {
       url: 'https://test.example.com',
     });
   });
+
+  it('marks every script with suppressHydrationWarning (CSP3 strips nonce from DOM)', async () => {
+    mockHeadersGet.mockReturnValue('nonce-abc');
+    const jsx = await HeadScripts(TEST_PROPS);
+    // jsx is a Fragment whose children are 3 <script> React elements.
+    // Read the prop off the React element tree directly — `suppressHydrationWarning`
+    // is a React-internal flag, it does not render to a DOM attribute, so this
+    // can't be asserted via container.querySelector.
+    const children = (
+      jsx as {
+        props: {
+          children: Array<{ props: Record<string, unknown> }>;
+        };
+      }
+    ).props.children;
+    expect(children).toHaveLength(3);
+    children.forEach((child) => {
+      expect(child.props.suppressHydrationWarning).toBe(true);
+    });
+  });
 });
