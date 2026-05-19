@@ -87,23 +87,24 @@ Key principles:
 
 ## What's Included
 
-| Feature                           | Description                                                        |
-| --------------------------------- | ------------------------------------------------------------------ |
-| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler             |
-| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable        |
-| **Custom Design System**          | 22 primitive UI components + 80-icon registry, all CSS Modules     |
-| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC    |
-| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK |
-| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation       |
-| **Server Actions**                | Modern form mutations with validation end-to-end                   |
-| **React Hook Form**               | Performant form handling integrated with Zod                       |
-| **TanStack Query**                | Client-side server state with prefetching and caching              |
-| **i18n (en/es)**                  | Locale-prefixed routes with `Accept-Language` detection            |
-| **MSW**                           | Deterministic tests by mocking network requests                    |
-| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration       |
-| **Complete SEO**                  | JSON-LD, Open Graph, sitemap, robots, manifest                     |
-| **Security Headers**              | CSP, HSTS, X-Frame-Options, Permissions-Policy                     |
-| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)       |
+| Feature                           | Description                                                                   |
+| --------------------------------- | ----------------------------------------------------------------------------- |
+| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                        |
+| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                   |
+| **Custom Design System**          | 22 primitive UI components + 80-icon registry, all CSS Modules                |
+| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC               |
+| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK            |
+| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                  |
+| **Server Actions**                | Modern form mutations with validation end-to-end                              |
+| **React Hook Form**               | Performant form handling integrated with Zod                                  |
+| **TanStack Query**                | Client-side server state with prefetching and caching                         |
+| **i18n (en/es)**                  | Locale-prefixed routes, `NEXT_LOCALE` cookie + `Accept-Language` fallback     |
+| **MSW**                           | Deterministic tests by mocking network requests                               |
+| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration                  |
+| **Complete SEO**                  | JSON-LD (WebSite + Organization), hreflang, multi-locale sitemap, OG, robots  |
+| **Security Headers**              | Nonce-based CSP (`strict-dynamic`), HSTS, X-Frame-Options, Permissions-Policy |
+| **Partial Prerendering**          | Cache Components + per-request nonce isolated via `<Suspense>`                |
+| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)                  |
 
 ---
 
@@ -228,7 +229,7 @@ my-frontend-boilerplate/
 │   │   │   └── loading.tsx          # Loading spinner
 │   │   ├── api/health/
 │   │   │   └── route.ts             # Health check → GET /api/health
-│   │   ├── layout.tsx               # Root layout — JSON-LD, OG, providers
+│   │   ├── layout.tsx               # Root layout — wraps HeadScripts in <Suspense>, providers, metadata
 │   │   ├── globals.css              # @layer reset/base/utilities + design tokens
 │   │   ├── error.tsx                # Global fallback error boundary
 │   │   ├── not-found.tsx            # Global 404
@@ -237,6 +238,7 @@ my-frontend-boilerplate/
 │   │   ├── sitemap.ts               # sitemap.xml
 │   │   └── opengraph-image.tsx      # Auto-generated OG image
 │   ├── components/
+│   │   ├── head-scripts/             # Server component: nonced inline scripts (anti-FOUC + JSON-LD), wrapped in <Suspense>
 │   │   ├── providers/
 │   │   │   ├── query-provider.tsx   # TanStack Query provider
 │   │   │   ├── theme-provider.tsx   # Tri-state theming (useSyncExternalStore + anti-FOUC)
@@ -369,9 +371,9 @@ Each component lives in its own subdirectory (`button/button.tsx`, `button/butto
 | `ToggleSwitch` | On/off toggle (rounded and rectangular variants)                                                                                        |
 | `Tooltip`      | Hover/focus tooltip powered by `@floating-ui/react`                                                                                     |
 
-> **`@floating-ui/react`** is the single approved exception to the zero-UI-dependency policy. It powers only `Tooltip` and `Dropdown`. See `.agents/ANALYSIS-STATUS.md` §10 for the full rationale.
+> **`@floating-ui/react`** is the single approved exception to the zero-UI-dependency policy. It powers only `Tooltip` and `Dropdown` because anchored positioning — viewport collision, scroll/resize tracking, arrow placement, cross-browser quirks — requires hundreds of lines of math per component to implement correctly. The dependency is ~12 KB gzipped, MIT-licensed, tree-shakeable, and is the same foundation Radix UI, shadcn/ui and Mantine use.
 >
-> **Floating-ui animation constraint:** floating-ui positions elements via an inline `transform: translate(x, y)`. CSS `@keyframes` declarations override inline styles for the same property during the animation. Never use `transform: translateY()` in entry/exit animations for floating-ui components — use the independent CSS `translate` property instead (`translate: 0 -4px`), which composes on top of the positioning transform without interfering. See `ONBOARDING.md` §17 for the full root-cause analysis.
+> **Floating-ui animation constraint:** floating-ui positions elements via an inline `transform: translate(x, y)`. CSS `@keyframes` declarations override inline styles for the same property during the animation. Never use `transform: translateY()` in entry/exit animations for floating-ui components — use the independent CSS `translate` property instead (`translate: 0 -4px`), which composes on top of the positioning transform without interfering.
 
 ### Typography
 
@@ -591,7 +593,9 @@ npm install @sentry/nextjs
 npx @sentry/wizard@latest -i nextjs   # creates sentry.*.config.ts + instrumentation.ts
 ```
 
-> **When to add it**, **when not to**, and the full architectural reasoning live in `.agents/ANALYSIS-STATUS.md` §11. **Rule of thumb:** any new surface that may throw at runtime (Error Boundaries, Server Actions, route handlers, jobs) should route errors through `reportError` — never `console.error` directly in production code.
+> **When to add it:** any production deployment that handles user-facing errors should adopt an error tracking SDK. Wire it into `reportError` and you're done — no boilerplate caller in the app needs to change. **When not to:** prototypes, internal tools, or apps in pre-launch with no traffic.
+>
+> **Rule of thumb:** any new surface that may throw at runtime (Error Boundaries, Server Actions, route handlers, jobs) should route errors through `reportError` — never `console.error` directly in production code.
 
 ---
 
@@ -817,7 +821,17 @@ Variables are validated at startup with Zod (`src/lib/env.ts`). Missing or malfo
 
 Next.js 16 uses `proxy.ts` (exporting a `proxy` function) instead of the legacy `middleware.ts` convention. **Do not rename this file or its export** — the framework will not recognise it.
 
-The `proxy` function reads the `Accept-Language` header to detect the visitor's preferred locale and redirects `/(path)` to `/[locale]/(path)` before the request reaches any page. API routes, static assets, and metadata files are excluded via the `matcher` config.
+The `proxy` function does three things on every request:
+
+1. **Locale routing.** Detects the visitor's preferred locale (cookie `NEXT_LOCALE` takes priority over `Accept-Language`) and redirects `/(path)` to `/[locale]/(path)` before the request reaches any page.
+2. **Locale cookie sync.** Sets/updates `NEXT_LOCALE` (1-year, sameSite=lax) so the user's explicit choice persists across visits.
+3. **CSP nonce.** Generates a fresh `crypto.randomUUID()` nonce per request, builds the `Content-Security-Policy` header with `'nonce-XYZ' 'strict-dynamic'`, and propagates it through both request headers (for `next/headers`-based reading in Server Components) and response headers (for browser enforcement). The CSP is intentionally **not** defined in `next.config.ts` — nonces must be generated per request, which static config cannot do.
+
+API routes, static assets, metadata files, and prefetches are excluded via the `matcher` config.
+
+> **Note on hydration mismatch:** browsers strip the `nonce` attribute from the DOM after using it for CSP enforcement (per the CSP3 spec §6.6.4.6 — anti-exfiltration measure). React's hydration will flag a benign attribute mismatch on those `<script>` tags as a result; the relevant elements use `suppressHydrationWarning` for this reason. The CSP enforcement itself is unaffected — the script ran because it carried the valid nonce at parse time.
+>
+> **Note on Partial Prerendering:** the inline `<script nonce>` elements that depend on `headers()` are isolated in a dedicated server component wrapped in `<Suspense>` at the call site. This preserves the static shell of the layout (PPR keeps working) while only the nonced scripts resolve per request.
 
 ### `npm ci` failures with peer dependencies
 
