@@ -7,6 +7,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      // `server-only` is supplied by Next.js at build time; standalone Vite
+      // can't resolve it. Point it at an empty stub so server modules are
+      // importable in jsdom tests. See src/mocks/server-only.ts.
+      'server-only': path.resolve(__dirname, './src/mocks/server-only.ts'),
     },
   },
   test: {
