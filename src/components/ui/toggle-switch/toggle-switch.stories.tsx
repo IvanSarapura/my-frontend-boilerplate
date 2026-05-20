@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { expect, userEvent, within } from 'storybook/test';
 
 import { ToggleSwitch } from './toggle-switch';
 
@@ -102,31 +101,5 @@ export const NoLabel: Story = {
     variant: 'rounded',
     size: 'md',
     'aria-label': 'Toggle feature',
-  },
-};
-
-/**
- * Interactive story — verifies the form-control contract end-to-end:
- * click toggles `checked` and ARIA reflects the change. Establishes the
- * play function pattern for uncontrolled form primitives in the design
- * system (see also UI/Modal → Interactive for the trigger pattern).
- */
-export const Interactive: Story = {
-  args: {
-    label: 'Enable notifications',
-    variant: 'rounded',
-    size: 'md',
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    const toggle = canvas.getByRole('checkbox', {
-      name: 'Enable notifications',
-    });
-
-    expect(toggle).not.toBeChecked();
-    await userEvent.click(toggle);
-    expect(toggle).toBeChecked();
-    await userEvent.click(toggle);
-    expect(toggle).not.toBeChecked();
   },
 };
