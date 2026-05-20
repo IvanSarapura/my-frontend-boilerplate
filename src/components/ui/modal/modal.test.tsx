@@ -3,6 +3,9 @@ import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
 import { Modal } from './modal';
+import { ModalBody } from './modal-body';
+import { ModalFooter } from './modal-footer';
+import { ModalHeader } from './modal-header';
 
 describe('Modal', () => {
   it('renders when open', () => {
@@ -116,5 +119,53 @@ describe('Modal', () => {
     expect(document.activeElement).toBe(
       screen.getByRole('button', { name: 'Inner' }),
     );
+  });
+
+  describe('compound API', () => {
+    it('renders ModalHeader/Body/Footer composition when title is omitted', () => {
+      render(
+        <Modal open onClose={vi.fn()}>
+          <ModalHeader>
+            <h2>Composed Title</h2>
+          </ModalHeader>
+          <ModalBody>Composed body content</ModalBody>
+          <ModalFooter>
+            <button type="button">Action</button>
+          </ModalFooter>
+        </Modal>,
+      );
+      expect(screen.getByRole('dialog')).toBeInTheDocument();
+      expect(screen.getByText('Composed Title')).toBeInTheDocument();
+      expect(screen.getByText('Composed body content')).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Action' }),
+      ).toBeInTheDocument();
+      expect(screen.getByLabelText('Close dialog')).toBeInTheDocument();
+    });
+
+    it('wires aria-labelledby to the ModalHeader wrapper in compound mode', () => {
+      render(
+        <Modal open onClose={vi.fn()}>
+          <ModalHeader>Accessible Name</ModalHeader>
+          <ModalBody>Body</ModalBody>
+        </Modal>,
+      );
+      const dialog = screen.getByRole('dialog');
+      const labelledBy = dialog.getAttribute('aria-labelledby');
+      expect(labelledBy).toBeTruthy();
+      const header = document.getElementById(labelledBy!);
+      expect(header).not.toBeNull();
+      expect(header).toHaveTextContent('Accessible Name');
+    });
+
+    it('throws if ModalHeader is rendered outside <Modal>', () => {
+      const consoleError = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => undefined);
+      expect(() => render(<ModalHeader>orphan</ModalHeader>)).toThrow(
+        /must be rendered inside <Modal>/,
+      );
+      consoleError.mockRestore();
+    });
   });
 });

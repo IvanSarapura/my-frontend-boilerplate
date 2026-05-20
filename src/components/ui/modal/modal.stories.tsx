@@ -5,6 +5,9 @@ import { expect, screen, userEvent, within } from 'storybook/test';
 import { Button } from '@/components/ui/button';
 
 import { Modal } from './modal';
+import { ModalBody } from './modal-body';
+import { ModalFooter } from './modal-footer';
+import { ModalHeader } from './modal-header';
 
 const SCROLLABLE_BODY = Array.from(
   { length: 10 },
@@ -97,6 +100,37 @@ export const Scrollable: Story = {
       </>
     ),
   },
+};
+
+/**
+ * Compound API — same dialog assembled from ModalHeader/Body/Footer slots
+ * instead of the `title` and `footer` shortcut props. Use this shape when
+ * you need a non-trivial header (badge, icon, multi-line subtitle) or when
+ * the footer layout diverges from the default right-aligned button row.
+ */
+export const Compound: Story = {
+  args: {
+    open: true,
+    onClose: () => {},
+    children: null,
+  },
+  render: () => (
+    <Modal open onClose={() => {}}>
+      <ModalHeader>
+        <h2>Update available</h2>
+      </ModalHeader>
+      <ModalBody>
+        A new version of the app is ready. Reloading applies the update and
+        preserves your unsaved changes.
+      </ModalBody>
+      <ModalFooter>
+        <Button variant="secondary" onClick={() => {}}>
+          Later
+        </Button>
+        <Button onClick={() => {}}>Reload</Button>
+      </ModalFooter>
+    </Modal>
+  ),
 };
 
 /**
