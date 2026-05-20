@@ -69,8 +69,11 @@ describe('Checkbox', () => {
     expect(screen.getByLabelText('Theme')).toHaveAttribute('id', 'theme');
   });
 
-  it('forwards HTML attributes', () => {
-    render(<Checkbox label="Field" id="field" data-testid="my-cb" />);
-    expect(screen.getByTestId('my-cb')).toBeInTheDocument();
+  it('forwards arbitrary HTML attributes to the underlying input', () => {
+    render(<Checkbox label="Field" id="field" data-tracking="cb-field" />);
+    expect(screen.getByRole('checkbox')).toHaveAttribute(
+      'data-tracking',
+      'cb-field',
+    );
   });
 });

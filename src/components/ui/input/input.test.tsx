@@ -21,7 +21,7 @@ describe('Input', () => {
   });
 
   it('forwards HTML attributes', () => {
-    render(<Input label="Name" id="name" disabled data-testid="my-input" />);
+    render(<Input label="Name" id="name" disabled />);
     expect(screen.getByLabelText('Name')).toBeDisabled();
   });
 

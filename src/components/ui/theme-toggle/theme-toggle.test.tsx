@@ -30,7 +30,7 @@ function installMatchMedia(initialMatches = false) {
 function renderToggle() {
   return render(
     <ThemeProvider>
-      <ThemeToggle data-testid="toggle" />
+      <ThemeToggle />
     </ThemeProvider>,
   );
 }

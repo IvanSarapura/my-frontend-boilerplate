@@ -34,11 +34,14 @@ describe('ToggleSwitch', () => {
     expect(screen.getByRole('checkbox')).toBeDisabled();
   });
 
-  it('forwards HTML attributes to the input', () => {
+  it('forwards arbitrary HTML attributes to the underlying input', () => {
     render(
-      <ToggleSwitch label="Feature" id="feature" data-testid="my-toggle" />,
+      <ToggleSwitch label="Feature" id="feature" data-tracking="ts-feature" />,
     );
-    expect(screen.getByTestId('my-toggle')).toBeInTheDocument();
+    expect(screen.getByRole('checkbox')).toHaveAttribute(
+      'data-tracking',
+      'ts-feature',
+    );
   });
 
   it('uses name as fallback id when id is not provided', () => {
