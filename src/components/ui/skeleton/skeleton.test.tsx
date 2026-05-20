@@ -50,4 +50,13 @@ describe('Skeleton', () => {
     const el = container.firstElementChild as HTMLElement;
     expect(el.style.opacity).toBe('0.5');
   });
+
+  it('becomes a polite status region when label is supplied', () => {
+    const { container } = render(<Skeleton label="Loading posts" />);
+    const el = container.firstElementChild as HTMLElement;
+    expect(el).toHaveAttribute('role', 'status');
+    expect(el).toHaveAttribute('aria-live', 'polite');
+    expect(el).toHaveAttribute('aria-label', 'Loading posts');
+    expect(el).not.toHaveAttribute('aria-hidden');
+  });
 });

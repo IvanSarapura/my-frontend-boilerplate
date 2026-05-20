@@ -87,3 +87,19 @@ export const ListSkeleton: Story = {
     </div>
   ),
 };
+
+/**
+ * Announced — when a single skeleton stands in for a self-contained
+ * loading region (e.g., a chart that hasn't streamed in yet), pass
+ * `label` to opt into `role="status"` + `aria-live="polite"`. Screen
+ * readers receive the loading cue without the consumer having to wrap
+ * the skeleton in a busy region manually.
+ */
+export const Announced: Story = {
+  args: {
+    variant: 'rect',
+    width: 320,
+    height: 160,
+    label: 'Loading chart',
+  },
+};
