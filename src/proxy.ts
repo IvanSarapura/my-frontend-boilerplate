@@ -60,7 +60,7 @@ function detectLocale(request: NextRequest): Locale {
 
 function extractLocaleFromPath(pathname: string): Locale | null {
   const match = locales.find(
-    (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
+    l => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
   );
   return match ?? null;
 }

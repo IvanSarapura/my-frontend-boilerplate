@@ -136,7 +136,7 @@ describe('Dropdown', () => {
       return (
         <Dropdown
           open={open}
-          onOpenChange={(v) => {
+          onOpenChange={v => {
             setOpen(v);
             onOpenChange(v);
           }}

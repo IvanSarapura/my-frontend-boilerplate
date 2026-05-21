@@ -26,9 +26,7 @@ describe('PostList', () => {
       { id: 2, title: 'Two', body: 'Body two', userId: 1 },
     ];
 
-    render(
-      <PostList posts={posts} getHref={(post) => `/en/posts/${post.id}`} />,
-    );
+    render(<PostList posts={posts} getHref={post => `/en/posts/${post.id}`} />);
 
     const links = screen.getAllByRole('link');
     expect(links).toHaveLength(2);

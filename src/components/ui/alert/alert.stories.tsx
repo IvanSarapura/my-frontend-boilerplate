@@ -81,7 +81,7 @@ export const Dismissible: Story = {
     title: 'Heads up',
     children: 'Click the X to dismiss this alert.',
   },
-  render: (args) => {
+  render: args => {
     const [open, setOpen] = useState(true);
     if (!open) return <button onClick={() => setOpen(true)}>Show alert</button>;
     return <Alert {...args} onClose={() => setOpen(false)} />;

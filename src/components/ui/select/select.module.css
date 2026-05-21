@@ -4,23 +4,23 @@
 }
 
 .trigger {
-  width: 100%;
   display: flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-2);
+  width: 100%;
   padding: var(--space-2) var(--space-3);
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--foreground);
+  cursor: pointer;
+  outline: none;
   background: var(--background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
-  cursor: pointer;
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
-  outline: none;
 }
 
 .trigger:focus {
@@ -29,9 +29,9 @@
 }
 
 .trigger:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
   background: var(--card-bg);
+  opacity: 0.6;
 }
 
 .placeholder {
@@ -39,10 +39,10 @@
 }
 
 .chevron {
+  flex-shrink: 0;
   width: 1rem;
   height: 1rem;
   transition: transform var(--transition-fast);
-  flex-shrink: 0;
 }
 
 .open .chevron {
@@ -52,26 +52,26 @@
 .menu {
   position: absolute;
   top: calc(100% + var(--space-1));
-  left: 0;
   right: 0;
+  left: 0;
   z-index: var(--z-dropdown);
+  max-height: 16rem;
+  padding: var(--space-1);
+  margin: 0;
+  overflow-y: auto;
+  list-style: none;
   background: var(--background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  list-style: none;
-  padding: var(--space-1);
-  margin: 0;
-  max-height: 16rem;
-  overflow-y: auto;
 }
 
 .option {
   padding: var(--space-2) var(--space-3);
   font-size: var(--text-sm);
-  border-radius: var(--radius-sm);
   cursor: pointer;
   outline: none;
+  border-radius: var(--radius-sm);
   transition: background var(--transition-fast);
 }
 
@@ -87,10 +87,10 @@
 
 .label {
   display: block;
+  margin-bottom: var(--space-1);
   font-size: var(--text-sm);
   font-weight: 500;
   color: var(--foreground);
-  margin-bottom: var(--space-1);
 }
 
 .error {
@@ -103,7 +103,7 @@
 }
 
 .errorText {
+  margin-top: var(--space-1);
   font-size: var(--text-xs);
   color: var(--color-error, #ef4444);
-  margin-top: var(--space-1);
 }

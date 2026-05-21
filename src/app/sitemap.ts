@@ -25,7 +25,7 @@ function buildLocaleUrl(locale: Locale, path: string): string {
 
 function buildLanguageAlternates(path: string): Record<string, string> {
   return {
-    ...Object.fromEntries(locales.map((l) => [l, buildLocaleUrl(l, path)])),
+    ...Object.fromEntries(locales.map(l => [l, buildLocaleUrl(l, path)])),
     'x-default': buildLocaleUrl(defaultLocale, path),
   };
 }
@@ -33,8 +33,8 @@ function buildLanguageAlternates(path: string): Record<string, string> {
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  return STATIC_PATHS.flatMap((path) =>
-    locales.map((locale) => ({
+  return STATIC_PATHS.flatMap(path =>
+    locales.map(locale => ({
       url: buildLocaleUrl(locale, path),
       lastModified: now,
       changeFrequency: 'monthly' as const,

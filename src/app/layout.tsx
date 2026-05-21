@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: {
-      ...Object.fromEntries(locales.map((l) => [l, `/${l}`])),
+      ...Object.fromEntries(locales.map(l => [l, `/${l}`])),
       'x-default': `/${defaultLocale}`,
     },
   },

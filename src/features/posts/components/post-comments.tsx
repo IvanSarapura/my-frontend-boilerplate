@@ -31,7 +31,7 @@ export function PostComments({ posts }: PostCommentsProps) {
     enabled: !!postId,
   });
 
-  const options = posts.map((post) => ({
+  const options = posts.map(post => ({
     value: String(post.id),
     label: post.title,
   }));
@@ -56,7 +56,7 @@ export function PostComments({ posts }: PostCommentsProps) {
       )}
       {comments && comments.length > 0 && (
         <ul className={styles.list}>
-          {comments.map((comment) => (
+          {comments.map(comment => (
             <li key={comment.id} className={styles.comment}>
               <p className={styles.commentName}>{comment.name}</p>
               <p className={styles.commentEmail}>{comment.email}</p>

@@ -34,7 +34,7 @@ export const Muted: Story = {
 export const White: Story = {
   args: { size: 'md', variant: 'white' },
   decorators: [
-    (Story) => (
+    Story => (
       <div
         style={{
           background: '#171717',
@@ -51,7 +51,7 @@ export const White: Story = {
 
 export const AllSizes: Story = {
   args: { variant: 'default' },
-  render: (args) => (
+  render: args => (
     <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
       <Spinner {...args} size="sm" />
       <Spinner {...args} size="md" />
@@ -62,7 +62,7 @@ export const AllSizes: Story = {
 
 export const AllVariants: Story = {
   args: { size: 'md' },
-  render: (args) => (
+  render: args => (
     <div
       style={{
         display: 'flex',

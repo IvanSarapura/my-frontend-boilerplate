@@ -10,7 +10,7 @@ type PostListProps = {
 export function PostList({ posts, getHref }: PostListProps) {
   return (
     <ul className={styles.list}>
-      {posts.map((post) => (
+      {posts.map(post => (
         <li key={post.id}>
           <PostCard
             title={post.title}

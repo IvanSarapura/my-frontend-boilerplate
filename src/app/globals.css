@@ -259,18 +259,18 @@
   }
 
   body {
-    min-height: 100%;
     display: flex;
     flex-direction: column;
-    color: var(--foreground);
-    background: var(--background);
+    min-height: 100%;
     font-family: var(--font-sans);
     font-size: var(--font-body);
-    line-height: var(--font-body-lh);
     font-weight: var(--font-body-weight);
+    line-height: var(--font-body-lh);
+    color: var(--foreground);
+    background: var(--background);
+    text-rendering: optimizelegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizelegibility;
   }
 
   /*
@@ -280,37 +280,37 @@
    */
   h1 {
     font-size: var(--font-heading-1);
-    line-height: var(--font-heading-1-lh);
     font-weight: var(--font-heading-1-weight);
+    line-height: var(--font-heading-1-lh);
     letter-spacing: var(--font-heading-1-tracking);
   }
 
   h2 {
     font-size: var(--font-heading-2);
-    line-height: var(--font-heading-2-lh);
     font-weight: var(--font-heading-2-weight);
+    line-height: var(--font-heading-2-lh);
     letter-spacing: var(--font-heading-2-tracking);
   }
 
   h3 {
     font-size: var(--font-heading-3);
-    line-height: var(--font-heading-3-lh);
     font-weight: var(--font-heading-3-weight);
+    line-height: var(--font-heading-3-lh);
     letter-spacing: var(--font-heading-3-tracking);
   }
 
   h4 {
     font-size: var(--font-heading-4);
-    line-height: var(--font-heading-4-lh);
     font-weight: var(--font-heading-4-weight);
+    line-height: var(--font-heading-4-lh);
     letter-spacing: var(--font-heading-4-tracking);
   }
 
   h5,
   h6 {
     font-size: var(--font-body);
-    line-height: var(--font-body-lh);
     font-weight: var(--weight-semibold);
+    line-height: var(--font-body-lh);
   }
 
   p {
@@ -361,25 +361,25 @@
     padding: 0;
     margin: -1px;
     overflow: hidden;
-    clip-path: inset(50%);
     white-space: nowrap;
     border-width: 0;
+    clip-path: inset(50%);
   }
 
   /* Restore visibility when focused (skip-to-content link) */
   .sr-only:focus {
     position: static;
+    z-index: var(--z-toast);
     width: auto;
     height: auto;
     padding: var(--space-2) var(--space-4);
     margin: 0;
     overflow: visible;
-    clip-path: none;
+    color: #fff;
     white-space: normal;
     background: var(--accent);
-    color: #fff;
     border-radius: var(--radius-sm);
-    z-index: var(--z-toast);
+    clip-path: none;
   }
 
   /* Focus ring utility for interactive elements */

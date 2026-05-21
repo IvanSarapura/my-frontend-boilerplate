@@ -88,7 +88,7 @@ describe('Tabs', () => {
     render(<ThreeTabs defaultValue="one" />);
     expect(screen.getByRole('tabpanel')).toHaveTextContent('Panel One');
     const allPanels = screen.getAllByRole('tabpanel', { hidden: true });
-    const hidden = allPanels.filter((p) => p.hasAttribute('hidden'));
+    const hidden = allPanels.filter(p => p.hasAttribute('hidden'));
     expect(hidden).toHaveLength(2);
   });
 
@@ -177,7 +177,7 @@ describe('Tabs', () => {
       return (
         <Tabs
           value={val}
-          onValueChange={(v) => {
+          onValueChange={v => {
             setVal(v);
             onValueChange(v);
           }}

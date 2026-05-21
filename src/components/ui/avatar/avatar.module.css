@@ -1,13 +1,13 @@
 .avatar {
   position: relative;
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  color: var(--foreground);
   font-weight: 600;
-  user-select: none;
   vertical-align: middle;
+  color: var(--foreground);
+  user-select: none;
 }
 
 .media {
@@ -17,15 +17,15 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: inherit;
   background: var(--card-bg);
+  border-radius: inherit;
 }
 
 .image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
 }
 
 .initials {
@@ -77,13 +77,13 @@
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 28%;
-  height: 28%;
-  min-width: 0.5rem;
-  min-height: 0.5rem;
-  border-radius: 50%;
-  border: 2px solid var(--background);
   box-sizing: content-box;
+  width: 28%;
+  min-width: 0.5rem;
+  height: 28%;
+  min-height: 0.5rem;
+  border: 2px solid var(--background);
+  border-radius: 50%;
 }
 
 /* status colors must come after .status for spec order */

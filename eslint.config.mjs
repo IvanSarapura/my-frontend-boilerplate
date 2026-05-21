@@ -6,8 +6,10 @@ import prettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import reactCompiler from 'eslint-plugin-react-compiler';
+import security from 'eslint-plugin-security';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import storybook from 'eslint-plugin-storybook';
+import testingLibrary from 'eslint-plugin-testing-library';
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -36,6 +38,29 @@ const eslintConfig = defineConfig([
     rules: {
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
+    },
+  },
+  {
+    ...security.configs.recommended,
+    rules: {
+      ...security.configs.recommended.rules,
+      'security/detect-object-injection': 'off',
+      'security/detect-non-literal-fs-filename': 'off',
+      'security/detect-possible-timing-attacks': 'off',
+    },
+  },
+  {
+    // Scope to Vitest + React Testing Library tests only.
+    // Playwright e2e specs (e2e/*.spec.ts) use a different API and are excluded.
+    files: ['src/**/*.test.{ts,tsx}'],
+    plugins: { 'testing-library': testingLibrary },
+    rules: {
+      ...testingLibrary.configs['flat/react'].rules,
+      // Off: UI primitive tests (Skeleton, Spinner, decorative wrappers) must
+      // inspect DOM nodes that lack ARIA roles — these rules force adding
+      // synthetic test IDs to internal nodes, which is itself an antipattern.
+      'testing-library/no-node-access': 'off',
+      'testing-library/no-container': 'off',
     },
   },
   prettier,

@@ -116,10 +116,10 @@ describe('generateBreadcrumbListJsonLd', () => {
       { name: 'Post 42', url: 'https://example.com/posts/42' },
     ]);
 
-    expect(result.itemListElement.map((item) => item.position)).toEqual([
+    expect(result.itemListElement.map(item => item.position)).toEqual([
       1, 2, 3,
     ]);
-    expect(result.itemListElement.map((item) => item.name)).toEqual([
+    expect(result.itemListElement.map(item => item.name)).toEqual([
       'Home',
       'Posts',
       'Post 42',

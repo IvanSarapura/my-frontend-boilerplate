@@ -4,11 +4,11 @@
 
 .list {
   display: inline-flex;
-  align-items: center;
   gap: var(--space-1);
-  list-style: none;
+  align-items: center;
   padding: 0;
   margin: 0;
+  list-style: none;
 }
 
 .pageButton,
@@ -19,13 +19,13 @@
   min-width: 2rem;
   height: 2rem;
   padding: 0 var(--space-2);
-  background: transparent;
-  color: var(--foreground);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: 500;
+  color: var(--foreground);
   cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
   transition:
     background-color var(--transition-fast),
     border-color var(--transition-fast),
@@ -33,14 +33,14 @@
 }
 
 .navButton {
-  color: var(--muted);
   padding: 0;
+  color: var(--muted);
 }
 
 .pageButton:disabled,
 .navButton:disabled {
-  opacity: 0.4;
   cursor: not-allowed;
+  opacity: 0.4;
 }
 
 .pageButton:focus-visible,
@@ -56,8 +56,8 @@
 }
 
 .current {
-  background: var(--accent);
   color: #fff;
+  background: var(--accent);
   border-color: var(--accent);
 }
 
@@ -73,8 +73,8 @@
   justify-content: center;
   min-width: 2rem;
   height: 2rem;
-  color: var(--muted);
   font-size: var(--text-sm);
+  color: var(--muted);
   user-select: none;
 }
 

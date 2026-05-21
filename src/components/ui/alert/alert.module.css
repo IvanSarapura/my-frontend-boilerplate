@@ -1,13 +1,13 @@
 .alert {
   display: flex;
-  align-items: flex-start;
   gap: var(--space-3);
+  align-items: flex-start;
   padding: var(--space-3) var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.5;
   border: 1px solid;
   border-left-width: 4px;
   border-radius: var(--radius-md);
-  font-size: var(--text-sm);
-  line-height: 1.5;
 }
 
 .icon {
@@ -21,9 +21,9 @@
 }
 
 .title {
+  margin-bottom: 0.125rem;
   font-weight: 600;
   color: var(--foreground);
-  margin-bottom: 0.125rem;
 }
 
 .description {
@@ -37,25 +37,25 @@
 }
 
 .info {
+  color: var(--color-info);
   background: color-mix(in srgb, var(--color-info) 8%, var(--background));
   border-color: var(--color-info);
-  color: var(--color-info);
 }
 
 .success {
+  color: var(--color-success);
   background: color-mix(in srgb, var(--color-success) 8%, var(--background));
   border-color: var(--color-success);
-  color: var(--color-success);
 }
 
 .warning {
+  color: var(--color-warning);
   background: color-mix(in srgb, var(--color-warning) 10%, var(--background));
   border-color: var(--color-warning);
-  color: var(--color-warning);
 }
 
 .error {
+  color: var(--color-error);
   background: color-mix(in srgb, var(--color-error) 8%, var(--background));
   border-color: var(--color-error);
-  color: var(--color-error);
 }

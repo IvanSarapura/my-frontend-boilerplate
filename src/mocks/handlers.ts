@@ -37,7 +37,7 @@ export const handlers = [
     'https://jsonplaceholder.typicode.com/posts/:postId/comments',
     ({ params }) => {
       const postId = Number(params.postId);
-      return HttpResponse.json(mockComments.filter((c) => c.postId === postId));
+      return HttpResponse.json(mockComments.filter(c => c.postId === postId));
     },
   ),
 ];

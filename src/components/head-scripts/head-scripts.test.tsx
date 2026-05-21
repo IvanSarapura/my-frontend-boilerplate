@@ -33,13 +33,13 @@ describe('HeadScripts', () => {
   });
 
   it('applies the nonce from x-nonce to every script tag', async () => {
-    mockHeadersGet.mockImplementation((name) =>
+    mockHeadersGet.mockImplementation(name =>
       name === 'x-nonce' ? 'nonce-abc' : null,
     );
     const jsx = await HeadScripts(TEST_PROPS);
     const { container } = render(jsx);
     const scripts = getScripts(container);
-    scripts.forEach((script) => {
+    scripts.forEach(script => {
       expect(script.getAttribute('nonce')).toBe('nonce-abc');
     });
   });
@@ -49,7 +49,7 @@ describe('HeadScripts', () => {
     const jsx = await HeadScripts(TEST_PROPS);
     const { container } = render(jsx);
     const scripts = getScripts(container);
-    scripts.forEach((script) => {
+    scripts.forEach(script => {
       expect(script.hasAttribute('nonce')).toBe(false);
     });
   });
@@ -110,7 +110,7 @@ describe('HeadScripts', () => {
       }
     ).props.children;
     expect(children).toHaveLength(3);
-    children.forEach((child) => {
+    children.forEach(child => {
       expect(child.props.suppressHydrationWarning).toBe(true);
     });
   });

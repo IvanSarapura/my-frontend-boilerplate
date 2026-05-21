@@ -99,7 +99,7 @@ export function Toaster() {
       aria-live="polite"
       aria-label="Notifications"
     >
-      {toasts.map((toast) => (
+      {toasts.map(toast => (
         <ToastItem key={toast.id} {...toast} onRemove={handleRemove} />
       ))}
     </div>,

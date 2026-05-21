@@ -52,7 +52,7 @@ export const Placements: Story = {
         padding: '4rem',
       }}
     >
-      {(['top', 'bottom', 'left', 'right'] as const).map((placement) => (
+      {(['top', 'bottom', 'left', 'right'] as const).map(placement => (
         <div
           key={placement}
           style={{ display: 'flex', justifyContent: 'center' }}

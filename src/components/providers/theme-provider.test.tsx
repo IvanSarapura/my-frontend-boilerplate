@@ -31,7 +31,7 @@ function createMatchMediaMock(initialMatches: boolean) {
     matchMedia,
     emit(matches: boolean) {
       state.matches = matches;
-      listeners.forEach((cb) =>
+      listeners.forEach(cb =>
         cb({ matches } as unknown as MediaQueryListEvent),
       );
     },

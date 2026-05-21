@@ -28,7 +28,7 @@ function parseParams(locale: string, id: string): ValidParams | null {
 // URLs to src/app/sitemap.ts.
 export async function generateStaticParams() {
   const posts = await getPosts();
-  return posts.map((post) => ({ id: String(post.id) }));
+  return posts.map(post => ({ id: String(post.id) }));
 }
 
 type PageProps = {

@@ -28,7 +28,7 @@ vi.mock('@/features/posts', () => ({
     { id: 2, userId: 1, title: 'Second Post', body: 'Body two' },
   ]),
   getPostById: vi.fn(async (id: number) => {
-    return mockPosts.find((p) => p.id === id) ?? null;
+    return mockPosts.find(p => p.id === id) ?? null;
   }),
 }));
 

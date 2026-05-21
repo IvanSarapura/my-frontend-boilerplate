@@ -26,14 +26,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
 
   const addToast = useCallback((toast: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).slice(2, 9);
-    setToasts((prev) => [...prev, { ...toast, id }]);
+    setToasts(prev => [...prev, { ...toast, id }]);
     setTimeout(() => {
-      setToasts((prev) => prev.filter((t) => t.id !== id));
+      setToasts(prev => prev.filter(t => t.id !== id));
     }, TOAST_DURATION_MS);
   }, []);
 
   const removeToast = useCallback((id: string) => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
+    setToasts(prev => prev.filter(t => t.id !== id));
   }, []);
 
   return (

@@ -33,10 +33,7 @@ export default async function PostsPage({
     <main className={styles.main}>
       <h1 className={styles.title}>{dict.posts.title}</h1>
       <p className={styles.description}>{dict.posts.description}</p>
-      <PostList
-        posts={posts}
-        getHref={(post) => `/${locale}/posts/${post.id}`}
-      />
+      <PostList posts={posts} getHref={post => `/${locale}/posts/${post.id}`} />
       <PostComments posts={posts} />
     </main>
   );

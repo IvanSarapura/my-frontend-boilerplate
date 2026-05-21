@@ -30,7 +30,7 @@ export const Default: Story = {
     defaultValue: 'pro',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <RadioGroup {...args}>
       <Radio value="free" label="Free" />
       <Radio value="pro" label="Pro" />
@@ -47,7 +47,7 @@ export const Horizontal: Story = {
     defaultValue: 'M',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <RadioGroup {...args}>
       <Radio value="S" label="Small" />
       <Radio value="M" label="Medium" />
@@ -63,7 +63,7 @@ export const Controlled: Story = {
     label: 'Pick a color (controlled)',
     children: null,
   },
-  render: (args) => {
+  render: args => {
     const [value, setValue] = useState('blue');
     return (
       <RadioGroup {...args} value={value} onChange={setValue}>
@@ -83,7 +83,7 @@ export const WithHelper: Story = {
     defaultValue: 'daily',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <RadioGroup {...args}>
       <Radio value="realtime" label="Realtime" />
       <Radio value="daily" label="Daily digest" />
@@ -99,7 +99,7 @@ export const WithError: Story = {
     error: 'Please choose an option to continue',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <RadioGroup {...args}>
       <Radio value="accept" label="Accept" />
       <Radio value="reject" label="Reject" />
@@ -115,7 +115,7 @@ export const Disabled: Story = {
     defaultValue: 'basic',
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <RadioGroup {...args}>
       <Radio value="basic" label="Basic" />
       <Radio value="premium" label="Premium" />

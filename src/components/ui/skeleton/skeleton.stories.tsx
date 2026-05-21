@@ -72,7 +72,7 @@ export const ListSkeleton: Story = {
       aria-busy="true"
       aria-label="Loading list"
     >
-      {[0, 1, 2].map((i) => (
+      {[0, 1, 2].map(i => (
         <div
           key={i}
           style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}

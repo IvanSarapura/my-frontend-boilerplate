@@ -15,18 +15,18 @@
   width: 100%;
   min-height: 6rem;
   padding: var(--space-2) var(--space-3);
+  font-family: inherit;
   font-size: var(--text-sm);
   line-height: 1.5;
   color: var(--foreground);
+  resize: vertical;
+  outline: none;
   background: var(--background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-md);
-  resize: vertical;
   transition:
     border-color var(--transition-fast),
     box-shadow var(--transition-fast);
-  outline: none;
-  font-family: inherit;
 }
 
 .textarea::placeholder {
@@ -39,9 +39,9 @@
 }
 
 .textarea:disabled {
-  opacity: 0.6;
   cursor: not-allowed;
   background: var(--card-bg);
+  opacity: 0.6;
 }
 
 .error {

@@ -7,9 +7,9 @@
 
 .root {
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
 
   /* Color tokens — overridden by variant classes */
   --spinner-track: var(--card-border);
@@ -48,8 +48,8 @@
   width: 100%;
   height: 100%;
   overflow: visible;
-  animation: spinner-rotate 0.75s linear infinite;
   transform-origin: center;
+  animation: spinner-rotate 0.75s linear infinite;
 }
 
 /* Track — full circle, subdued */

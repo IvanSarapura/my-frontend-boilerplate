@@ -108,6 +108,6 @@ describe('Radio + RadioGroup', () => {
 
   it('disables all radios when group is disabled', () => {
     render(<Group disabled />);
-    screen.getAllByRole('radio').forEach((r) => expect(r).toBeDisabled());
+    screen.getAllByRole('radio').forEach(r => expect(r).toBeDisabled());
   });
 });

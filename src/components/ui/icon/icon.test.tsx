@@ -54,7 +54,7 @@ describe('Icon', () => {
   it('renders the correct shapes for each icon name', () => {
     const names = Object.keys(icons) as IconName[];
 
-    names.forEach((name) => {
+    names.forEach(name => {
       const { container, unmount } = render(<Icon name={name} />);
       const svg = container.querySelector('svg');
       expect(svg).toBeInTheDocument();

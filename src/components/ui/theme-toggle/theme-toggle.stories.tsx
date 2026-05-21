@@ -9,7 +9,7 @@ const meta = {
   component: ThemeToggle,
   tags: ['autodocs'],
   decorators: [
-    (Story) => (
+    Story => (
       <ThemeProvider>
         <Story />
       </ThemeProvider>
@@ -43,7 +43,7 @@ export const AllSizes: Story = {
 
 export const InToolbar: Story = {
   args: { size: 'sm' },
-  render: (args) => (
+  render: args => (
     <div
       style={{
         display: 'flex',

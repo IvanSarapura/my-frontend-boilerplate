@@ -73,7 +73,7 @@ export const Gallery: Story = {
         padding: '1rem',
       }}
     >
-      {ICON_NAMES.map((name) => (
+      {ICON_NAMES.map(name => (
         <div
           key={name}
           style={{

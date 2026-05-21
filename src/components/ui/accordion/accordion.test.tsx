@@ -44,9 +44,7 @@ describe('Accordion', () => {
   it('renders triggers with aria-expanded=false by default', () => {
     render(<ThreeItems />);
     const triggers = screen.getAllByRole('button');
-    triggers.forEach((t) =>
-      expect(t).toHaveAttribute('aria-expanded', 'false'),
-    );
+    triggers.forEach(t => expect(t).toHaveAttribute('aria-expanded', 'false'));
   });
 
   it('opens an item on click and sets aria-expanded=true', async () => {
@@ -115,7 +113,7 @@ describe('Accordion', () => {
         <Accordion
           type="single"
           value={value}
-          onValueChange={(v) => {
+          onValueChange={v => {
             setValue(v);
             onValueChange(v);
           }}

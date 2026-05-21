@@ -6,12 +6,12 @@
 
 .row {
   display: inline-flex;
-  align-items: center;
   gap: var(--space-2);
-  cursor: pointer;
-  user-select: none;
+  align-items: center;
   font-size: var(--text-sm);
   color: var(--foreground);
+  cursor: pointer;
+  user-select: none;
 }
 
 .row.disabled {
@@ -23,23 +23,23 @@
   position: absolute;
   width: 1.125rem;
   height: 1.125rem;
-  opacity: 0;
-  cursor: inherit;
   margin: 0;
+  cursor: inherit;
+  opacity: 0;
 }
 
 .box {
   position: relative;
   display: inline-flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: center;
   width: 1.125rem;
   height: 1.125rem;
-  flex-shrink: 0;
+  color: #fff;
   background: var(--background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-sm);
-  color: #fff;
   transition:
     background-color var(--transition-fast),
     border-color var(--transition-fast),

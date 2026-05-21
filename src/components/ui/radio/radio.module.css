@@ -25,12 +25,12 @@
 
 .row {
   display: inline-flex;
-  align-items: center;
   gap: var(--space-2);
-  cursor: pointer;
-  user-select: none;
+  align-items: center;
   font-size: var(--text-sm);
   color: var(--foreground);
+  cursor: pointer;
+  user-select: none;
 }
 
 .row.disabled {
@@ -42,17 +42,17 @@
   position: absolute;
   width: 1.125rem;
   height: 1.125rem;
-  opacity: 0;
-  cursor: inherit;
   margin: 0;
+  cursor: inherit;
+  opacity: 0;
 }
 
 .box {
   position: relative;
   display: inline-block;
+  flex-shrink: 0;
   width: 1.125rem;
   height: 1.125rem;
-  flex-shrink: 0;
   background: var(--background);
   border: 1px solid var(--card-border);
   border-radius: 50%;
@@ -65,11 +65,11 @@
 .dot {
   position: absolute;
   inset: 0;
-  margin: auto;
   width: 0.5rem;
   height: 0.5rem;
-  border-radius: 50%;
+  margin: auto;
   background: var(--background);
+  border-radius: 50%;
   transform: scale(0);
   transition: transform var(--transition-fast);
 }

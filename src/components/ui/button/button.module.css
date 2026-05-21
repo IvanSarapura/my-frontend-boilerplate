@@ -1,17 +1,17 @@
 .button {
   display: inline-flex;
+  gap: var(--space-2);
   align-items: center;
   justify-content: center;
-  gap: var(--space-2);
-  border: none;
-  border-radius: var(--radius-md);
   font-size: var(--text-sm);
   font-weight: 500;
+  text-decoration: none;
   cursor: pointer;
+  border: none;
+  border-radius: var(--radius-md);
   transition:
     opacity 0.15s ease,
     transform 0.1s ease;
-  text-decoration: none;
 }
 
 .button:focus-visible {
@@ -20,8 +20,8 @@
 }
 
 .button:disabled {
-  opacity: 0.5;
   cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .button:not(:disabled):active {
@@ -45,8 +45,8 @@
 
 /* variants */
 .primary {
-  background: var(--accent);
   color: #fff;
+  background: var(--accent);
 }
 
 .primary:not(:disabled):hover {
@@ -54,8 +54,8 @@
 }
 
 .secondary {
-  background: var(--card-bg);
   color: var(--foreground);
+  background: var(--card-bg);
   border: 1px solid var(--card-border);
 }
 
@@ -64,8 +64,8 @@
 }
 
 .ghost {
-  background: transparent;
   color: var(--foreground);
+  background: transparent;
 }
 
 .ghost:not(:disabled):hover {
@@ -74,9 +74,9 @@
 
 /* icon variant: square button, intended for a single <Icon> child */
 .icon {
-  background: transparent;
-  color: var(--foreground);
   aspect-ratio: 1;
+  color: var(--foreground);
+  background: transparent;
   border-radius: var(--radius-md);
 }
 

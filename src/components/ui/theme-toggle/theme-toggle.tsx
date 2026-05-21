@@ -59,7 +59,7 @@ export function ThemeToggle({
       className={cx(styles.toggle, styles[size], className)}
       aria-label={label}
       title={label}
-      onClick={(e) => {
+      onClick={e => {
         setTheme(CYCLE[theme]);
         onClick?.(e);
       }}

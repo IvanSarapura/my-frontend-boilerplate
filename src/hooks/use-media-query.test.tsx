@@ -27,7 +27,7 @@ function installMatchMedia(initialMatches: boolean) {
     mql,
     fire(matches: boolean) {
       mql.matches = matches;
-      listeners.forEach((cb) =>
+      listeners.forEach(cb =>
         cb({ matches } as unknown as MediaQueryListEvent),
       );
     },

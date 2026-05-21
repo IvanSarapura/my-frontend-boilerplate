@@ -10,7 +10,7 @@ const meta = {
   component: Toaster,
   tags: ['autodocs'],
   decorators: [
-    (Story) => (
+    Story => (
       <ToastProvider>
         <Story />
       </ToastProvider>

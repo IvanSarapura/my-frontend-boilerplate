@@ -41,9 +41,9 @@ const items = [
 
 export const Single: Story = {
   args: { type: 'single', defaultValue: 'item-1', children: null },
-  render: (args) => (
+  render: args => (
     <Accordion {...args}>
-      {items.map((item) => (
+      {items.map(item => (
         <AccordionItem key={item.value} value={item.value}>
           <AccordionTrigger>{item.title}</AccordionTrigger>
           <AccordionContent>{item.body}</AccordionContent>
@@ -59,9 +59,9 @@ export const Multiple: Story = {
     defaultValue: ['item-1', 'item-3'],
     children: null,
   },
-  render: (args) => (
+  render: args => (
     <Accordion {...args}>
-      {items.map((item) => (
+      {items.map(item => (
         <AccordionItem key={item.value} value={item.value}>
           <AccordionTrigger>{item.title}</AccordionTrigger>
           <AccordionContent>{item.body}</AccordionContent>
@@ -81,7 +81,7 @@ export const Controlled: Story = {
           Open item: <code>{value || '(none)'}</code>
         </div>
         <Accordion type="single" value={value} onValueChange={setValue}>
-          {items.map((item) => (
+          {items.map(item => (
             <AccordionItem key={item.value} value={item.value}>
               <AccordionTrigger>{item.title}</AccordionTrigger>
               <AccordionContent>{item.body}</AccordionContent>
@@ -95,7 +95,7 @@ export const Controlled: Story = {
 
 export const WithDisabledItem: Story = {
   args: { type: 'single', defaultValue: 'item-1', children: null },
-  render: (args) => (
+  render: args => (
     <Accordion {...args}>
       <AccordionItem value="item-1">
         <AccordionTrigger>Available section</AccordionTrigger>
@@ -126,7 +126,7 @@ export const FAQ: Story = {
         Frequently Asked Questions
       </h3>
       <Accordion type="single">
-        {items.map((item) => (
+        {items.map(item => (
           <AccordionItem key={item.value} value={item.value}>
             <AccordionTrigger>{item.title}</AccordionTrigger>
             <AccordionContent>{item.body}</AccordionContent>

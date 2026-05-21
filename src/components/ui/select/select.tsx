@@ -37,7 +37,7 @@ export function Select({
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const selectedLabel = useMemo(
-    () => options.find((o) => o.value === value)?.label,
+    () => options.find(o => o.value === value)?.label,
     [options, value],
   );
 
@@ -64,10 +64,10 @@ export function Select({
       }
       if (e.key === 'ArrowDown') {
         e.preventDefault();
-        setFocusedIndex((i) => Math.min(i + 1, options.length - 1));
+        setFocusedIndex(i => Math.min(i + 1, options.length - 1));
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
-        setFocusedIndex((i) => Math.max(i - 1, 0));
+        setFocusedIndex(i => Math.max(i - 1, 0));
       } else if (e.key === 'Enter' && focusedIndex >= 0) {
         e.preventDefault();
         const option = options[focusedIndex];
@@ -91,7 +91,7 @@ export function Select({
           open && styles.open,
           error && styles.error,
         )}
-        onClick={() => !disabled && setOpen((v) => !v)}
+        onClick={() => !disabled && setOpen(v => !v)}
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={open}
