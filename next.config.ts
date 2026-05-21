@@ -1,4 +1,19 @@
+import bundleAnalyzer from '@next/bundle-analyzer';
 import type { NextConfig } from 'next';
+
+// Opt-in bundle analyzer. Activates only when ANALYZE=true is set, so normal
+// builds (`next build`) pay zero overhead. Run `npm run analyze` to produce
+// HTML treemaps in `.next/analyze/` (client.html, nodejs.html, edge.html).
+//
+// Next.js 16 defaults to Turbopack, which is NOT supported by
+// `@next/bundle-analyzer` (webpack-only tool). The `analyze` npm script
+// forces the webpack bundler via `next build --webpack` so the analyzer
+// hooks fire. Treat the report as a diagnostic snapshot of the webpack
+// bundle, not of the production Turbopack build (the two have small
+// differences in chunking — for absolute numbers, deploy + measure).
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const securityHeaders = [
   { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
@@ -27,6 +42,18 @@ const nextConfig: NextConfig = {
   // request. See ONBOARDING.md §14 for the full architecture.
   cacheComponents: true,
 
+  // Gzip compression for HTML, RSC payloads and static assets when serving
+  // via `next start` or a custom Node server. This is Next.js's default
+  // (declared here as intent-as-documentation):
+  //   - Algorithm: gzip ONLY. Brotli is NOT served by next start; it must
+  //     be handled at the edge (reverse-proxy, CDN, Vercel).
+  //   - No-op on Vercel: the edge already serves brotli/gzip; this flag is
+  //     irrelevant there.
+  //   - Self-host behind Nginx/Caddy/Cloudflare: prefer `compress: false`
+  //     and let the proxy compress (avoids double-encoding, enables brotli).
+  //   - Self-host directly via `next start`: keep `true` to get gzip.
+  compress: true,
+
   // Allowlist for next/image external sources. Leave the array empty until a
   // real external image is needed — `next/image` blocks any foreign hostname
   // not listed here, which is intentional (prevents abuse of the optimizer
@@ -54,4 +81,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);
