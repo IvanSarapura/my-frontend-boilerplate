@@ -1,4 +1,4 @@
-import type { TextareaHTMLAttributes } from 'react';
+import { type TextareaHTMLAttributes, useId } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -18,7 +18,8 @@ export function Textarea({
   id,
   ...props
 }: TextareaProps) {
-  const textareaId = id ?? props.name;
+  const generatedId = useId();
+  const textareaId = id ?? props.name ?? generatedId;
 
   return (
     <div className={styles.field}>

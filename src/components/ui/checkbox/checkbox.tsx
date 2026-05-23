@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from 'react';
+import { type InputHTMLAttributes, useId } from 'react';
 
 import { CheckIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
@@ -20,7 +20,8 @@ export function Checkbox({
   disabled,
   ...props
 }: CheckboxProps) {
-  const inputId = id ?? props.name;
+  const generatedId = useId();
+  const inputId = id ?? props.name ?? generatedId;
   const describedBy = error
     ? `${inputId}-error`
     : helper

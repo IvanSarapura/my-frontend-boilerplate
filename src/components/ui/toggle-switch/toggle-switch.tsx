@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from 'react';
+import { type InputHTMLAttributes, useId } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -26,7 +26,8 @@ export function ToggleSwitch({
   id,
   ...props
 }: ToggleSwitchProps) {
-  const switchId = id ?? props.name;
+  const generatedId = useId();
+  const switchId = id ?? props.name ?? generatedId;
 
   return (
     <div className={cx(styles.wrapper, className)}>

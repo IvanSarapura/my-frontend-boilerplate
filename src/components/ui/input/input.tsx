@@ -1,4 +1,4 @@
-import type { InputHTMLAttributes } from 'react';
+import { type InputHTMLAttributes, useId } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -18,7 +18,8 @@ export function Input({
   id,
   ...props
 }: InputProps) {
-  const inputId = id ?? props.name;
+  const generatedId = useId();
+  const inputId = id ?? props.name ?? generatedId;
 
   return (
     <div className={styles.field}>
