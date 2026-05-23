@@ -63,11 +63,11 @@
 /* Interaction states — higher specificity, ordered after active */
 .trigger:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: var(--opacity-disabled);
 }
 
 .trigger:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
   outline-offset: -2px;
   border-radius: var(--radius-sm);
 }
@@ -96,8 +96,8 @@
 }
 
 .panel:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--color-focus-ring-offset);
   border-radius: var(--radius-sm);
 }
 

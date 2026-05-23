@@ -35,7 +35,7 @@
 
 .row.disabled {
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: var(--opacity-disabled);
 }
 
 .input {
@@ -84,8 +84,8 @@
 }
 
 .input:focus-visible + .box {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--color-focus-ring-offset);
 }
 
 .row:hover:not(.disabled) .box {
@@ -112,7 +112,7 @@
 
 .errorText {
   font-size: var(--text-xs);
-  color: var(--color-error);
+  color: var(--color-error-text);
 }
 
 /* ── Reduced motion ───────────────────────────────────── */

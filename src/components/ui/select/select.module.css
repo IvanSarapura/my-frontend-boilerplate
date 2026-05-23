@@ -24,14 +24,15 @@
 }
 
 .trigger:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgb(0 112 243 / 0.2);
+  border-color: var(--color-focus-ring);
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
 }
 
 .trigger:disabled {
   cursor: not-allowed;
-  background: var(--card-bg);
-  opacity: 0.6;
+  background: var(--color-disabled-bg);
+  opacity: var(--opacity-disabled);
 }
 
 .placeholder {
@@ -105,5 +106,5 @@
 .errorText {
   margin-top: var(--space-1);
   font-size: var(--text-xs);
-  color: var(--color-error, #ef4444);
+  color: var(--color-error-text);
 }

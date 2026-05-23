@@ -38,21 +38,27 @@
    * | ----------------------------------- | ------: | ------------------------------------------------------------ |
    * | --foreground (#171717) on #fff      | 16.91:1 | AAA Normal + AAA Large — primary body text                   |
    * | --accent (#0070f3) on #fff          |  4.46:1 | AA Normal, AAA Large — links, primary buttons                |
-   * | --muted (#888) on #fff              |  3.54:1 | AA Large only (fails AA Normal) — metadata, never body text  |
-   * | --color-error (#ef4444) on #fff     |  3.76:1 | AA Large only — pair with icon + text label                  |
+   * | --muted (#6b6b6b) on #fff           |  5.33:1 | AA Normal + AAA Large — helper text, metadata, muted labels  |
+   * | --muted (#6b6b6b) on #f5f5f5        |  4.89:1 | AA Normal on --card-bg surfaces                              |
+   * | --color-error (#ef4444) on #fff     |  3.76:1 | AA Large only — borders/icons/fills, never message text      |
+   * | --color-error-text (#dc2626) on #fff|  4.83:1 | AA Normal — error message text                               |
    * | --color-warning (#f59e0b) on #fff   |  2.15:1 | Fails AA — decorative only (filled badges, icons)            |
    * | --color-success (#10b981) on #fff   |  2.54:1 | Fails AA — decorative only (filled badges, icons)            |
    * | --color-info (#0070f3) on #fff      |  4.46:1 | AA Normal, AAA Large — same as --accent                      |
    *
    * Dark mode (against --background: #0a0a0a):
    * | --foreground (#ededed) on #0a0a0a   | 16.74:1 | AAA Normal + AAA Large                                       |
+   * | --muted (#969696) on #0a0a0a        |  6.69:1 | AA Normal + AAA Large (5.88:1 on --card-bg #1a1a1a)          |
+   * | --color-error-text (#f87171) dark   |  7.16:1 | AA Normal on #0a0a0a (6.29:1 on --card-bg #1a1a1a)           |
    *
    * Rules of thumb enforced by these ratios:
-   * - Body text must use --foreground (never --muted or semantic colors).
-   * - Status colors (success/warning/error) are valid for filled badges,
-   *   icons, and borders. For text on plain background, pair with a matching
-   *   icon + text label, or use a tinted background via color-mix() to keep
-   *   contrast safe (see alert.module.css for the pattern).
+   * - Primary body text uses --foreground. --muted is AA Normal and valid for
+   *   secondary text (helper text, metadata, muted labels) on #fff and #f5f5f5.
+   * - Error message text uses --color-error-text (AA Normal). The raw
+   *   --color-error (and other status colors) are for filled badges, icons,
+   *   and borders only — never plain message text. For status text on a plain
+   *   background, pair with an icon + label or a tinted color-mix() background
+   *   (see alert.module.css for the pattern).
    * - Any new color token MUST be added to this table with its measured ratio
    *   before merge.
    */
@@ -62,13 +68,18 @@
     --card-bg: #f5f5f5;
     --card-border: #e0e0e0;
     --accent: #0070f3;
-    --muted: #888;
+    --muted: #6b6b6b;
 
     /* Semantic colors — see contrast table above for usage rules. */
     --color-info: #0070f3;
     --color-success: #10b981;
     --color-warning: #f59e0b;
     --color-error: #ef4444;
+
+    /* AA-compliant text variant of --color-error for error MESSAGES (small
+     * body text). --color-error itself stays for borders/icons/fills, which
+     * have no minimum text-contrast requirement. */
+    --color-error-text: #dc2626;
 
     /*
      * Interactive state tokens.
@@ -232,6 +243,10 @@
       --foreground: #ededed;
       --card-bg: #1a1a1a;
       --card-border: #2e2e2e;
+
+      /* Lighten muted + error text so they stay AA on the dark surfaces. */
+      --muted: #969696;
+      --color-error-text: #f87171;
     }
   }
 
@@ -240,6 +255,10 @@
     --foreground: #ededed;
     --card-bg: #1a1a1a;
     --card-border: #2e2e2e;
+
+    /* Lighten muted + error text so they stay AA on the dark surfaces. */
+    --muted: #969696;
+    --color-error-text: #f87171;
   }
 
   @keyframes spin {

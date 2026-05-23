@@ -40,13 +40,13 @@
 .pageButton:disabled,
 .navButton:disabled {
   cursor: not-allowed;
-  opacity: 0.4;
+  opacity: var(--opacity-disabled);
 }
 
 .pageButton:focus-visible,
 .navButton:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--color-focus-ring-offset);
 }
 
 .pageButton:not(:disabled):hover,

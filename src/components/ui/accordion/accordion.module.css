@@ -33,11 +33,11 @@
 
 .trigger:disabled {
   cursor: not-allowed;
-  opacity: 0.5;
+  opacity: var(--opacity-disabled);
 }
 
 .trigger:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
   outline-offset: -2px;
 }
 

@@ -113,12 +113,12 @@
 .input:focus-visible ~ .slider {
   box-shadow:
     0 0 0 2px var(--background),
-    0 0 0 4px var(--accent);
+    0 0 0 4px var(--color-focus-ring);
 }
 
 /* Disabled */
 .input:disabled ~ .slider {
-  opacity: 0.5;
+  opacity: var(--opacity-disabled);
 }
 
 .switch:has(.input:disabled) {
