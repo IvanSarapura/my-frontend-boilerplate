@@ -10,10 +10,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-env:
-  # GitHub Actions will force Node.js 24 for all runner actions on 2026-06-02.
-  # This opts in now to avoid breaking changes and silence deprecation warnings.
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+# Workflow-level default. Each job may narrow or expand this; jobs that need
+# write scopes (artifact uploads) opt in explicitly below.
+permissions:
+  contents: read
 
 jobs:
   quality:
