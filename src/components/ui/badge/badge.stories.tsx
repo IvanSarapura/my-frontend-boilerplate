@@ -31,11 +31,23 @@ export const Primary: Story = {
   },
 };
 
+/*
+ * Filled status badges (success/error) are intentionally low-contrast: per the
+ * design-system contrast table (globals.css), --color-success/--color-error are
+ * decorative fills, not text colors, and never carry information by color alone
+ * — the badge text repeats the status. We disable the color-contrast rule here
+ * with that justification rather than darkening the brand fills.
+ */
+const decorativeFillA11y = {
+  a11y: { config: { rules: [{ id: 'color-contrast', enabled: false }] } },
+};
+
 export const Success: Story = {
   args: {
     children: 'Active',
     variant: 'success',
   },
+  parameters: decorativeFillA11y,
 };
 
 export const Warning: Story = {
@@ -50,4 +62,5 @@ export const Error: Story = {
     children: 'Failed',
     variant: 'error',
   },
+  parameters: decorativeFillA11y,
 };

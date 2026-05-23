@@ -68,6 +68,7 @@ export const ListSkeleton: Story = {
   args: { variant: 'rect' },
   render: () => (
     <div
+      role="status"
       style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
       aria-busy="true"
       aria-label="Loading list"
