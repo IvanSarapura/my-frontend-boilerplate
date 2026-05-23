@@ -3,7 +3,7 @@
 import { useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Icon } from '@/components/ui/icon';
+import { CloseIcon } from '@/components/ui/icon';
 import { useModalBehavior } from '@/hooks/use-modal-behavior';
 import { cx } from '@/lib/utils';
 
@@ -66,7 +66,7 @@ export function Modal({
                 onClick={onClose}
                 aria-label="Close dialog"
               >
-                <Icon name="close" size={20} />
+                <CloseIcon size={20} />
               </button>
               {children}
             </>
@@ -82,7 +82,7 @@ export function Modal({
                   onClick={onClose}
                   aria-label="Close dialog"
                 >
-                  <Icon name="close" size={20} />
+                  <CloseIcon size={20} />
                 </button>
               </div>
               <div className={styles.body}>{children}</div>

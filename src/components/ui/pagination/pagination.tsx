@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui/icon';
+import { ChevronLeftIcon, ChevronRightIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
 
 import {
@@ -69,8 +69,8 @@ export function Pagination({
             >
               {/* Two chevrons stacked via .tight margin render the "<<" affordance
                   without adding a chevrons-left-double icon to the registry. */}
-              <Icon name="chevron-left" size={14} />
-              <Icon name="chevron-left" size={14} className={styles.tight} />
+              <ChevronLeftIcon size={14} />
+              <ChevronLeftIcon size={14} className={styles.tight} />
             </button>
           </li>
         )}
@@ -82,7 +82,7 @@ export function Pagination({
             disabled={disabled || isFirst}
             aria-label="Previous page"
           >
-            <Icon name="chevron-left" size={16} />
+            <ChevronLeftIcon size={16} />
           </button>
         </li>
         {pages.map((item, idx) => (
@@ -102,7 +102,7 @@ export function Pagination({
             disabled={disabled || isLast}
             aria-label="Next page"
           >
-            <Icon name="chevron-right" size={16} />
+            <ChevronRightIcon size={16} />
           </button>
         </li>
         {showFirstLast && (
@@ -115,8 +115,8 @@ export function Pagination({
               aria-label="Last page"
             >
               {/* Mirror of the "<<" pattern above — see First page comment. */}
-              <Icon name="chevron-right" size={14} />
-              <Icon name="chevron-right" size={14} className={styles.tight} />
+              <ChevronRightIcon size={14} />
+              <ChevronRightIcon size={14} className={styles.tight} />
             </button>
           </li>
         )}

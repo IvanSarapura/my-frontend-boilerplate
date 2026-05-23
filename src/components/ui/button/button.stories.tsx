@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Icon } from '@/components/ui/icon';
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  InfoIcon,
+} from '@/components/ui/icon';
 
 import { Button } from './button';
 
@@ -75,7 +80,7 @@ export const Disabled: Story = {
 
 export const IconChevronLeft: Story = {
   args: {
-    children: <Icon name="chevron-left" />,
+    children: <ChevronLeftIcon />,
     variant: 'icon',
     size: 'md',
     'aria-label': 'Previous page',
@@ -84,7 +89,7 @@ export const IconChevronLeft: Story = {
 
 export const IconClose: Story = {
   args: {
-    children: <Icon name="close" />,
+    children: <CloseIcon />,
     variant: 'icon',
     size: 'md',
     'aria-label': 'Close',
@@ -93,7 +98,7 @@ export const IconClose: Story = {
 
 export const IconSmall: Story = {
   args: {
-    children: <Icon name="chevron-right" size={16} />,
+    children: <ChevronRightIcon size={16} />,
     variant: 'icon',
     size: 'sm',
     'aria-label': 'Next',
@@ -102,7 +107,7 @@ export const IconSmall: Story = {
 
 export const IconLarge: Story = {
   args: {
-    children: <Icon name="info" size={24} />,
+    children: <InfoIcon size={24} />,
     variant: 'icon',
     size: 'lg',
     'aria-label': 'More info',

@@ -17,8 +17,8 @@ export {
   DropdownSeparator,
   DropdownTrigger,
 } from './dropdown';
-export type { IconName } from './icon';
-export { Icon } from './icon';
+export type { IconBaseProps, IconComponent } from './icon';
+export { IconBase } from './icon';
 export { Input } from './input';
 export { Modal, ModalBody, ModalFooter, ModalHeader } from './modal';
 export { Pagination } from './pagination';

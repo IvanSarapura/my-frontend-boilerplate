@@ -63,6 +63,30 @@ const eslintConfig = defineConfig([
       'testing-library/no-container': 'off',
     },
   },
+  {
+    // Production code must import individual icons (CloseIcon, ChevronDownIcon, …),
+    // never the dev-only catalog (which pulls all 171 into the bundle).
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: [
+      'src/components/ui/icon/icons.test.tsx',
+      'src/components/ui/icon/icons.stories.tsx',
+      'src/components/ui/icon/icons-registry.dev.ts',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@/components/ui/icon/icons-registry.dev',
+              message:
+                'icons-registry.dev is dev-only (used by Storybook gallery and icon enumeration tests). Production code must import individual icons from "@/components/ui/icon".',
+            },
+          ],
+        },
+      ],
+    },
+  },
   prettier,
   globalIgnores([
     '.next/**',

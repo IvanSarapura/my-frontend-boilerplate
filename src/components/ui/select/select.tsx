@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Icon } from '@/components/ui/icon';
+import { ChevronDownIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
 
 import styles from './select.module.css';
@@ -100,7 +100,7 @@ export function Select({
         <span className={!selectedLabel ? styles.placeholder : undefined}>
           {selectedLabel ?? placeholder}
         </span>
-        <Icon name="chevron-down" className={styles.chevron} />
+        <ChevronDownIcon className={styles.chevron} />
       </button>
       {open && (
         <ul className={styles.menu} role="listbox">

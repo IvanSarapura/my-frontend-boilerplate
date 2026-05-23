@@ -1,6 +1,6 @@
 import type { InputHTMLAttributes } from 'react';
 
-import { Icon } from '@/components/ui/icon';
+import { CheckIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
 
 import styles from './checkbox.module.css';
@@ -46,7 +46,7 @@ export function Checkbox({
           className={cx(styles.box, error && styles.boxError, className)}
           aria-hidden="true"
         >
-          <Icon name="check" size={14} className={styles.check} />
+          <CheckIcon size={14} className={styles.check} />
         </span>
         {label && <span className={styles.label}>{label}</span>}
       </label>

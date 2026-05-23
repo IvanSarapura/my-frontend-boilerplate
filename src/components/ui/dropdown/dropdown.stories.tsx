@@ -1,6 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Icon } from '@/components/ui/icon';
+import {
+  CheckIcon,
+  ChevronDownIcon,
+  CloseIcon,
+  InfoIcon,
+} from '@/components/ui/icon';
 
 import { Dropdown } from './dropdown';
 import { DropdownContent } from './dropdown-content';
@@ -86,21 +91,21 @@ export const WithIcons: Story = {
     <div style={{ padding: '2rem' }}>
       <Dropdown>
         <DropdownTrigger>
-          <Icon name="chevron-down" size={16} />
+          <ChevronDownIcon size={16} />
           More actions
         </DropdownTrigger>
         <DropdownContent>
           <DropdownItem onSelect={() => alert('Info')}>
-            <Icon name="info" size={14} />
+            <InfoIcon size={14} />
             Details
           </DropdownItem>
           <DropdownItem onSelect={() => alert('Check')}>
-            <Icon name="check" size={14} />
+            <CheckIcon size={14} />
             Mark done
           </DropdownItem>
           <DropdownSeparator />
           <DropdownItem onSelect={() => alert('Close')}>
-            <Icon name="close" size={14} />
+            <CloseIcon size={14} />
             Dismiss
           </DropdownItem>
         </DropdownContent>

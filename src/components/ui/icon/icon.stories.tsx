@@ -1,69 +1,53 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { Icon } from './icon';
-import { type IconName, icons } from './icons';
-
-const ICON_NAMES = Object.keys(icons) as IconName[];
+import { IconBase } from './icon-base';
+import { ICON_CATALOG } from './icons-registry.dev';
+import {
+  ChevronDownIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  CloseIcon,
+  InfoIcon,
+} from './index';
 
 const meta = {
   title: 'UI/Icon',
-  component: Icon,
+  component: IconBase,
   tags: ['autodocs'],
-  argTypes: {
-    name: {
-      control: { type: 'select' },
-      options: ICON_NAMES,
+  parameters: {
+    docs: {
+      description: {
+        component:
+          'Tree-shakeable icon system. Import each icon as a named component (`import { CloseIcon } from "@/components/ui/icon"`). Only the icons referenced ship to the production bundle. `IconBase` is the shared SVG wrapper; consumers normally use the per-icon components below, not `IconBase` directly.',
+      },
     },
-    size: {
-      control: { type: 'number', min: 12, max: 64, step: 2 },
-    },
-    'aria-label': { control: 'text' },
   },
-} satisfies Meta<typeof Icon>;
+} satisfies Meta<typeof IconBase>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {
-    name: 'chevron-down',
-    size: 20,
-  },
+  render: () => <ChevronDownIcon size={20} />,
 };
 
 export const ChevronLeft: Story = {
-  args: {
-    name: 'chevron-left',
-    size: 20,
-    'aria-label': 'Previous',
-  },
+  render: () => <ChevronLeftIcon size={20} aria-label="Previous" />,
 };
 
 export const ChevronRight: Story = {
-  args: {
-    name: 'chevron-right',
-    size: 20,
-    'aria-label': 'Next',
-  },
+  render: () => <ChevronRightIcon size={20} aria-label="Next" />,
 };
 
 export const Large: Story = {
-  args: {
-    name: 'info',
-    size: 48,
-  },
+  render: () => <InfoIcon size={48} />,
 };
 
 export const WithAriaLabel: Story = {
-  args: {
-    name: 'close',
-    size: 20,
-    'aria-label': 'Close dialog',
-  },
+  render: () => <CloseIcon size={20} aria-label="Close dialog" />,
 };
 
 export const Gallery: Story = {
-  args: { name: 'info', size: 24 },
   render: () => (
     <div
       style={{
@@ -73,7 +57,7 @@ export const Gallery: Story = {
         padding: '1rem',
       }}
     >
-      {ICON_NAMES.map(name => (
+      {ICON_CATALOG.map(({ name, Component }) => (
         <div
           key={name}
           style={{
@@ -86,7 +70,7 @@ export const Gallery: Story = {
             borderRadius: 'var(--radius-md)',
           }}
         >
-          <Icon name={name} size={24} aria-label={name} />
+          <Component size={24} aria-label={name} />
           <code style={{ fontSize: 'var(--text-xs)' }}>{name}</code>
         </div>
       ))}

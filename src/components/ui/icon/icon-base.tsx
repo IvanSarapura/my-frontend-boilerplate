@@ -1,21 +1,15 @@
 import { cx } from '@/lib/utils';
 
-import styles from './icon.module.css';
-import { type IconName, icons } from './icons';
+import styles from './icon-base.module.css';
+import type { IconBaseProps } from './types';
 
-type IconProps = {
-  name: IconName;
-  size?: number | undefined;
-  className?: string | undefined;
-  'aria-label'?: string | undefined;
-};
-
-export function Icon({
-  name,
+export function IconBase({
   size = 20,
   className,
   'aria-label': ariaLabel,
-}: IconProps) {
+  children,
+  ...rest
+}: IconBaseProps) {
   const isDecorative = !ariaLabel;
 
   return (
@@ -33,8 +27,9 @@ export function Icon({
       aria-label={ariaLabel}
       aria-hidden={isDecorative ? true : undefined}
       focusable={false}
+      {...rest}
     >
-      {icons[name]}
+      {children}
     </svg>
   );
 }

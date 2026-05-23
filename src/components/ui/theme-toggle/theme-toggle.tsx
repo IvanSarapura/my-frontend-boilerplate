@@ -4,8 +4,12 @@ import type { ButtonHTMLAttributes } from 'react';
 
 import type { Theme } from '@/components/providers/theme-provider';
 import { useTheme } from '@/components/providers/theme-provider';
-import type { IconName } from '@/components/ui/icon';
-import { Icon } from '@/components/ui/icon';
+import {
+  type IconComponent,
+  MonitorIcon,
+  MoonIcon,
+  SunIcon,
+} from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
 
 import styles from './theme-toggle.module.css';
@@ -25,10 +29,10 @@ const CYCLE: Record<Theme, Theme> = {
   system: 'light',
 };
 
-const ICON: Record<Theme, IconName> = {
-  light: 'sun',
-  dark: 'moon',
-  system: 'monitor',
+const ICON: Record<Theme, IconComponent> = {
+  light: SunIcon,
+  dark: MoonIcon,
+  system: MonitorIcon,
 };
 
 const LABEL: Record<Theme, string> = {
@@ -52,6 +56,7 @@ export function ThemeToggle({
 }: ThemeToggleProps) {
   const { theme, setTheme } = useTheme();
   const label = LABEL[theme];
+  const ThemeIcon = ICON[theme];
 
   return (
     <button
@@ -65,7 +70,7 @@ export function ThemeToggle({
       }}
       {...props}
     >
-      <Icon name={ICON[theme]} size={ICON_SIZE[size]} />
+      <ThemeIcon size={ICON_SIZE[size]} />
     </button>
   );
 }

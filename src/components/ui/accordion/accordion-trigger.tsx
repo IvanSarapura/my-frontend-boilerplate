@@ -1,6 +1,6 @@
 'use client';
 
-import { Icon } from '@/components/ui/icon';
+import { ChevronDownIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
 
 import styles from './accordion.module.css';
@@ -30,8 +30,7 @@ export function AccordionTrigger({
       aria-controls={contentId}
     >
       <span className={styles.triggerLabel}>{children}</span>
-      <Icon
-        name="chevron-down"
+      <ChevronDownIcon
         size={18}
         className={cx(styles.chevron, isOpen && styles.chevronOpen)}
       />

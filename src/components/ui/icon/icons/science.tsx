@@ -1,0 +1,12 @@
+import { IconBase } from '../icon-base';
+import type { IconComponent } from '../types';
+
+export const ScienceIcon: IconComponent = props => (
+  <IconBase {...props}>
+    <path
+      fill="currentColor"
+      stroke="none"
+      d="M19.8 18.4L14 10.67V6.5L15.35 4.81C15.61 4.48 15.38 4 14.96 4H9.03999C8.61999 4 8.38999 4.48 8.64999 4.81L9.99999 6.5V10.67L4.19999 18.4C3.70999 19.06 4.17999 20 4.99999 20H19C19.82 20 20.29 19.06 19.8 18.4Z"
+    />
+  </IconBase>
+);

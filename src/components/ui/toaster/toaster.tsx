@@ -7,18 +7,25 @@ import {
   TOAST_DURATION_MS,
   useToast,
 } from '@/components/providers/toast-provider';
-import { Icon, type IconName } from '@/components/ui/icon';
+import {
+  CloseIcon,
+  ErrorIcon,
+  type IconComponent,
+  InfoIcon,
+  SuccessIcon,
+  WarningIcon,
+} from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
 
 import styles from './toaster.module.css';
 
 type ToastVariant = 'default' | 'success' | 'error' | 'warning';
 
-const VARIANT_ICONS: Record<ToastVariant, IconName> = {
-  default: 'info',
-  success: 'success',
-  error: 'error',
-  warning: 'warning',
+const VARIANT_ICONS: Record<ToastVariant, IconComponent> = {
+  default: InfoIcon,
+  success: SuccessIcon,
+  error: ErrorIcon,
+  warning: WarningIcon,
 };
 
 function useIsClient() {
@@ -46,6 +53,7 @@ function ToastItem({
   onRemove: (id: string) => void;
 }) {
   const [leaving, setLeaving] = useState(false);
+  const VariantIcon = VARIANT_ICONS[variant];
 
   useEffect(() => {
     const timer = setTimeout(() => setLeaving(true), TOAST_FADE_START_MS);
@@ -63,7 +71,7 @@ function ToastItem({
       className={cx(styles.toast, styles[variant], leaving && styles.leaving)}
     >
       <div className={styles.iconWrapper}>
-        <Icon name={VARIANT_ICONS[variant]} size={20} />
+        <VariantIcon size={20} />
       </div>
       <div className={styles.content}>
         <p className={styles.title}>{title}</p>
@@ -75,7 +83,7 @@ function ToastItem({
         onClick={() => setLeaving(true)}
         aria-label="Dismiss notification"
       >
-        <Icon name="close" size={16} />
+        <CloseIcon size={16} />
       </button>
     </div>
   );

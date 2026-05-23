@@ -1,0 +1,354 @@
+// Dev-only catalog. NEVER import from production code (ESLint-guarded).
+// Used exclusively by icon Storybook gallery and icon enumeration tests.
+
+import { AddIcon } from './icons/add';
+import { AnchorIcon } from './icons/anchor';
+import { ArchiveIcon } from './icons/archive';
+import { ArticleIcon } from './icons/article';
+import { ArticleFilledIcon } from './icons/article-filled';
+import { AssignmentFilledIcon } from './icons/assignment-filled';
+import { AttachFileIcon } from './icons/attach-file';
+import { AutorenewIcon } from './icons/autorenew';
+import { BackpackIcon } from './icons/backpack';
+import { BackpackFilledIcon } from './icons/backpack-filled';
+import { BankIcon } from './icons/bank';
+import { BedIcon } from './icons/bed';
+import { BoltIcon } from './icons/bolt';
+import { BoltAltIcon } from './icons/bolt-alt';
+import { BookIcon } from './icons/book';
+import { BookmarkIcon } from './icons/bookmark';
+import { BookmarkFilledIcon } from './icons/bookmark-filled';
+import { BriefcaseIcon } from './icons/briefcase';
+import { BugIcon } from './icons/bug';
+import { BugFilledIcon } from './icons/bug-filled';
+import { BuildIcon } from './icons/build';
+import { BusinessIcon } from './icons/business';
+import { CachedIcon } from './icons/cached';
+import { CalendarIcon } from './icons/calendar';
+import { CalendarTodayIcon } from './icons/calendar-today';
+import { CarIcon } from './icons/car';
+import { ChatIcon } from './icons/chat';
+import { CheckIcon } from './icons/check';
+import { ChevronDownIcon } from './icons/chevron-down';
+import { ChevronLeftIcon } from './icons/chevron-left';
+import { ChevronRightIcon } from './icons/chevron-right';
+import { ChevronUpIcon } from './icons/chevron-up';
+import { CircleCheckIcon } from './icons/circle-check';
+import { CircleRemoveIcon } from './icons/circle-remove';
+import { CloseIcon } from './icons/close';
+import { CompressIcon } from './icons/compress';
+import { CopyIcon } from './icons/copy';
+import { CreditCardIcon } from './icons/credit-card';
+import { CroissantIcon } from './icons/croissant';
+import { CroissantFilledIcon } from './icons/croissant-filled';
+import { DeleteIcon } from './icons/delete';
+import { DocumentIcon } from './icons/document';
+import { DragIndicatorIcon } from './icons/drag-indicator';
+import { EditIcon } from './icons/edit';
+import { ErrorIcon } from './icons/error';
+import { ExpandIcon } from './icons/expand';
+import { ExtensionFilledIcon } from './icons/extension-filled';
+import { FavoriteIcon } from './icons/favorite';
+import { FavoriteFilledIcon } from './icons/favorite-filled';
+import { FemaleIcon } from './icons/female';
+import { FileIcon } from './icons/file';
+import { FilterFilledIcon } from './icons/filter-filled';
+import { FilterListIcon } from './icons/filter-list';
+import { FilterOffIcon } from './icons/filter-off';
+import { FlagIcon } from './icons/flag';
+import { FlagFilledIcon } from './icons/flag-filled';
+import { FlightIcon } from './icons/flight';
+import { FullscreenIcon } from './icons/fullscreen';
+import { FullscreenExitIcon } from './icons/fullscreen-exit';
+import { GasStationIcon } from './icons/gas-station';
+import { GroupIcon } from './icons/group';
+import { GroupsIcon } from './icons/groups';
+import { HistoryIcon } from './icons/history';
+import { HomeIcon } from './icons/home';
+import { HourglassEmptyIcon } from './icons/hourglass-empty';
+import { InboxIcon } from './icons/inbox';
+import { InboxAllIcon } from './icons/inbox-all';
+import { InfoIcon } from './icons/info';
+import { InsertLinkIcon } from './icons/insert-link';
+import { InterestsIcon } from './icons/interests';
+import { KitchenIcon } from './icons/kitchen';
+import { LabelIcon } from './icons/label';
+import { LabelFilledIcon } from './icons/label-filled';
+import { LampIcon } from './icons/lamp';
+import { LampFilledIcon } from './icons/lamp-filled';
+import { LaunchIcon } from './icons/launch';
+import { LeaderboardIcon } from './icons/leaderboard';
+import { LightbulbIcon } from './icons/lightbulb';
+import { LightbulbFilledIcon } from './icons/lightbulb-filled';
+import { ListIcon } from './icons/list';
+import { LockIcon } from './icons/lock';
+import { LockOpenIcon } from './icons/lock-open';
+import { LoginIcon } from './icons/login';
+import { LogoutIcon } from './icons/logout';
+import { LoopIcon } from './icons/loop';
+import { LuggageIcon } from './icons/luggage';
+import { MailIcon } from './icons/mail';
+import { MaleIcon } from './icons/male';
+import { MapIcon } from './icons/map';
+import { MenuIcon } from './icons/menu';
+import { MenuBackIcon } from './icons/menu-back';
+import { MinusIcon } from './icons/minus';
+import { MonitorIcon } from './icons/monitor';
+import { MoonIcon } from './icons/moon';
+import { MoonAltIcon } from './icons/moon-alt';
+import { MoreHorizIcon } from './icons/more-horiz';
+import { MoreVertIcon } from './icons/more-vert';
+import { NoEntryIcon } from './icons/no-entry';
+import { NotificationIcon } from './icons/notification';
+import { NotificationActiveIcon } from './icons/notification-active';
+import { NotificationFilledIcon } from './icons/notification-filled';
+import { OfferIcon } from './icons/offer';
+import { OpenFullIcon } from './icons/open-full';
+import { PaidIcon } from './icons/paid';
+import { PasteIcon } from './icons/paste';
+import { PeopleAltIcon } from './icons/people-alt';
+import { PercentIcon } from './icons/percent';
+import { PersonIcon } from './icons/person';
+import { PersonAddIcon } from './icons/person-add';
+import { PersonRemoveIcon } from './icons/person-remove';
+import { PinIcon } from './icons/pin';
+import { PointIcon } from './icons/point';
+import { PollIcon } from './icons/poll';
+import { PollFilledIcon } from './icons/poll-filled';
+import { PowerIcon } from './icons/power';
+import { PrintIcon } from './icons/print';
+import { QrCodeIcon } from './icons/qr-code';
+import { QuestionIcon } from './icons/question';
+import { RecyclingIcon } from './icons/recycling';
+import { RefreshIcon } from './icons/refresh';
+import { RocketIcon } from './icons/rocket';
+import { RocketLaunchIcon } from './icons/rocket-launch';
+import { SaveIcon } from './icons/save';
+import { ScaleIcon } from './icons/scale';
+import { SchoolIcon } from './icons/school';
+import { ScienceIcon } from './icons/science';
+import { SearchIcon } from './icons/search';
+import { SentimentDissatisfiedIcon } from './icons/sentiment-dissatisfied';
+import { SentimentNeutralIcon } from './icons/sentiment-neutral';
+import { SentimentSatisfiedIcon } from './icons/sentiment-satisfied';
+import { SettingsIcon } from './icons/settings';
+import { ShareIcon } from './icons/share';
+import { ShareIosIcon } from './icons/share-ios';
+import { ShieldIcon } from './icons/shield';
+import { ShieldAltIcon } from './icons/shield-alt';
+import { ShoppingCartIcon } from './icons/shopping-cart';
+import { SportsIcon } from './icons/sports';
+import { StarIcon } from './icons/star';
+import { StarEmptyIcon } from './icons/star-empty';
+import { StarHalfIcon } from './icons/star-half';
+import { StickyNoteIcon } from './icons/sticky-note';
+import { SuccessIcon } from './icons/success';
+import { SunIcon } from './icons/sun';
+import { SwapHorizIcon } from './icons/swap-horiz';
+import { SwapVertIcon } from './icons/swap-vert';
+import { TagIcon } from './icons/tag';
+import { TerminalIcon } from './icons/terminal';
+import { ThumbDownIcon } from './icons/thumb-down';
+import { ThumbDownFilledIcon } from './icons/thumb-down-filled';
+import { ThumbUpIcon } from './icons/thumb-up';
+import { ThumbUpFilledIcon } from './icons/thumb-up-filled';
+import { TimeIcon } from './icons/time';
+import { TimelineIcon } from './icons/timeline';
+import { TrendingDownIcon } from './icons/trending-down';
+import { TrendingUpIcon } from './icons/trending-up';
+import { UndoIcon } from './icons/undo';
+import { VerifyIcon } from './icons/verify';
+import { ViewArrayIcon } from './icons/view-array';
+import { ViewCarouselIcon } from './icons/view-carousel';
+import { ViewColumnIcon } from './icons/view-column';
+import { ViewDashboardIcon } from './icons/view-dashboard';
+import { ViewDashboardAltIcon } from './icons/view-dashboard-alt';
+import { ViewListIcon } from './icons/view-list';
+import { ViewModulesIcon } from './icons/view-modules';
+import { ViewSidebarIcon } from './icons/view-sidebar';
+import { WalletIcon } from './icons/wallet';
+import { WalletFilledIcon } from './icons/wallet-filled';
+import { WarningIcon } from './icons/warning';
+import { WindowIcon } from './icons/window';
+import { WindowFilledIcon } from './icons/window-filled';
+import { WinnerIcon } from './icons/winner';
+import type { IconComponent } from './types';
+
+export type IconCatalogEntry = {
+  readonly name: string;
+  readonly Component: IconComponent;
+};
+
+export const ICON_CATALOG: readonly IconCatalogEntry[] = [
+  { name: 'add', Component: AddIcon },
+  { name: 'anchor', Component: AnchorIcon },
+  { name: 'archive', Component: ArchiveIcon },
+  { name: 'article', Component: ArticleIcon },
+  { name: 'article-filled', Component: ArticleFilledIcon },
+  { name: 'assignment-filled', Component: AssignmentFilledIcon },
+  { name: 'attach-file', Component: AttachFileIcon },
+  { name: 'autorenew', Component: AutorenewIcon },
+  { name: 'backpack', Component: BackpackIcon },
+  { name: 'backpack-filled', Component: BackpackFilledIcon },
+  { name: 'bank', Component: BankIcon },
+  { name: 'bed', Component: BedIcon },
+  { name: 'bolt', Component: BoltIcon },
+  { name: 'bolt-alt', Component: BoltAltIcon },
+  { name: 'book', Component: BookIcon },
+  { name: 'bookmark', Component: BookmarkIcon },
+  { name: 'bookmark-filled', Component: BookmarkFilledIcon },
+  { name: 'briefcase', Component: BriefcaseIcon },
+  { name: 'bug', Component: BugIcon },
+  { name: 'bug-filled', Component: BugFilledIcon },
+  { name: 'build', Component: BuildIcon },
+  { name: 'business', Component: BusinessIcon },
+  { name: 'cached', Component: CachedIcon },
+  { name: 'calendar', Component: CalendarIcon },
+  { name: 'calendar-today', Component: CalendarTodayIcon },
+  { name: 'car', Component: CarIcon },
+  { name: 'chat', Component: ChatIcon },
+  { name: 'check', Component: CheckIcon },
+  { name: 'chevron-down', Component: ChevronDownIcon },
+  { name: 'chevron-left', Component: ChevronLeftIcon },
+  { name: 'chevron-right', Component: ChevronRightIcon },
+  { name: 'chevron-up', Component: ChevronUpIcon },
+  { name: 'circle-check', Component: CircleCheckIcon },
+  { name: 'circle-remove', Component: CircleRemoveIcon },
+  { name: 'close', Component: CloseIcon },
+  { name: 'compress', Component: CompressIcon },
+  { name: 'copy', Component: CopyIcon },
+  { name: 'credit-card', Component: CreditCardIcon },
+  { name: 'croissant', Component: CroissantIcon },
+  { name: 'croissant-filled', Component: CroissantFilledIcon },
+  { name: 'delete', Component: DeleteIcon },
+  { name: 'document', Component: DocumentIcon },
+  { name: 'drag-indicator', Component: DragIndicatorIcon },
+  { name: 'edit', Component: EditIcon },
+  { name: 'error', Component: ErrorIcon },
+  { name: 'expand', Component: ExpandIcon },
+  { name: 'extension-filled', Component: ExtensionFilledIcon },
+  { name: 'favorite', Component: FavoriteIcon },
+  { name: 'favorite-filled', Component: FavoriteFilledIcon },
+  { name: 'female', Component: FemaleIcon },
+  { name: 'file', Component: FileIcon },
+  { name: 'filter-filled', Component: FilterFilledIcon },
+  { name: 'filter-list', Component: FilterListIcon },
+  { name: 'filter-off', Component: FilterOffIcon },
+  { name: 'flag', Component: FlagIcon },
+  { name: 'flag-filled', Component: FlagFilledIcon },
+  { name: 'flight', Component: FlightIcon },
+  { name: 'fullscreen', Component: FullscreenIcon },
+  { name: 'fullscreen-exit', Component: FullscreenExitIcon },
+  { name: 'gas-station', Component: GasStationIcon },
+  { name: 'group', Component: GroupIcon },
+  { name: 'groups', Component: GroupsIcon },
+  { name: 'history', Component: HistoryIcon },
+  { name: 'home', Component: HomeIcon },
+  { name: 'hourglass-empty', Component: HourglassEmptyIcon },
+  { name: 'inbox', Component: InboxIcon },
+  { name: 'inbox-all', Component: InboxAllIcon },
+  { name: 'info', Component: InfoIcon },
+  { name: 'insert-link', Component: InsertLinkIcon },
+  { name: 'interests', Component: InterestsIcon },
+  { name: 'kitchen', Component: KitchenIcon },
+  { name: 'label', Component: LabelIcon },
+  { name: 'label-filled', Component: LabelFilledIcon },
+  { name: 'lamp', Component: LampIcon },
+  { name: 'lamp-filled', Component: LampFilledIcon },
+  { name: 'launch', Component: LaunchIcon },
+  { name: 'leaderboard', Component: LeaderboardIcon },
+  { name: 'lightbulb', Component: LightbulbIcon },
+  { name: 'lightbulb-filled', Component: LightbulbFilledIcon },
+  { name: 'list', Component: ListIcon },
+  { name: 'lock', Component: LockIcon },
+  { name: 'lock-open', Component: LockOpenIcon },
+  { name: 'login', Component: LoginIcon },
+  { name: 'logout', Component: LogoutIcon },
+  { name: 'loop', Component: LoopIcon },
+  { name: 'luggage', Component: LuggageIcon },
+  { name: 'mail', Component: MailIcon },
+  { name: 'male', Component: MaleIcon },
+  { name: 'map', Component: MapIcon },
+  { name: 'menu', Component: MenuIcon },
+  { name: 'menu-back', Component: MenuBackIcon },
+  { name: 'minus', Component: MinusIcon },
+  { name: 'monitor', Component: MonitorIcon },
+  { name: 'moon', Component: MoonIcon },
+  { name: 'moon-alt', Component: MoonAltIcon },
+  { name: 'more-horiz', Component: MoreHorizIcon },
+  { name: 'more-vert', Component: MoreVertIcon },
+  { name: 'no-entry', Component: NoEntryIcon },
+  { name: 'notification', Component: NotificationIcon },
+  { name: 'notification-active', Component: NotificationActiveIcon },
+  { name: 'notification-filled', Component: NotificationFilledIcon },
+  { name: 'offer', Component: OfferIcon },
+  { name: 'open-full', Component: OpenFullIcon },
+  { name: 'paid', Component: PaidIcon },
+  { name: 'paste', Component: PasteIcon },
+  { name: 'people-alt', Component: PeopleAltIcon },
+  { name: 'percent', Component: PercentIcon },
+  { name: 'person', Component: PersonIcon },
+  { name: 'person-add', Component: PersonAddIcon },
+  { name: 'person-remove', Component: PersonRemoveIcon },
+  { name: 'pin', Component: PinIcon },
+  { name: 'point', Component: PointIcon },
+  { name: 'poll', Component: PollIcon },
+  { name: 'poll-filled', Component: PollFilledIcon },
+  { name: 'power', Component: PowerIcon },
+  { name: 'print', Component: PrintIcon },
+  { name: 'qr-code', Component: QrCodeIcon },
+  { name: 'question', Component: QuestionIcon },
+  { name: 'recycling', Component: RecyclingIcon },
+  { name: 'refresh', Component: RefreshIcon },
+  { name: 'rocket', Component: RocketIcon },
+  { name: 'rocket-launch', Component: RocketLaunchIcon },
+  { name: 'save', Component: SaveIcon },
+  { name: 'scale', Component: ScaleIcon },
+  { name: 'school', Component: SchoolIcon },
+  { name: 'science', Component: ScienceIcon },
+  { name: 'search', Component: SearchIcon },
+  { name: 'sentiment-dissatisfied', Component: SentimentDissatisfiedIcon },
+  { name: 'sentiment-neutral', Component: SentimentNeutralIcon },
+  { name: 'sentiment-satisfied', Component: SentimentSatisfiedIcon },
+  { name: 'settings', Component: SettingsIcon },
+  { name: 'share', Component: ShareIcon },
+  { name: 'share-ios', Component: ShareIosIcon },
+  { name: 'shield', Component: ShieldIcon },
+  { name: 'shield-alt', Component: ShieldAltIcon },
+  { name: 'shopping-cart', Component: ShoppingCartIcon },
+  { name: 'sports', Component: SportsIcon },
+  { name: 'star', Component: StarIcon },
+  { name: 'star-empty', Component: StarEmptyIcon },
+  { name: 'star-half', Component: StarHalfIcon },
+  { name: 'sticky-note', Component: StickyNoteIcon },
+  { name: 'success', Component: SuccessIcon },
+  { name: 'sun', Component: SunIcon },
+  { name: 'swap-horiz', Component: SwapHorizIcon },
+  { name: 'swap-vert', Component: SwapVertIcon },
+  { name: 'tag', Component: TagIcon },
+  { name: 'terminal', Component: TerminalIcon },
+  { name: 'thumb-down', Component: ThumbDownIcon },
+  { name: 'thumb-down-filled', Component: ThumbDownFilledIcon },
+  { name: 'thumb-up', Component: ThumbUpIcon },
+  { name: 'thumb-up-filled', Component: ThumbUpFilledIcon },
+  { name: 'time', Component: TimeIcon },
+  { name: 'timeline', Component: TimelineIcon },
+  { name: 'trending-down', Component: TrendingDownIcon },
+  { name: 'trending-up', Component: TrendingUpIcon },
+  { name: 'undo', Component: UndoIcon },
+  { name: 'verify', Component: VerifyIcon },
+  { name: 'view-array', Component: ViewArrayIcon },
+  { name: 'view-carousel', Component: ViewCarouselIcon },
+  { name: 'view-column', Component: ViewColumnIcon },
+  { name: 'view-dashboard', Component: ViewDashboardIcon },
+  { name: 'view-dashboard-alt', Component: ViewDashboardAltIcon },
+  { name: 'view-list', Component: ViewListIcon },
+  { name: 'view-modules', Component: ViewModulesIcon },
+  { name: 'view-sidebar', Component: ViewSidebarIcon },
+  { name: 'wallet', Component: WalletIcon },
+  { name: 'wallet-filled', Component: WalletFilledIcon },
+  { name: 'warning', Component: WarningIcon },
+  { name: 'window', Component: WindowIcon },
+  { name: 'window-filled', Component: WindowFilledIcon },
+  { name: 'winner', Component: WinnerIcon },
+] as const;
