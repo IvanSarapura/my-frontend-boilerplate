@@ -87,24 +87,24 @@ Key principles:
 
 ## What's Included
 
-| Feature                           | Description                                                                   |
-| --------------------------------- | ----------------------------------------------------------------------------- |
-| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                        |
-| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                   |
-| **Custom Design System**          | 22 primitive UI components + 80-icon registry, all CSS Modules                |
-| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC               |
-| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK            |
-| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                  |
-| **Server Actions**                | Modern form mutations with validation end-to-end                              |
-| **React Hook Form**               | Performant form handling integrated with Zod                                  |
-| **TanStack Query**                | Client-side server state with prefetching and caching                         |
-| **i18n (en/es)**                  | Locale-prefixed routes, `NEXT_LOCALE` cookie + `Accept-Language` fallback     |
-| **MSW**                           | Deterministic tests by mocking network requests                               |
-| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration                  |
-| **Complete SEO**                  | JSON-LD (WebSite + Organization), hreflang, multi-locale sitemap, OG, robots  |
-| **Security Headers**              | Nonce-based CSP (`strict-dynamic`), HSTS, X-Frame-Options, Permissions-Policy |
-| **Partial Prerendering**          | Cache Components + per-request nonce isolated via `<Suspense>`                |
-| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)                  |
+| Feature                           | Description                                                                      |
+| --------------------------------- | -------------------------------------------------------------------------------- |
+| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                           |
+| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                      |
+| **Custom Design System**          | 22 primitive UI components + 171 tree-shakeable icon components, all CSS Modules |
+| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC                  |
+| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK               |
+| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                     |
+| **Server Actions**                | Modern form mutations with validation end-to-end                                 |
+| **React Hook Form**               | Performant form handling integrated with Zod                                     |
+| **TanStack Query**                | Client-side server state with prefetching and caching                            |
+| **i18n (en/es)**                  | Locale-prefixed routes, `NEXT_LOCALE` cookie + `Accept-Language` fallback        |
+| **MSW**                           | Deterministic tests by mocking network requests                                  |
+| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration                     |
+| **Complete SEO**                  | JSON-LD (WebSite + Organization), hreflang, multi-locale sitemap, OG, robots     |
+| **Security Headers**              | Nonce-based CSP (`strict-dynamic`), HSTS, X-Frame-Options, Permissions-Policy    |
+| **Partial Prerendering**          | Cache Components + per-request nonce isolated via `<Suspense>`                   |
+| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)                     |
 
 ---
 
@@ -252,7 +252,7 @@ my-frontend-boilerplate/
 │   │   │   ├── card/
 │   │   │   ├── checkbox/
 │   │   │   ├── dropdown/            #   @floating-ui compound: Trigger + Content + Item + Separator
-│   │   │   ├── icon/                #   80-icon registry: Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants
+│   │   │   ├── icon/                #   171 tree-shakeable icon components (named ESM exports) + IconBase wrapper. Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants
 │   │   │   ├── input/
 │   │   │   ├── modal/
 │   │   │   ├── pagination/          #   accessible nav with ellipsis collapsing
@@ -346,30 +346,30 @@ Every primitive in `components/ui/` is built from scratch with **CSS Modules** a
 
 Each component lives in its own subdirectory (`button/button.tsx`, `button/button.test.tsx`, `button/button.stories.tsx`, `button/button.module.css`, `button/index.ts`). Adding a new component never pollutes the parent directory. Context providers (`QueryProvider`, `ToastProvider`) live in `components/providers/` — separate from the stateless visual primitives in `components/ui/`. Complex interactive behavior is extracted into `src/hooks/` as dedicated hooks (e.g. `useModalBehavior`), keeping components responsible for rendering only.
 
-| Component      | Purpose                                                                                                                                 |
-| -------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `Accordion`    | Compound: `Accordion` + `Item` + `Trigger` + `Content`                                                                                  |
-| `Alert`        | Info / success / warning / error with dismissible variant                                                                               |
-| `Avatar`       | Image with automatic initials fallback + status indicator                                                                               |
-| `Badge`        | Status indicators                                                                                                                       |
-| `Button`       | Variants (primary, secondary, ghost, icon) — 3 sizes                                                                                    |
-| `Card`         | Container with variants                                                                                                                 |
-| `Checkbox`     | Form field with label / error / helper                                                                                                  |
-| `Dropdown`     | Compound menu powered by `@floating-ui/react`                                                                                           |
-| `Icon`         | 80-icon registry (Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants like `thumb-up` ↻180° = `thumb-down`) |
-| `Input`        | Text input with label, error, helper                                                                                                    |
-| `Modal`        | Focus-trapped dialog (portal)                                                                                                           |
-| `Pagination`   | Accessible nav with MUI-style ellipsis collapsing                                                                                       |
-| `Radio`        | `Radio` + `RadioGroup` with context (controlled / uncontrolled)                                                                         |
-| `Select`       | Custom accessible dropdown with keyboard navigation                                                                                     |
-| `Skeleton`     | Shimmer placeholder, respects `prefers-reduced-motion`                                                                                  |
-| `Spinner`      | Loading indicator                                                                                                                       |
-| `Tabs`         | Compound + roving tabindex + manual activation                                                                                          |
-| `Textarea`     | Multi-line input following the `Input` pattern                                                                                          |
-| `ThemeToggle`  | Cycles light → dark → system with dynamic ARIA label                                                                                    |
-| `Toast`        | Notification system (context + hook)                                                                                                    |
-| `ToggleSwitch` | On/off toggle (rounded and rectangular variants)                                                                                        |
-| `Tooltip`      | Hover/focus tooltip powered by `@floating-ui/react`                                                                                     |
+| Component              | Purpose                                                                                                                                                                                                                                                                                                             |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Accordion`            | Compound: `Accordion` + `Item` + `Trigger` + `Content`                                                                                                                                                                                                                                                              |
+| `Alert`                | Info / success / warning / error with dismissible variant                                                                                                                                                                                                                                                           |
+| `Avatar`               | Image with automatic initials fallback + status indicator                                                                                                                                                                                                                                                           |
+| `Badge`                | Status indicators                                                                                                                                                                                                                                                                                                   |
+| `Button`               | Variants (primary, secondary, ghost, icon) — 3 sizes                                                                                                                                                                                                                                                                |
+| `Card`                 | Container with variants                                                                                                                                                                                                                                                                                             |
+| `Checkbox`             | Form field with label / error / helper                                                                                                                                                                                                                                                                              |
+| `Dropdown`             | Compound menu powered by `@floating-ui/react`                                                                                                                                                                                                                                                                       |
+| `IconBase` + 171 icons | Named ESM exports — only the icons you import ship to the bundle. `IconBase` is the shared SVG wrapper; per-icon components (`<CloseIcon />`, `<ChevronDownIcon />`, …) live in `icons/*.tsx`. Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants like `thumb-up` ↻180° = `thumb-down` |
+| `Input`                | Text input with label, error, helper                                                                                                                                                                                                                                                                                |
+| `Modal`                | Focus-trapped dialog (portal)                                                                                                                                                                                                                                                                                       |
+| `Pagination`           | Accessible nav with MUI-style ellipsis collapsing                                                                                                                                                                                                                                                                   |
+| `Radio`                | `Radio` + `RadioGroup` with context (controlled / uncontrolled)                                                                                                                                                                                                                                                     |
+| `Select`               | Custom accessible dropdown with keyboard navigation                                                                                                                                                                                                                                                                 |
+| `Skeleton`             | Shimmer placeholder, respects `prefers-reduced-motion`                                                                                                                                                                                                                                                              |
+| `Spinner`              | Loading indicator                                                                                                                                                                                                                                                                                                   |
+| `Tabs`                 | Compound + roving tabindex + manual activation                                                                                                                                                                                                                                                                      |
+| `Textarea`             | Multi-line input following the `Input` pattern                                                                                                                                                                                                                                                                      |
+| `ThemeToggle`          | Cycles light → dark → system with dynamic ARIA label                                                                                                                                                                                                                                                                |
+| `Toast`                | Notification system (context + hook)                                                                                                                                                                                                                                                                                |
+| `ToggleSwitch`         | On/off toggle (rounded and rectangular variants)                                                                                                                                                                                                                                                                    |
+| `Tooltip`              | Hover/focus tooltip powered by `@floating-ui/react`                                                                                                                                                                                                                                                                 |
 
 > **`@floating-ui/react`** is the single approved exception to the zero-UI-dependency policy. It powers only `Tooltip` and `Dropdown` because anchored positioning — viewport collision, scroll/resize tracking, arrow placement, cross-browser quirks — requires hundreds of lines of math per component to implement correctly. The dependency is ~12 KB gzipped, MIT-licensed, tree-shakeable, and is the same foundation Radix UI, shadcn/ui and Mantine use.
 >
@@ -851,7 +851,7 @@ ESLint and Stylelint run with `--cache` in the pre-commit hook. The first commit
 
 ### Pre-commit Node heap
 
-`.husky/pre-commit` exports `NODE_OPTIONS='--max-old-space-size=4096'` before invoking `lint-staged`. This raises V8's heap ceiling so eslint/prettier/stylelint can process large files without being killed by the OS (`SIGKILL`). The Icon registry alone is ~800 lines of JSX, and combined with `eslint-plugin-react-compiler`'s type-aware analysis the default ~2 GB heap is insufficient. Raise the limit further (e.g. `6144`) only if the symptom returns; do not bypass it by skipping the hook.
+`.husky/pre-commit` exports `NODE_OPTIONS='--max-old-space-size=4096'` before invoking `lint-staged`. This raises V8's heap ceiling so eslint/prettier/stylelint can process large staged sets without being killed by the OS (`SIGKILL`). Combined with `eslint-plugin-react-compiler`'s type-aware analysis on the React tree, the default ~2 GB heap can be insufficient on WSL2 / Linux for repos with many JSX files (the icon system alone is 171 modules). Raise the limit further (e.g. `6144`) only if the symptom returns; do not bypass it by skipping the hook.
 
 > **Why exported in the hook, not inline in `lint-staged`?** `lint-staged` does **not** run commands through a shell, so an env-var prefix like `NODE_OPTIONS=... eslint --fix` is interpreted as a binary name and fails with `ENOENT`. Exporting the variable in the hook makes it available to every child process (eslint, prettier, stylelint) without depending on shell-quoting.
 
