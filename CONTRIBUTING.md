@@ -402,10 +402,13 @@ npm run test:coverage
 # Run in watch mode (useful during development)
 npm run test:watch
 
-# Run E2E tests against a production build
-npm run build       # Terminal 1: build once
-npm start           # Terminal 1: serve the build
-npm run test:e2e    # Terminal 2: run Playwright
+# Run E2E tests against a production build.
+# Playwright's webServer builds + serves automatically, so this is enough:
+npm run test:e2e
+# To iterate without rebuilding each run, keep a prod server up and Playwright
+# reuses it:
+#   npm run build && npm start   # Terminal 1
+#   npm run test:e2e             # Terminal 2 (reuses the running server)
 
 # Open Playwright UI mode for debugging
 npm run test:e2e:ui

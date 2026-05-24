@@ -21,11 +21,17 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // In CI, serve the production build (the `e2e` job extracts the prebuilt
-    // `.next` artifact) so E2E exercises what actually ships. Locally, use the
-    // dev server for fast iteration.
-    command: process.env.CI ? 'npm run start' : 'npm run dev',
+    // E2E always runs against a production server — the industry standard: it
+    // exercises what actually ships and has no dev-only HMR (whose teardown
+    // logs a benign ECONNRESET). CI serves the prebuilt `.next` artifact;
+    // locally we build first. A server already running on the URL is reused
+    // (start `npm run build && npm start` once to iterate without rebuilding).
+    command: process.env.CI
+      ? 'npm run start'
+      : 'npm run build && npm run start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
+    // Allow the local production build to finish before the server is expected.
+    timeout: 120_000,
   },
 });
