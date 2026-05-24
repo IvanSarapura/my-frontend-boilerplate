@@ -9,6 +9,23 @@ import {
 } from './get-pagination-range';
 import styles from './pagination.module.css';
 
+/** Localizable accessible names. Pass localized strings; English is the default. */
+type PaginationLabels = {
+  first?: string;
+  previous?: string;
+  next?: string;
+  last?: string;
+  page?: (page: number) => string;
+};
+
+const DEFAULT_LABELS: Required<PaginationLabels> = {
+  first: 'First page',
+  previous: 'Previous page',
+  next: 'Next page',
+  last: 'Last page',
+  page: (page: number) => `Page ${page}`,
+};
+
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
@@ -19,6 +36,7 @@ type PaginationProps = {
   disabled?: boolean | undefined;
   className?: string | undefined;
   'aria-label'?: string | undefined;
+  labels?: PaginationLabels | undefined;
 };
 
 export function Pagination({
@@ -31,7 +49,9 @@ export function Pagination({
   disabled = false,
   className,
   'aria-label': ariaLabel = 'Pagination',
+  labels,
 }: PaginationProps) {
+  const l = { ...DEFAULT_LABELS, ...labels };
   const pages = getPaginationRange({
     currentPage,
     totalPages,
@@ -65,7 +85,7 @@ export function Pagination({
               className={styles.navButton}
               onClick={() => go(1)}
               disabled={disabled || isFirst}
-              aria-label="First page"
+              aria-label={l.first}
             >
               {/* Two chevrons stacked via .tight margin render the "<<" affordance
                   without adding a chevrons-left-double icon to the registry. */}
@@ -80,7 +100,7 @@ export function Pagination({
             className={styles.navButton}
             onClick={() => go(currentPage - 1)}
             disabled={disabled || isFirst}
-            aria-label="Previous page"
+            aria-label={l.previous}
           >
             <ChevronLeftIcon size={16} />
           </button>
@@ -92,6 +112,7 @@ export function Pagination({
             currentPage={currentPage}
             disabled={disabled}
             onClick={go}
+            pageLabel={l.page}
           />
         ))}
         <li>
@@ -100,7 +121,7 @@ export function Pagination({
             className={styles.navButton}
             onClick={() => go(currentPage + 1)}
             disabled={disabled || isLast}
-            aria-label="Next page"
+            aria-label={l.next}
           >
             <ChevronRightIcon size={16} />
           </button>
@@ -112,7 +133,7 @@ export function Pagination({
               className={styles.navButton}
               onClick={() => go(totalPages)}
               disabled={disabled || isLast}
-              aria-label="Last page"
+              aria-label={l.last}
             >
               {/* Mirror of the "<<" pattern above — see First page comment. */}
               <ChevronRightIcon size={14} />
@@ -130,11 +151,13 @@ function PageItem({
   currentPage,
   disabled,
   onClick,
+  pageLabel,
 }: {
   item: PaginationItem;
   currentPage: number;
   disabled: boolean;
   onClick: (page: number) => void;
+  pageLabel: (page: number) => string;
 }) {
   if (item === 'ellipsis') {
     return (
@@ -154,7 +177,7 @@ function PageItem({
         className={cx(styles.pageButton, isCurrent && styles.current)}
         onClick={() => onClick(item)}
         disabled={disabled}
-        aria-label={`Page ${item}`}
+        aria-label={pageLabel(item)}
         aria-current={isCurrent ? 'page' : undefined}
       >
         {item}

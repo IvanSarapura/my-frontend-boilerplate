@@ -45,12 +45,14 @@ function ToastItem({
   description,
   variant = 'default',
   onRemove,
+  dismissLabel,
 }: {
   id: string;
   title: string;
   description?: string;
   variant?: ToastVariant;
   onRemove: (id: string) => void;
+  dismissLabel: string;
 }) {
   const [leaving, setLeaving] = useState(false);
   const VariantIcon = VARIANT_ICONS[variant];
@@ -81,7 +83,7 @@ function ToastItem({
         type="button"
         className={styles.close}
         onClick={() => setLeaving(true)}
-        aria-label="Dismiss notification"
+        aria-label={dismissLabel}
       >
         <CloseIcon size={16} />
       </button>
@@ -89,7 +91,17 @@ function ToastItem({
   );
 }
 
-export function Toaster() {
+type ToasterProps = {
+  /** Accessible name for the toast region. Pass a localized string. */
+  regionLabel?: string;
+  /** Accessible name for each toast's dismiss button. Pass a localized string. */
+  dismissLabel?: string;
+};
+
+export function Toaster({
+  regionLabel = 'Notifications',
+  dismissLabel = 'Dismiss notification',
+}: ToasterProps) {
   const isClient = useIsClient();
   const { toasts, removeToast } = useToast();
 
@@ -105,10 +117,15 @@ export function Toaster() {
       className={styles.toaster}
       role="region"
       aria-live="polite"
-      aria-label="Notifications"
+      aria-label={regionLabel}
     >
       {toasts.map(toast => (
-        <ToastItem key={toast.id} {...toast} onRemove={handleRemove} />
+        <ToastItem
+          key={toast.id}
+          {...toast}
+          onRemove={handleRemove}
+          dismissLabel={dismissLabel}
+        />
       ))}
     </div>,
     document.body,

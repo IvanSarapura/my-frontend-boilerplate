@@ -8,6 +8,26 @@ import { ModalFooter } from './modal-footer';
 import { ModalHeader } from './modal-header';
 
 describe('Modal', () => {
+  it('uses the default close-button label and allows overriding it', () => {
+    const { rerender } = render(
+      <Modal open title="T" onClose={vi.fn()}>
+        body
+      </Modal>,
+    );
+    expect(
+      screen.getByRole('button', { name: 'Close dialog' }),
+    ).toBeInTheDocument();
+
+    rerender(
+      <Modal open title="T" onClose={vi.fn()} closeLabel="Cerrar diálogo">
+        body
+      </Modal>,
+    );
+    expect(
+      screen.getByRole('button', { name: 'Cerrar diálogo' }),
+    ).toBeInTheDocument();
+  });
+
   it('renders when open', () => {
     render(
       <Modal open title="Test Modal" onClose={vi.fn()}>

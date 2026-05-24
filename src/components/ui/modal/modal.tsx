@@ -23,6 +23,8 @@ type ModalProps = {
   children: React.ReactNode;
   footer?: React.ReactNode;
   className?: string;
+  /** Accessible name for the close button. Pass a localized string. */
+  closeLabel?: string;
 };
 
 export function Modal({
@@ -32,6 +34,7 @@ export function Modal({
   children,
   footer,
   className,
+  closeLabel = 'Close dialog',
 }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
@@ -64,7 +67,7 @@ export function Modal({
                 type="button"
                 className={cx(styles.close, styles.closeFloating)}
                 onClick={onClose}
-                aria-label="Close dialog"
+                aria-label={closeLabel}
               >
                 <CloseIcon size={20} />
               </button>
@@ -80,7 +83,7 @@ export function Modal({
                   type="button"
                   className={styles.close}
                   onClick={onClose}
-                  aria-label="Close dialog"
+                  aria-label={closeLabel}
                 >
                   <CloseIcon size={20} />
                 </button>

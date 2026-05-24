@@ -6,6 +6,43 @@ import { describe, expect, it, vi } from 'vitest';
 import { Pagination } from './pagination';
 
 describe('Pagination', () => {
+  it('uses default English labels and allows overriding them', () => {
+    const { rerender } = render(
+      <Pagination
+        currentPage={2}
+        totalPages={5}
+        onPageChange={() => {}}
+        showFirstLast
+      />,
+    );
+    expect(
+      screen.getByRole('button', { name: 'Previous page' }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Page 1' })).toBeInTheDocument();
+
+    rerender(
+      <Pagination
+        currentPage={2}
+        totalPages={5}
+        onPageChange={() => {}}
+        showFirstLast
+        labels={{
+          first: 'Primera',
+          previous: 'Anterior',
+          next: 'Siguiente',
+          last: 'Última',
+          page: n => `Página ${n}`,
+        }}
+      />,
+    );
+    expect(
+      screen.getByRole('button', { name: 'Anterior' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Página 1' }),
+    ).toBeInTheDocument();
+  });
+
   it('returns null when totalPages is 0', () => {
     const { container } = render(
       <Pagination currentPage={1} totalPages={0} onPageChange={() => {}} />,

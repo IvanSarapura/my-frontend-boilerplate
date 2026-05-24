@@ -20,6 +20,8 @@ type AlertProps = {
   onClose?: (() => void) | undefined;
   icon?: boolean | undefined;
   className?: string | undefined;
+  /** Accessible name for the dismiss button. Pass a localized string. */
+  dismissLabel?: string | undefined;
 };
 
 const VARIANT_ICONS: Record<AlertVariant, IconComponent> = {
@@ -36,6 +38,7 @@ export function Alert({
   onClose,
   icon = true,
   className,
+  dismissLabel = 'Dismiss alert',
 }: AlertProps) {
   const VariantIcon = VARIANT_ICONS[variant];
   return (
@@ -53,7 +56,7 @@ export function Alert({
           variant="icon"
           size="sm"
           onClick={onClose}
-          aria-label="Dismiss alert"
+          aria-label={dismissLabel}
           className={styles.close}
         >
           <CloseIcon size={16} />

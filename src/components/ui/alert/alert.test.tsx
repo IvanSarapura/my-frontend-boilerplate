@@ -62,4 +62,20 @@ describe('Alert', () => {
     const { container } = render(<Alert variant="warning">W</Alert>);
     expect(container.firstElementChild).toHaveClass('warning');
   });
+
+  it('uses the default dismiss label and allows overriding it', () => {
+    const { rerender } = render(<Alert onClose={vi.fn()}>msg</Alert>);
+    expect(
+      screen.getByRole('button', { name: 'Dismiss alert' }),
+    ).toBeInTheDocument();
+
+    rerender(
+      <Alert onClose={vi.fn()} dismissLabel="Descartar">
+        msg
+      </Alert>,
+    );
+    expect(
+      screen.getByRole('button', { name: 'Descartar' }),
+    ).toBeInTheDocument();
+  });
 });
