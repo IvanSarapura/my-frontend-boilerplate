@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
 import { apiClient } from '@/lib/api/client';
-
-const JSONPLACEHOLDER_API = 'https://jsonplaceholder.typicode.com';
+import { DEMO_API_ORIGIN } from '@/lib/constants';
 
 const commentSchema = z.object({
   postId: z.number(),
@@ -15,7 +14,7 @@ const commentSchema = z.object({
 export type Comment = z.infer<typeof commentSchema>;
 
 export async function getComments(postId: number): Promise<Comment[]> {
-  return apiClient(`${JSONPLACEHOLDER_API}/posts/${postId}/comments`, {
+  return apiClient(`${DEMO_API_ORIGIN}/posts/${postId}/comments`, {
     schema: z.array(commentSchema),
   });
 }

@@ -2,8 +2,7 @@ import { cacheLife } from 'next/cache';
 import { z } from 'zod';
 
 import { apiClient, ApiError } from '@/lib/api/client';
-
-const JSONPLACEHOLDER_API = 'https://jsonplaceholder.typicode.com';
+import { DEMO_API_ORIGIN } from '@/lib/constants';
 
 import type { Post } from '../types';
 
@@ -18,7 +17,7 @@ export async function getPosts(): Promise<Post[]> {
   'use cache';
   cacheLife('minutes');
 
-  return apiClient(`${JSONPLACEHOLDER_API}/posts?_limit=10`, {
+  return apiClient(`${DEMO_API_ORIGIN}/posts?_limit=10`, {
     schema: z.array(postSchema),
   });
 }
@@ -28,7 +27,7 @@ export async function getPostById(id: number): Promise<Post | null> {
   cacheLife('minutes');
 
   try {
-    return await apiClient(`${JSONPLACEHOLDER_API}/posts/${id}`, {
+    return await apiClient(`${DEMO_API_ORIGIN}/posts/${id}`, {
       schema: postSchema,
     });
   } catch (error) {
