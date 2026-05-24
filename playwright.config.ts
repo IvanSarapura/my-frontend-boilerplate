@@ -33,5 +33,12 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     // Allow the local production build to finish before the server is expected.
     timeout: 120_000,
+    // Test-only public env so the production-mode server is fully configured:
+    // silences the env guardrail (src/lib/env.ts) and resolves metadataBase.
+    // This is a test environment — it does not mask a real production misconfig.
+    env: {
+      NEXT_PUBLIC_APP_NAME: 'My App',
+      NEXT_PUBLIC_APP_URL: 'http://localhost:3000', // must match `url` above
+    },
   },
 });
