@@ -3,14 +3,14 @@
   max-width: 14rem;
   padding: var(--space-1) var(--space-2);
   font-size: var(--text-xs);
-  line-height: 1.4;
+  line-height: var(--leading-label);
   color: var(--background);
   overflow-wrap: break-word;
   pointer-events: none;
   background: var(--foreground);
   border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
-  animation: tooltip-fade-in 0.1s ease;
+  animation: tooltip-fade-in var(--transition-fast);
 }
 
 .arrow {

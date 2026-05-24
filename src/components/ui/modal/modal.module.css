@@ -6,8 +6,8 @@
   align-items: center;
   justify-content: center;
   padding: var(--space-4);
-  background: rgb(0 0 0 / 0.5);
-  animation: fade-in 0.15s ease;
+  background: var(--overlay-bg);
+  animation: fade-in var(--transition-fast);
 }
 
 .content {
@@ -20,7 +20,7 @@
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-lg);
-  animation: slide-in 0.2s ease;
+  animation: slide-in var(--transition-base);
 }
 
 .contentCompound {
@@ -40,7 +40,7 @@
 .headerSlot > h3 {
   margin: 0;
   font-size: var(--text-xl);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .closeFloating {
@@ -61,7 +61,7 @@
 .title {
   margin: 0;
   font-size: var(--text-xl);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .close {
@@ -82,7 +82,7 @@
 
 .body {
   font-size: var(--text-sm);
-  line-height: 1.6;
+  line-height: var(--leading-relaxed);
   color: var(--foreground);
 }
 

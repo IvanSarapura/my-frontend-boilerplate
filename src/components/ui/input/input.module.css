@@ -7,7 +7,7 @@
 
 .label {
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   color: var(--foreground);
 }
 
@@ -15,7 +15,7 @@
   width: 100%;
   padding: var(--space-2) var(--space-3);
   font-size: var(--text-sm);
-  line-height: 1.5;
+  line-height: var(--leading-normal);
   color: var(--foreground);
   outline: none;
   background: var(--background);
@@ -43,12 +43,12 @@
 }
 
 .error {
-  border-color: var(--color-error, #ef4444);
+  border-color: var(--color-error);
 }
 
 .error:focus {
-  border-color: var(--color-error, #ef4444);
-  box-shadow: 0 0 0 2px rgb(239 68 68 / 0.2);
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-error) 20%, transparent);
 }
 
 .helper {

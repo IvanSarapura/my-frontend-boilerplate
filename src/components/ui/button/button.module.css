@@ -4,14 +4,14 @@
   align-items: center;
   justify-content: center;
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   text-decoration: none;
   cursor: pointer;
   border: none;
   border-radius: var(--radius-md);
   transition:
-    opacity 0.15s ease,
-    transform 0.1s ease;
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .button:focus-visible {
@@ -45,7 +45,7 @@
 
 /* variants */
 .primary {
-  color: #fff;
+  color: var(--color-on-accent);
   background: var(--accent);
 }
 

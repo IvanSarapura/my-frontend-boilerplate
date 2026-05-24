@@ -62,9 +62,9 @@
 .slider::before {
   position: absolute;
   content: '';
-  background-color: #fff;
+  background-color: var(--color-on-accent);
   box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
-  transition: transform 0.25s ease;
+  transition: transform var(--transition-base);
 }
 
 /* sm thumb: 16×16 with 3px inset */

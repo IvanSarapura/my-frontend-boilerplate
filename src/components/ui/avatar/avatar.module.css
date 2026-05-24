@@ -4,7 +4,7 @@
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   vertical-align: middle;
   color: var(--foreground);
   user-select: none;
@@ -35,7 +35,7 @@
   width: 100%;
   height: 100%;
   text-transform: uppercase;
-  letter-spacing: 0.025em;
+  letter-spacing: var(--tracking-wide);
 }
 
 /* shapes */

@@ -7,7 +7,7 @@
 .title {
   margin-bottom: var(--space-4);
   font-size: var(--text-xl);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .selectWrapper {
@@ -32,7 +32,7 @@
 .commentName {
   margin-bottom: var(--space-1);
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .commentEmail {
@@ -43,7 +43,7 @@
 
 .commentBody {
   font-size: var(--text-sm);
-  line-height: 1.5;
+  line-height: var(--leading-normal);
   color: var(--foreground);
 }
 

@@ -4,7 +4,7 @@
   align-items: flex-start;
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-sm);
-  line-height: 1.5;
+  line-height: var(--leading-normal);
   border: 1px solid;
   border-left-width: 4px;
   border-radius: var(--radius-md);
@@ -22,7 +22,7 @@
 
 .title {
   margin-bottom: 0.125rem;
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   color: var(--foreground);
 }
 

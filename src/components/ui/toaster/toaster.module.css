@@ -24,7 +24,7 @@
   transition:
     opacity 0.2s ease,
     transform 0.2s ease;
-  animation: slide-in 0.25s ease;
+  animation: slide-in var(--transition-base);
 }
 
 .toast.leaving {
@@ -42,15 +42,15 @@
 }
 
 .success .iconWrapper {
-  color: var(--color-success, #10b981);
+  color: var(--color-success);
 }
 
 .error .iconWrapper {
-  color: var(--color-error, #ef4444);
+  color: var(--color-error);
 }
 
 .warning .iconWrapper {
-  color: var(--color-warning, #f59e0b);
+  color: var(--color-warning);
 }
 
 /* Right container — title + description, vertically centered */
@@ -65,7 +65,7 @@
 .title {
   margin: 0;
   font-size: var(--text-sm);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
 }
 
 .description {

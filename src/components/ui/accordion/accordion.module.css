@@ -22,7 +22,7 @@
   width: 100%;
   padding: var(--space-3) var(--space-4);
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   color: var(--foreground);
   text-align: left;
   cursor: pointer;

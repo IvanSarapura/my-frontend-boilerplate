@@ -6,7 +6,7 @@
 
 .groupLabel {
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
   color: var(--foreground);
 }
 
@@ -102,7 +102,7 @@
 }
 
 .label {
-  line-height: 1.4;
+  line-height: var(--leading-label);
 }
 
 .helper {

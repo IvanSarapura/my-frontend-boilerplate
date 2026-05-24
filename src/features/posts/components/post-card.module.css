@@ -19,12 +19,12 @@
 .title {
   margin-bottom: var(--space-2);
   font-size: var(--text-base);
-  font-weight: 600;
+  font-weight: var(--weight-semibold);
   text-transform: capitalize;
 }
 
 .body {
   font-size: var(--text-sm);
-  line-height: 1.6;
+  line-height: var(--leading-relaxed);
   color: var(--muted);
 }

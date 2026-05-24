@@ -27,12 +27,12 @@
 .title {
   margin-bottom: var(--space-4);
   font-size: var(--text-2xl);
-  font-weight: 700;
+  font-weight: var(--weight-bold);
   text-transform: capitalize;
 }
 
 .body {
   font-size: var(--text-base);
-  line-height: 1.7;
+  line-height: var(--leading-prose);
   color: var(--foreground);
 }

@@ -36,7 +36,7 @@
   justify-content: center;
   width: 1.125rem;
   height: 1.125rem;
-  color: #fff;
+  color: var(--color-on-accent);
   background: var(--background);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-sm);
@@ -66,16 +66,16 @@
 }
 
 .boxError {
-  border-color: var(--color-error, #ef4444);
+  border-color: var(--color-error);
 }
 
 .input:checked + .boxError {
-  background: var(--color-error, #ef4444);
-  border-color: var(--color-error, #ef4444);
+  background: var(--color-error);
+  border-color: var(--color-error);
 }
 
 .label {
-  line-height: 1.4;
+  line-height: var(--leading-label);
 }
 
 .helper {
