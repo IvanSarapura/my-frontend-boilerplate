@@ -1,5 +1,5 @@
 import { delay, http, HttpResponse } from 'msw';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
 import { server } from '@/mocks/node';
@@ -23,15 +23,20 @@ describe('apiClient', () => {
     expect(data).toEqual({ id: 1, name: 'Jane' });
   });
 
-  it('returns raw data unvalidated when no schema is provided', async () => {
+  it('returns raw data unvalidated (and warns in dev) when no schema is provided', async () => {
     const payload = { anything: ['goes', 'here'] };
     server.use(
       http.get('https://api.test/raw', () => HttpResponse.json(payload)),
     );
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const data = await apiClient<typeof payload>('https://api.test/raw');
 
     expect(data).toEqual(payload);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('No schema provided'),
+    );
+    warn.mockRestore();
   });
 
   it('throws ApiError with the response status when the HTTP response is not ok', async () => {

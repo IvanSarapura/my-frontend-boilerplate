@@ -81,5 +81,11 @@ export async function apiClient<T>(
     return parsed.data;
   }
 
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn(
+      `[apiClient] No schema provided for ${url}; returning unvalidated data. ` +
+        'Pass a Zod schema to validate the response.',
+    );
+  }
   return data as T;
 }
