@@ -412,9 +412,15 @@ npm run test:e2e:ui
 
 # Build Storybook to verify stories compile
 npm run storybook:build
+
+# Run every story as a test in a real browser, enforcing accessibility.
+# Slower (Chromium + axe), so it is NOT part of `npm test` or the pre-push hook.
+npm run test:storybook
 ```
 
 > **Coverage thresholds:** Every file must individually reach 70% coverage for statements, branches, functions, and lines. If you add a new file, add matching tests. You cannot rely on other files to compensate.
+
+> **Accessibility gate:** `npm run test:storybook` runs each story through axe with `a11y.test: 'error'` (`.storybook/preview.ts`). It runs in CI (the **Storybook a11y Tests** job), not in the pre-push hook, so a story with accessibility violations fails the PR even though it can be pushed locally. Run it yourself before opening a PR when you add or change stories. Intentional, justified violations (e.g. decorative filled badges) use a per-story `parameters.a11y.config.rules` override with a comment.
 
 ### Debugging E2E Tests
 
