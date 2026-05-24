@@ -189,24 +189,7 @@ jobs:
           retention-days: 7
 
   storybook:
-    name: Storybook
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: [quality]
-    permissions:
-      contents: read
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-      - run: npm ci
-      - name: Build Storybook
-        run: npm run storybook:build
-
-  storybook-a11y:
-    name: Storybook a11y Tests
+    name: Storybook (build + a11y)
     runs-on: ubuntu-latest
     timeout-minutes: 15
     needs: [quality]
@@ -221,6 +204,10 @@ jobs:
           cache: 'npm'
 
       - run: npm ci
+
+      # Fail-fast: if the Storybook app does not compile, skip the browser run.
+      - name: Build Storybook
+        run: npm run storybook:build
 
       - name: Install Playwright Chromium
         run: npx playwright install chromium --with-deps
