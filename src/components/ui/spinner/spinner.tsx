@@ -10,6 +10,13 @@ type SpinnerProps = {
   variant?: SpinnerVariant;
   /** Accessible label announced by screen readers. Defaults to "Loading". */
   label?: string;
+  /**
+   * When `true`, the spinner is purely visual: it drops `role="status"`/label
+   * and is `aria-hidden`. Use it inside an element that already announces the
+   * loading state (e.g. a wrapping `role="status"` region) to avoid nesting two
+   * live regions. Defaults to `false` (announces on its own).
+   */
+  decorative?: boolean;
   className?: string;
 };
 
@@ -17,12 +24,16 @@ export function Spinner({
   size = 'md',
   variant = 'default',
   label,
+  decorative = false,
   className,
 }: SpinnerProps) {
+  const a11yProps = decorative
+    ? ({ 'aria-hidden': true } as const)
+    : ({ role: 'status', 'aria-label': label ?? 'Loading' } as const);
+
   return (
     <span
-      role="status"
-      aria-label={label ?? 'Loading'}
+      {...a11yProps}
       className={cx(
         styles.root,
         styles[size],

@@ -24,6 +24,12 @@ describe('Spinner', () => {
     expect(screen.getByRole('status')).toHaveAccessibleName('Saving changes');
   });
 
+  it('is decorative (aria-hidden, no status role) when decorative', () => {
+    const { container } = render(<Spinner decorative />);
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(container.firstChild).toHaveAttribute('aria-hidden', 'true');
+  });
+
   it('renders the SVG as aria-hidden', () => {
     const { container } = render(<Spinner />);
     const svg = container.querySelector('svg');

@@ -6,8 +6,8 @@ import Loading from './loading';
 describe('Loading', () => {
   it('renders loading spinner with accessible label', () => {
     render(<Loading />);
-    // The wrapper region and the Spinner each expose role="status".
-    expect(screen.getAllByRole('status').length).toBeGreaterThan(0);
+    // A single status region (the wrapper); the Spinner is decorative.
+    expect(screen.getByRole('status')).toBeInTheDocument();
     expect(screen.getByText('Loading...')).toBeInTheDocument();
   });
 });
