@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useActionState, useEffect, useMemo, useRef } from 'react';
+import { useActionState, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useToast } from '@/components/providers/toast-provider';
@@ -34,7 +34,6 @@ export function ContactForm({ errorMessages, labels }: ContactFormProps) {
     submitContactAction,
     null,
   );
-  const formRef = useRef<HTMLFormElement>(null);
   const { addToast } = useToast();
 
   const schema = useMemo(
@@ -63,7 +62,7 @@ export function ContactForm({ errorMessages, labels }: ContactFormProps) {
   }, [state, reset, addToast, labels]);
 
   return (
-    <form ref={formRef} action={formAction} className={styles.form} noValidate>
+    <form action={formAction} className={styles.form} noValidate>
       <Input
         label={labels.nameLabel}
         placeholder={labels.namePlaceholder}
