@@ -10,9 +10,14 @@ const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year
 /**
  * Build the per-request Content-Security-Policy header.
  *
- * - `'nonce-XYZ' 'strict-dynamic'` allows our nonced scripts and anything
- *   they dynamically load (required for Next.js hydration). This replaces
- *   the previous `'unsafe-inline'`.
+ * - `'nonce-XYZ'` authorizes our inline scripts (theme init, JSON-LD, the RSC
+ *   flight-data scripts Next nonces automatically). `'self'` authorizes the
+ *   same-origin bundle chunks under `/_next/static`.
+ * - `'strict-dynamic'` is intentionally NOT used: it disables the `'self'`
+ *   allowlist, and Turbopack's chunk loader (Next.js 16 default) injects the
+ *   lazy `<script>` chunks without propagating the nonce, so the browser would
+ *   block every client chunk → no hydration in production. `'self'` + nonce is
+ *   the Turbopack-compatible policy.
  * - `'unsafe-eval'` is dev-only — React uses eval for enhanced stack traces.
  *   Not needed in production.
  * - `style-src` keeps `'unsafe-inline'` in dev (Next.js dev server injects
@@ -23,7 +28,7 @@ const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year
 function buildCspHeader(nonce: string, isDev: boolean): string {
   return [
     "default-src 'self'",
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'${isDev ? " 'unsafe-eval'" : ''}`,
+    `script-src 'self' 'nonce-${nonce}'${isDev ? " 'unsafe-eval'" : ''}`,
     `style-src 'self' ${isDev ? "'unsafe-inline'" : `'nonce-${nonce}'`}`,
     "img-src 'self' blob: data:",
     "font-src 'self'",
