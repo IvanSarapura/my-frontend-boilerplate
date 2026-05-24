@@ -1,6 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { ChevronDownIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
@@ -36,6 +43,7 @@ export function Select({
   const [open, setOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const errorId = `${useId()}-error`;
   const selectedLabel = useMemo(
     () => options.find(o => o.value === value)?.label,
     [options, value],
@@ -95,7 +103,7 @@ export function Select({
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-describedby={error ? 'select-error' : undefined}
+        aria-describedby={error ? errorId : undefined}
       >
         <span className={!selectedLabel ? styles.placeholder : undefined}>
           {selectedLabel ?? placeholder}
@@ -127,7 +135,7 @@ export function Select({
         </ul>
       )}
       {error && (
-        <span id="select-error" className={styles.errorText}>
+        <span id={errorId} className={styles.errorText}>
           {error}
         </span>
       )}

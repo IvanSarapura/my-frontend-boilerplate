@@ -71,11 +71,23 @@ export function Tooltip({
 
   if (disabled) return <>{children}</>;
 
-  // Forward ref and interaction props (including aria-describedby) directly
-  // onto the trigger element so screen readers correctly associate the tooltip.
+  // Forward ref and interaction props onto the trigger. getReferenceProps()
+  // includes an aria-describedby pointing at the tooltip; merge it with any
+  // aria-describedby the trigger already has (e.g. a form error) instead of
+  // overwriting it, so both are announced.
+  const referenceProps = getReferenceProps();
+  const childDescribedBy = (
+    React.Children.only(children).props as { 'aria-describedby'?: string }
+  )['aria-describedby'];
+  const ariaDescribedBy =
+    [childDescribedBy, referenceProps['aria-describedby'] as string | undefined]
+      .filter(Boolean)
+      .join(' ') || undefined;
+
   const trigger = React.cloneElement(React.Children.only(children), {
     ref: refs.setReference,
-    ...getReferenceProps(),
+    ...referenceProps,
+    'aria-describedby': ariaDescribedBy,
   } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
 
   return (

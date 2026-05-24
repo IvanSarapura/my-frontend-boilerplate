@@ -87,4 +87,26 @@ describe('Tooltip', () => {
     const trigger = screen.getByRole('button');
     expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
   });
+
+  it('preserves an existing aria-describedby on the trigger', async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <span id="external-hint">External description</span>
+        <Tooltip content="Tooltip hint" delay={0}>
+          <button aria-describedby="external-hint">Trigger</button>
+        </Tooltip>
+      </>,
+    );
+    const trigger = screen.getByRole('button');
+    // Closed: only the pre-existing description.
+    expect(trigger).toHaveAttribute('aria-describedby', 'external-hint');
+
+    await user.hover(trigger);
+    const tooltip = screen.getByRole('tooltip');
+    expect(trigger).toHaveAttribute(
+      'aria-describedby',
+      `external-hint ${tooltip.id}`,
+    );
+  });
 });

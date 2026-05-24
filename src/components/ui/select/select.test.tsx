@@ -64,4 +64,28 @@ describe('Select', () => {
     await userEvent.keyboard('{Enter}');
     expect(onChange).toHaveBeenCalledWith('a');
   });
+
+  it('links the error message via aria-describedby', () => {
+    render(<Select options={options} onChange={vi.fn()} error="Required" />);
+    const describedBy = screen
+      .getByRole('button')
+      .getAttribute('aria-describedby');
+    expect(describedBy).toBeTruthy();
+    expect(screen.getByText('Required')).toHaveAttribute('id', describedBy);
+  });
+
+  it('generates unique error ids across instances', () => {
+    render(
+      <>
+        <Select options={options} onChange={vi.fn()} error="First error" />
+        <Select options={options} onChange={vi.fn()} error="Second error" />
+      </>,
+    );
+    const [first, second] = screen.getAllByRole('button');
+    const firstId = first?.getAttribute('aria-describedby');
+    const secondId = second?.getAttribute('aria-describedby');
+    expect(firstId).toBeTruthy();
+    expect(secondId).toBeTruthy();
+    expect(firstId).not.toBe(secondId);
+  });
 });
