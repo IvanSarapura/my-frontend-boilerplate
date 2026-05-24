@@ -8,6 +8,7 @@ import { useToast } from '@/components/providers/toast-provider';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import type { Messages } from '@/i18n/config';
 
 import type { ContactState } from '../actions';
 import { submitContactAction } from '../actions';
@@ -25,9 +26,10 @@ function getServerError(
 
 type ContactFormProps = {
   errorMessages: ContactErrorMessages;
+  labels: Messages['contact'];
 };
 
-export function ContactForm({ errorMessages }: ContactFormProps) {
+export function ContactForm({ errorMessages, labels }: ContactFormProps) {
   const [state, formAction, pending] = useActionState(
     submitContactAction,
     null,
@@ -52,39 +54,39 @@ export function ContactForm({ errorMessages }: ContactFormProps) {
   useEffect(() => {
     if (state?.success) {
       addToast({
-        title: 'Success',
+        title: labels.successTitle,
         description: state.message,
         variant: 'success',
       });
       reset();
     }
-  }, [state, reset, addToast]);
+  }, [state, reset, addToast, labels]);
 
   return (
     <form ref={formRef} action={formAction} className={styles.form} noValidate>
       <Input
-        label="Name"
-        placeholder="Your name"
+        label={labels.nameLabel}
+        placeholder={labels.namePlaceholder}
         error={errors.name?.message ?? getServerError(state, 'name')}
         {...register('name')}
       />
       <Input
-        label="Email"
+        label={labels.emailLabel}
         type="email"
-        placeholder="you@example.com"
+        placeholder={labels.emailPlaceholder}
         error={errors.email?.message ?? getServerError(state, 'email')}
         {...register('email')}
       />
       <Textarea
-        label="Message"
-        placeholder="How can we help?"
+        label={labels.messageLabel}
+        placeholder={labels.messagePlaceholder}
         rows={5}
         error={errors.message?.message ?? getServerError(state, 'message')}
         {...register('message')}
       />
       <div className={styles.actions}>
         <Button type="submit" disabled={pending}>
-          {pending ? 'Sending...' : 'Submit'}
+          {pending ? labels.sendingLabel : labels.submitLabel}
         </Button>
       </div>
     </form>

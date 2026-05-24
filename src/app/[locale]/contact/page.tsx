@@ -32,7 +32,7 @@ export default async function ContactPage({
     <main className={styles.main}>
       <h1 className={styles.title}>{dict.contact.title}</h1>
       <p className={styles.subtitle}>{dict.contact.subtitle}</p>
-      <ContactForm errorMessages={dict.errors.contact} />
+      <ContactForm errorMessages={dict.errors.contact} labels={dict.contact} />
     </main>
   );
 }

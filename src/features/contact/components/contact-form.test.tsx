@@ -3,6 +3,7 @@ import { userEvent } from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ToastProvider } from '@/components/providers/toast-provider';
+import en from '@/i18n/messages/en.json';
 
 import type { ContactState } from '../actions';
 import { ContactForm } from './contact-form';
@@ -26,7 +27,7 @@ const ERROR_MESSAGES = {
 function renderForm() {
   return render(
     <ToastProvider>
-      <ContactForm errorMessages={ERROR_MESSAGES} />
+      <ContactForm errorMessages={ERROR_MESSAGES} labels={en.contact} />
     </ToastProvider>,
   );
 }

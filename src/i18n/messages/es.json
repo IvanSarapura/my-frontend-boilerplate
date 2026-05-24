@@ -27,7 +27,10 @@
     "emailPlaceholder": "tu@ejemplo.com",
     "messageLabel": "Mensaje",
     "messagePlaceholder": "¿Cómo podemos ayudarte?",
-    "successMessage": "¡Gracias! Tu mensaje ha sido enviado."
+    "successMessage": "¡Gracias! Tu mensaje ha sido enviado.",
+    "submitLabel": "Enviar",
+    "sendingLabel": "Enviando…",
+    "successTitle": "Éxito"
   },
   "errors": {
     "contact": {
