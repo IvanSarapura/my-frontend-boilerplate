@@ -38,7 +38,7 @@ describe('Error boundary', () => {
     render(<ErrorComponent error={error} reset={vi.fn()} />);
     expect(consoleSpy).toHaveBeenCalledWith('[observability]', {
       error,
-      source: 'root-error-boundary',
+      source: 'locale-error-boundary',
       digest: 'd-42',
     });
     vi.unstubAllEnvs();
