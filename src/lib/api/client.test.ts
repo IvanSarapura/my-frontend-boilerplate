@@ -1,4 +1,4 @@
-import { http, HttpResponse } from 'msw';
+import { delay, http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 
@@ -87,6 +87,53 @@ describe('apiClient', () => {
     expect(receivedMethod).toBe('POST');
     expect(receivedAuth).toBe('Bearer token-123');
     expect(receivedContentType).toBe('application/json');
+  });
+
+  it('throws ApiError(504) when the request exceeds the timeout', async () => {
+    server.use(
+      http.get('https://api.test/slow', async () => {
+        await delay('infinite');
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    await expect(
+      apiClient('https://api.test/slow', { timeoutMs: 20 }),
+    ).rejects.toMatchObject({ name: 'ApiError', status: 504 });
+  });
+
+  it('throws ApiError(502) when the response body is not valid JSON', async () => {
+    server.use(
+      http.get(
+        'https://api.test/html',
+        () =>
+          new HttpResponse('<html>oops</html>', {
+            headers: { 'Content-Type': 'text/html' },
+          }),
+      ),
+    );
+
+    await expect(apiClient('https://api.test/html')).rejects.toMatchObject({
+      name: 'ApiError',
+      status: 502,
+    });
+  });
+
+  it('re-throws a caller-initiated abort without wrapping it in ApiError', async () => {
+    server.use(
+      http.get('https://api.test/cancel', async () => {
+        await delay('infinite');
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    const controller = new AbortController();
+    const promise = apiClient('https://api.test/cancel', {
+      signal: controller.signal,
+    });
+    controller.abort();
+
+    await expect(promise).rejects.not.toBeInstanceOf(ApiError);
   });
 });
 
