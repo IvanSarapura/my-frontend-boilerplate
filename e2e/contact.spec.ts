@@ -34,7 +34,8 @@ test('contact form: client-side validation blocks an empty submit', async ({
 
   await page.getByRole('button', { name: /^submit$/i }).click();
 
-  // RHF + zodResolver displays these messages without round-tripping to the server.
+  // Submitting empty runs the Server Action, whose Zod validation returns the
+  // field errors that the form surfaces (getServerError).
   await expect(
     page.getByText('Name must be at least 2 characters'),
   ).toBeVisible();
@@ -45,7 +46,7 @@ test('contact form: client-side validation blocks an empty submit', async ({
     page.getByText('Message must be at least 10 characters'),
   ).toBeVisible();
 
-  // The success toast must NOT appear — the action never reached the server.
+  // The success toast must NOT appear — validation failed, so there is no success.
   await expect(
     page.getByText('Thank you! Your message has been sent.'),
   ).toBeHidden();
@@ -58,11 +59,11 @@ test('contact form: validation errors render in Spanish on /es', async ({
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Contacto');
 
-  await page.getByLabel('Name').fill('Juan');
-  await page.getByLabel('Email').fill('not-an-email');
-  await page.getByLabel('Message').fill('Mensaje suficientemente largo.');
+  await page.getByLabel('Nombre').fill('Juan');
+  await page.getByLabel('Correo electrónico').fill('not-an-email');
+  await page.getByLabel('Mensaje').fill('Mensaje suficientemente largo.');
 
-  await page.getByRole('button', { name: /^submit$/i }).click();
+  await page.getByRole('button', { name: /^enviar$/i }).click();
 
   // Confirms the Zod factory pattern wired through the locale cookie
   // produces translated error messages end-to-end.
