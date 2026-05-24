@@ -21,7 +21,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    // In CI, serve the production build (the `e2e` job extracts the prebuilt
+    // `.next` artifact) so E2E exercises what actually ships. Locally, use the
+    // dev server for fast iteration.
+    command: process.env.CI ? 'npm run start' : 'npm run dev',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },
