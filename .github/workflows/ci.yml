@@ -205,6 +205,32 @@ jobs:
       - name: Build Storybook
         run: npm run storybook:build
 
+  storybook-a11y:
+    name: Storybook a11y Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: [quality]
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: Run Storybook a11y tests
+        run: npm run test:storybook
+        env:
+          # Match the local pre-push budget; the browser project is memory-hungry.
+          NODE_OPTIONS: '--max-old-space-size=4096'
+
   e2e:
     name: E2E Tests
     runs-on: ubuntu-latest
