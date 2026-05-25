@@ -1,5 +1,7 @@
 import 'server-only';
 
+import { cache } from 'react';
+
 import type { Locale, Messages } from '@/i18n/config';
 
 const load = async (
@@ -11,6 +13,6 @@ const loaders: Record<Locale, () => Promise<Messages>> = {
   es: () => load(() => import('@/i18n/messages/es.json')),
 };
 
-export async function getDictionary(locale: Locale): Promise<Messages> {
-  return loaders[locale]();
-}
+export const getDictionary = cache(
+  async (locale: Locale): Promise<Messages> => loaders[locale](),
+);

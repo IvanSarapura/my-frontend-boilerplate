@@ -87,24 +87,24 @@ Key principles:
 
 ## What's Included
 
-| Feature                           | Description                                                                      |
-| --------------------------------- | -------------------------------------------------------------------------------- |
-| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                           |
-| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                      |
-| **Custom Design System**          | 22 primitive UI components + 171 tree-shakeable icon components, all CSS Modules |
-| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC                  |
-| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK               |
-| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                     |
-| **Server Actions**                | Modern form mutations with validation end-to-end                                 |
-| **React Hook Form**               | Performant form handling integrated with Zod                                     |
-| **TanStack Query**                | Client-side server state with prefetching and caching                            |
-| **i18n (en/es)**                  | Locale-prefixed routes, `NEXT_LOCALE` cookie + `Accept-Language` fallback        |
-| **MSW**                           | Deterministic tests by mocking network requests                                  |
-| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration                     |
-| **Complete SEO**                  | JSON-LD (WebSite + Organization), hreflang, multi-locale sitemap, OG, robots     |
-| **Security Headers**              | Nonce-based CSP (`strict-dynamic`), HSTS, X-Frame-Options, Permissions-Policy    |
-| **Partial Prerendering**          | Cache Components + per-request nonce isolated via `<Suspense>`                   |
-| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)                     |
+| Feature                           | Description                                                                                                     |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                                                          |
+| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                                                     |
+| **Custom Design System**          | 22 primitive UI components + 171 tree-shakeable icon components, all CSS Modules                                |
+| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC                                                 |
+| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK                                              |
+| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                                                    |
+| **Server Actions**                | Modern form mutations with validation end-to-end                                                                |
+| **React Hook Form**               | Performant form handling integrated with Zod                                                                    |
+| **TanStack Query**                | Client-side server state with prefetching and caching                                                           |
+| **i18n (en/es)**                  | Locale-prefixed routes, `NEXT_LOCALE` cookie + `Accept-Language` fallback                                       |
+| **MSW**                           | Deterministic tests by mocking network requests                                                                 |
+| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration                                                    |
+| **Complete SEO**                  | JSON-LD (WebSite + Organization), hreflang, multi-locale sitemap, OG, robots                                    |
+| **Security Headers**              | Nonce-based CSP (`'self'` + per-request nonce, Turbopack-compatible), HSTS, X-Frame-Options, Permissions-Policy |
+| **Partial Prerendering**          | Cache Components + per-request nonce isolated via `<Suspense>`                                                  |
+| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)                                                    |
 
 ---
 
@@ -211,6 +211,7 @@ my-frontend-boilerplate/
 │   ├── preview.ts
 │   └── preview-head.html            # Loads Geist into the preview iframe (Storybook is Vite, not SWC)
 ├── e2e/
+│   ├── contact.spec.ts              # Contact form: happy path, validation, i18n
 │   ├── home.spec.ts                 # Locale routing + heading assertions
 │   └── smoke.spec.ts                # Health endpoint + 404 + skip-link
 ├── src/
@@ -222,21 +223,19 @@ my-frontend-boilerplate/
 │   │   │   │   ├── mock/
 │   │   │   │   │   └── page.tsx     # Mock posts page
 │   │   │   │   └── page.tsx         # Posts via JSONPlaceholder API
-│   │   │   ├── layout.tsx           # Locale validation + generateStaticParams
+│   │   │   ├── layout.tsx           # Root layout — <html lang={locale}>, providers, metadata, generateStaticParams
 │   │   │   ├── page.tsx             # Home page (translated)
 │   │   │   ├── error.tsx            # Error boundary (Client Component)
 │   │   │   ├── not-found.tsx        # 404 page
-│   │   │   └── loading.tsx          # Loading spinner
+│   │   │   ├── loading.tsx          # Loading spinner (role="status")
+│   │   │   └── opengraph-image.tsx  # Auto-generated OG image (inherits metadataBase)
 │   │   ├── api/health/
 │   │   │   └── route.ts             # Health check → GET /api/health
-│   │   ├── layout.tsx               # Root layout — wraps HeadScripts in <Suspense>, providers, metadata
+│   │   ├── global-error.tsx         # Top-level boundary for errors thrown in the root layout
 │   │   ├── globals.css              # @layer reset/base/utilities + design tokens
-│   │   ├── error.tsx                # Global fallback error boundary
-│   │   ├── not-found.tsx            # Global 404
 │   │   ├── manifest.ts              # Web app manifest
 │   │   ├── robots.ts                # robots.txt
-│   │   ├── sitemap.ts               # sitemap.xml
-│   │   └── opengraph-image.tsx      # Auto-generated OG image
+│   │   └── sitemap.ts               # sitemap.xml
 │   ├── components/
 │   │   ├── head-scripts/             # Server component: nonced inline scripts (anti-FOUC + JSON-LD), wrapped in <Suspense>
 │   │   ├── providers/
@@ -297,10 +296,14 @@ my-frontend-boilerplate/
 │   │   └── messages/es.json
 │   ├── lib/
 │   │   ├── api/
-│   │   │   └── client.ts            # Generic type-safe fetch client
-│   │   ├── env.ts
+│   │   │   └── client.ts            # Generic type-safe fetch client (timeout + Zod)
+│   │   ├── constants.ts             # Shared constants (e.g. DEMO_API_ORIGIN)
+│   │   ├── env.ts                   # Public env (NEXT_PUBLIC_*) validated with Zod
+│   │   ├── env.server.ts            # Server-only secrets (server-only import guard)
 │   │   ├── json-ld.ts
 │   │   ├── observability.ts         # Vendor-agnostic reportError hook (no-op in prod)
+│   │   ├── query-defaults.ts        # Shared TanStack Query default options
+│   │   ├── string.ts                # String helpers
 │   │   └── utils.ts
 │   ├── mocks/
 │   │   ├── handlers.ts              # MSW request handlers
@@ -363,7 +366,7 @@ Each component lives in its own subdirectory (`button/button.tsx`, `button/butto
 | `Radio`                | `Radio` + `RadioGroup` with context (controlled / uncontrolled)                                                                                                                                                                                                                                                     |
 | `Select`               | Custom accessible dropdown with keyboard navigation                                                                                                                                                                                                                                                                 |
 | `Skeleton`             | Shimmer placeholder, respects `prefers-reduced-motion`                                                                                                                                                                                                                                                              |
-| `Spinner`              | Loading indicator                                                                                                                                                                                                                                                                                                   |
+| `Spinner`              | Loading indicator with optional `decorative` mode (drops its own `role="status"` when nested in a labelled region)                                                                                                                                                                                                  |
 | `Tabs`                 | Compound + roving tabindex + manual activation                                                                                                                                                                                                                                                                      |
 | `Textarea`             | Multi-line input following the `Input` pattern                                                                                                                                                                                                                                                                      |
 | `ThemeToggle`          | Cycles light → dark → system with dynamic ARIA label                                                                                                                                                                                                                                                                |
@@ -381,10 +384,10 @@ The typography system is a three-layer scale in `src/app/globals.css`: raw size 
 
 **Fonts: Geist + Geist Mono via a dual-runtime architecture.**
 
-| Runtime             | How Geist is loaded                                                                                   | What defines the family                               |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
-| Next.js (prod/dev)  | `next/font/google` in `src/app/layout.tsx` (SWC plugin generates self-hosted `@font-face` + preloads) | `--font-geist-sans` / `--font-geist-mono` on `<html>` |
-| Storybook (`:6006`) | `<link rel="stylesheet">` to Google Fonts in `.storybook/preview-head.html` (Vite has no SWC plugin)  | `@font-face { font-family: 'Geist'; … }`              |
+| Runtime             | How Geist is loaded                                                                                            | What defines the family                               |
+| ------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| Next.js (prod/dev)  | `next/font/google` in `src/app/[locale]/layout.tsx` (SWC plugin generates self-hosted `@font-face` + preloads) | `--font-geist-sans` / `--font-geist-mono` on `<html>` |
+| Storybook (`:6006`) | `<link rel="stylesheet">` to Google Fonts in `.storybook/preview-head.html` (Vite has no SWC plugin)           | `@font-face { font-family: 'Geist'; … }`              |
 
 `globals.css` reconciles both with a single declaration using inline `var()` fallback:
 
@@ -394,7 +397,7 @@ The typography system is a three-layer scale in `src/app/globals.css`: raw size 
   'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
 ```
 
-In Next.js, the hashed family name from `next/font` wins. In Storybook, that var is undefined and the literal `'Geist'` resolves against the `@font-face` injected by `preview-head.html`. Single source of truth, no decorators, no patches. To swap the typeface, edit the `next/font` binding in `layout.tsx` and the Google Fonts URL in `preview-head.html` — no component CSS needs to change.
+In Next.js, the hashed family name from `next/font` wins. In Storybook, that var is undefined and the literal `'Geist'` resolves against the `@font-face` injected by `preview-head.html`. Single source of truth, no decorators, no patches. To swap the typeface, edit the `next/font` binding in `[locale]/layout.tsx` and the Google Fonts URL in `preview-head.html` — no component CSS needs to change.
 
 ### Tri-State Theming
 
@@ -408,7 +411,7 @@ A first-class theming layer with three explicit choices: `light`, `dark`, and `s
 | `src/components/ui/theme-toggle/`             | `ThemeToggle` primitive that cycles light → dark → system            |
 | `src/hooks/use-theme.ts`                      | Re-export of `useTheme` for ergonomic feature-side imports           |
 | `src/app/globals.css`                         | CSS contract with `:root` tokens and `[data-theme="dark"]` overrides |
-| `src/app/layout.tsx`                          | Provider mount + inline anti-FOUC script in `<head>`                 |
+| `src/app/[locale]/layout.tsx`                 | Provider mount + inline anti-FOUC script in `<head>`                 |
 
 **Why `useSyncExternalStore` instead of `useState + useEffect`?** The latter pattern produces a render-then-flash on every load because the effect runs _after_ the first paint. `useSyncExternalStore` keeps SSR and CSR consistent: the server snapshot is the neutral `system` baseline, and the client snapshot reads `localStorage` synchronously without an extra render.
 
@@ -437,9 +440,14 @@ import { apiClient } from '@/lib/api/client';
 import { z } from 'zod';
 
 const userSchema = z.object({ id: z.number(), name: z.string() });
-const user = await apiClient('/api/user', { schema: userSchema });
+const user = await apiClient('/api/user', {
+  schema: userSchema,
+  timeoutMs: 5000,
+});
 // user is typed AND validated at runtime
 ```
+
+Beyond schema validation, the client enforces a request **timeout** (`timeoutMs`, default 10s) via an internal `AbortController` that composes with any caller-provided `signal`, **guards** `res.json()` (raising a structured `ApiError` on a non-JSON response), and **warns in development** when called without a `schema`.
 
 ---
 
@@ -470,7 +478,7 @@ The `contact` feature demonstrates the modern mutation pattern:
 
 1. **Zod schema** validates the form shape (`features/contact/schemas.ts`).
 2. **Server Action** receives `FormData`, validates it again on the server, and returns a typed state object (`features/contact/actions.ts`).
-3. **React Hook Form** handles client-side UX with `useActionState` for server feedback (`features/contact/components/contact-form.tsx`).
+3. **React Hook Form** handles client-side UX with `useActionState` for server feedback (`features/contact/components/contact-form.tsx`). The form receives its visible labels through a localized `labels` prop from the page, so every string is translated per locale.
 
 > **Why validate twice?** The client validates for instant UX feedback. The server validates because you can never trust the client.
 
@@ -510,7 +518,7 @@ MSW starts automatically in `vitest.setup.ts` before all tests.
 
 ### End-to-End Tests
 
-Playwright runs full browser tests against a production build to validate routing, i18n, accessibility, and API health.
+Playwright runs full browser tests against a **production build** in every environment — CI serves the prebuilt artifact, and locally the config runs `build && start` (reusing an already-running server if one is present). Three specs (`home`, `contact`, `smoke` — 9 tests) cover locale routing, i18n, the contact form, accessibility, and API health. The Playwright `webServer` injects test values for `NEXT_PUBLIC_*`, so the production-mode server is fully configured and its output stays clean.
 
 ---
 
@@ -701,7 +709,7 @@ quality ──┬──▶ storybook
 | **quality**   | format check → lint → typecheck → security audit (prod gate: `--omit=dev`; full-tree audit: all deps) → commitlint validation (PR only) |
 | **test**      | unit/component suite (Vitest, no coverage thresholds)                                                                                   |
 | **coverage**  | same test suite with v8 coverage report and threshold enforcement; HTML report uploaded as artifact                                     |
-| **storybook** | static Storybook build to catch configuration or story errors                                                                           |
+| **storybook** | build Storybook and run accessibility (a11y) audits against the stories                                                                 |
 | **build**     | production build; bundle-size summary posted to job summary; build artifact packaged as tarball and uploaded                            |
 | **e2e**       | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)                                      |
 
@@ -709,7 +717,7 @@ quality ──┬──▶ storybook
 
 - Jobs that upload or download artifacts are granted `actions: write` permissions.
 - Build and report artifacts are retained for **7 days**.
-- `.next/cache` is cached between runs using `actions/cache@v4`.
+- `.next/cache` is cached between runs using `actions/cache@v4`. The cache key includes `package-lock.json`, `next.config.ts`, `tsconfig.json`, and `src/**/*.{ts,tsx}`, so a change to the build/TS config invalidates a stale cache.
 
 ### Coverage Artifacts
 
@@ -811,7 +819,7 @@ NEXT_PUBLIC_APP_NAME=My App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-Variables are validated at startup with Zod (`src/lib/env.ts`). Missing or malformed values throw at build time.
+Public variables (`NEXT_PUBLIC_*`) are validated with Zod (`src/lib/env.ts`) and ship with development defaults so a fresh clone runs zero-config — in production they **warn** (they do not throw) if unset, making the misconfiguration visible in the logs. Server-only secrets live in `src/lib/env.server.ts` (no defaults, guarded by `server-only`) and **throw** at startup if missing or malformed.
 
 ---
 
@@ -825,7 +833,7 @@ The `proxy` function does three things on every request:
 
 1. **Locale routing.** Detects the visitor's preferred locale (cookie `NEXT_LOCALE` takes priority over `Accept-Language`) and redirects `/(path)` to `/[locale]/(path)` before the request reaches any page.
 2. **Locale cookie sync.** Sets/updates `NEXT_LOCALE` (1-year, sameSite=lax) so the user's explicit choice persists across visits.
-3. **CSP nonce.** Generates a fresh `crypto.randomUUID()` nonce per request, builds the `Content-Security-Policy` header with `'nonce-XYZ' 'strict-dynamic'`, and propagates it through both request headers (for `next/headers`-based reading in Server Components) and response headers (for browser enforcement). The CSP is intentionally **not** defined in `next.config.ts` — nonces must be generated per request, which static config cannot do.
+3. **CSP nonce.** Generates a fresh `crypto.randomUUID()` nonce per request, builds the `Content-Security-Policy` header with `script-src 'self' 'nonce-XYZ'` (`'strict-dynamic'` is intentionally **omitted** — it disables the `'self'` allowlist and Turbopack's chunk loader injects lazy `<script>` chunks without the nonce, which would block hydration in production), and propagates it through both request headers (for `next/headers`-based reading in Server Components) and response headers (for browser enforcement). The CSP is intentionally **not** defined in `next.config.ts` — nonces must be generated per request, which static config cannot do.
 
 API routes, static assets, metadata files, and prefetches are excluded via the `matcher` config.
 
