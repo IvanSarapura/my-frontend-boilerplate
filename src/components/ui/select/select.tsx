@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useEffectEvent,
   useId,
   useMemo,
   useRef,
@@ -63,31 +64,33 @@ export function Select({
     return () => document.removeEventListener('mousedown', handleClick);
   }, [open, close]);
 
+  const onKeyDown = useEffectEvent((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      close();
+      return;
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setFocusedIndex(i => Math.min(i + 1, options.length - 1));
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setFocusedIndex(i => Math.max(i - 1, 0));
+    } else if (e.key === 'Enter' && focusedIndex >= 0) {
+      e.preventDefault();
+      const option = options[focusedIndex];
+      if (option) {
+        onChange(option.value);
+        close();
+      }
+    }
+  });
+
   useEffect(() => {
     if (!open) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        close();
-        return;
-      }
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        setFocusedIndex(i => Math.min(i + 1, options.length - 1));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        setFocusedIndex(i => Math.max(i - 1, 0));
-      } else if (e.key === 'Enter' && focusedIndex >= 0) {
-        e.preventDefault();
-        const option = options[focusedIndex];
-        if (option) {
-          onChange(option.value);
-          close();
-        }
-      }
-    };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [open, options, focusedIndex, onChange, close]);
+    const listener = (e: KeyboardEvent) => onKeyDown(e);
+    document.addEventListener('keydown', listener);
+    return () => document.removeEventListener('keydown', listener);
+  }, [open]);
 
   return (
     <div className={cx(styles.wrapper, className)} ref={wrapperRef}>

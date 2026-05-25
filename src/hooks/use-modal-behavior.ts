@@ -1,6 +1,6 @@
 'use client';
 
-import { type RefObject, useEffect, useRef } from 'react';
+import { type RefObject, useEffect, useEffectEvent, useRef } from 'react';
 
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
@@ -25,40 +25,44 @@ export function useModalBehavior(
     }
   }, [open, overlayRef]);
 
-  useEffect(() => {
-    if (!open) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
+  const onKeyDown = useEffectEvent((e: KeyboardEvent) => {
+    if (e.key === 'Escape') {
+      onClose();
+      return;
+    }
+    if (e.key === 'Tab' && overlayRef.current) {
+      const focusable = Array.from(
+        overlayRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
+      );
+      /* v8 ignore next -- modal always renders a close button */
+      if (focusable.length === 0) return;
+      const first = focusable[0]!;
+      const last = focusable[focusable.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
-      if (e.key === 'Tab' && overlayRef.current) {
-        const focusable = Array.from(
-          overlayRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR),
-        );
-        /* v8 ignore next -- modal always renders a close button */
-        if (focusable.length === 0) return;
-        const first = focusable[0]!;
-        const last = focusable[focusable.length - 1]!;
-        if (e.shiftKey && document.activeElement === first) {
-          e.preventDefault();
-          last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
-          e.preventDefault();
-          first.focus();
-        }
-      }
-    };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [open, onClose, overlayRef]);
+    }
+  });
 
   useEffect(() => {
     if (!open) return;
-    const handlePointerDown = (e: PointerEvent) => {
-      if (e.target === overlayRef.current) onClose();
-    };
-    document.addEventListener('pointerdown', handlePointerDown);
-    return () => document.removeEventListener('pointerdown', handlePointerDown);
-  }, [open, onClose, overlayRef]);
+    const listener = (e: KeyboardEvent) => onKeyDown(e);
+    document.addEventListener('keydown', listener);
+    return () => document.removeEventListener('keydown', listener);
+  }, [open]);
+
+  const onPointerDown = useEffectEvent((e: PointerEvent) => {
+    if (e.target === overlayRef.current) onClose();
+  });
+
+  useEffect(() => {
+    if (!open) return;
+    const listener = (e: PointerEvent) => onPointerDown(e);
+    document.addEventListener('pointerdown', listener);
+    return () => document.removeEventListener('pointerdown', listener);
+  }, [open]);
 }
