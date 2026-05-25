@@ -10,8 +10,7 @@
   align-items: flex-start;
 }
 
-/* ── Tab list ─────────────────────────────────────────── */
-
+/* Tab list */
 .list {
   display: flex;
   flex-shrink: 0;
@@ -24,8 +23,7 @@
   border-bottom: none;
 }
 
-/* ── Tab trigger ──────────────────────────────────────── */
-
+/* Tab trigger */
 .trigger {
   position: relative;
   padding: var(--space-2) var(--space-4);
@@ -60,7 +58,7 @@
   background: var(--accent);
 }
 
-/* Interaction states — higher specificity, ordered after active */
+/* Interaction states (higher specificity) */
 .trigger:disabled {
   cursor: not-allowed;
   opacity: var(--opacity-disabled);
@@ -87,8 +85,7 @@
   height: 100%;
 }
 
-/* ── Tab panel ────────────────────────────────────────── */
-
+/* Tab panel */
 .panel {
   flex: 1;
   padding: var(--space-4) 0;
@@ -105,8 +102,7 @@
   display: none;
 }
 
-/* ── Reduced motion ───────────────────────────────────── */
-
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .trigger,
   .trigger::after {

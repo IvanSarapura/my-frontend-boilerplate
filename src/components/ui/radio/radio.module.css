@@ -115,7 +115,7 @@
   color: var(--color-error-text);
 }
 
-/* ── Reduced motion ───────────────────────────────────── */
+/* Reduced motion */
 
 @media (prefers-reduced-motion: reduce) {
   .box,

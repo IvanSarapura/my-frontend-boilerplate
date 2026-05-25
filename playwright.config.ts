@@ -21,11 +21,8 @@ export default defineConfig({
     },
   ],
   webServer: {
-    // E2E always runs against a production server — the industry standard: it
-    // exercises what actually ships and has no dev-only HMR (whose teardown
-    // logs a benign ECONNRESET). CI serves the prebuilt `.next` artifact;
-    // locally we build first. A server already running on the URL is reused
-    // (start `npm run build && npm start` once to iterate without rebuilding).
+    // E2E runs against a production server (CI serves the prebuilt artifact;
+    // local builds first). A server already on the URL is reused locally.
     command: process.env.CI
       ? 'npm run start'
       : 'npm run build && npm run start',
@@ -33,9 +30,8 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     // Allow the local production build to finish before the server is expected.
     timeout: 120_000,
-    // Test-only public env so the production-mode server is fully configured:
-    // silences the env guardrail (src/lib/env.ts) and resolves metadataBase.
-    // This is a test environment — it does not mask a real production misconfig.
+    // Test-only env to fully configure the production-mode server (silences the
+    // env guardrail in src/lib/env.ts, resolves metadataBase).
     env: {
       NEXT_PUBLIC_APP_NAME: 'My App',
       NEXT_PUBLIC_APP_URL: 'http://localhost:3000', // must match `url` above

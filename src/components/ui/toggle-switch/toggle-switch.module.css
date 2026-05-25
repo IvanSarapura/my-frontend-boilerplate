@@ -11,7 +11,7 @@
   user-select: none;
 }
 
-/* Track container (the <label> element) */
+/* Track */
 .switch {
   position: relative;
   display: inline-block;
@@ -19,7 +19,6 @@
   cursor: pointer;
 }
 
-/* Sizes */
 .sm {
   width: 40px;
   height: 22px;
@@ -47,7 +46,6 @@
   opacity: 0;
 }
 
-/* Visual track */
 .slider {
   position: absolute;
   inset: 0;
@@ -58,7 +56,6 @@
     box-shadow 0.15s ease;
 }
 
-/* Thumb */
 .slider::before {
   position: absolute;
   content: '';
@@ -91,7 +88,6 @@
   height: 28px;
 }
 
-/* Checked: accent track */
 .input:checked ~ .slider {
   background-color: var(--accent);
 }
@@ -109,14 +105,12 @@
   transform: translateX(28px); /* 64 - 28 - 8 */
 }
 
-/* Focus ring on the track */
 .input:focus-visible ~ .slider {
   box-shadow:
     0 0 0 2px var(--background),
     0 0 0 4px var(--color-focus-ring);
 }
 
-/* Disabled */
 .input:disabled ~ .slider {
   opacity: var(--opacity-disabled);
 }

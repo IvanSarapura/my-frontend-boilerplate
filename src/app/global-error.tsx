@@ -4,13 +4,9 @@ import { useEffect } from 'react';
 
 import { reportError } from '@/lib/observability';
 
-/**
- * Last-resort boundary for errors thrown in the root layout itself. It replaces
- * the entire document, so it renders its own <html>/<body> and uses inline
- * styles only — globals.css and the design tokens are not guaranteed to be
- * loaded in this context. Only shown in production (in dev, Next renders its
- * error overlay instead).
- */
+// Last-resort boundary for errors in the root layout. It replaces the whole
+// document, so it ships its own <html>/<body> and inline styles (globals.css
+// may not be loaded). Production only; dev shows Next's error overlay.
 export default function GlobalError({
   error,
   reset,

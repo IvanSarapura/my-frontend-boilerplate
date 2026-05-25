@@ -21,11 +21,9 @@ function parseParams(locale: string, id: string): ValidParams | null {
   return { locale: locale as Locale, numericId };
 }
 
-// Cache Components composes [locale] from the parent layout's generateStaticParams
-// automatically — this child only needs to enumerate [id]. Build output: 2 × 10 = 20 paths.
-// Sitemap intentionally omits these URLs: JSONPlaceholder posts are demo data, not real
-// content (see Round 6 / C17). When replacing the demo source with real content, add the
-// URLs to src/app/sitemap.ts.
+// [locale] is composed from the parent layout's generateStaticParams, so this
+// child only enumerates [id]. Sitemap omits these URLs (demo data); when wiring
+// a real source, add them to src/app/sitemap.ts.
 export async function generateStaticParams() {
   const posts = await getPosts();
   return posts.map(post => ({ id: String(post.id) }));

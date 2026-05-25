@@ -17,9 +17,8 @@ type ToastContextValue = {
   removeToast: (id: string) => void;
 };
 
-// Visible lifetime of a toast. The dismissal lifecycle (fade-out + removal) is
-// owned by `ToastItem` (see toaster.tsx), which reads this value — do NOT add a
-// removal timer here, or toasts would be torn down by two competing timers.
+// Visible lifetime of a toast. Removal is owned by `ToastItem` (toaster.tsx),
+// which reads this — don't add a removal timer here (competing timers).
 export const TOAST_DURATION_MS = 5000;
 
 const ToastContext = createContext<ToastContextValue | null>(null);

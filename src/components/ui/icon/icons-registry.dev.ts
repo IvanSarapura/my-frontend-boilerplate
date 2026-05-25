@@ -1,5 +1,5 @@
-// Dev-only catalog. NEVER import from production code (ESLint-guarded).
-// Used exclusively by icon Storybook gallery and icon enumeration tests.
+// Dev-only catalog for the Storybook gallery and icon tests. Never import from
+// production code (ESLint-guarded).
 
 import { AddIcon } from './icons/add';
 import { AnchorIcon } from './icons/anchor';

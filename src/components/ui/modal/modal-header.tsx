@@ -12,11 +12,8 @@ type ModalHeaderProps = {
   className?: string;
 };
 
-/**
- * Header slot of the compound Modal API. The wrapper carries the id
- * referenced by the dialog's `aria-labelledby`, so any text inside is
- * announced as the dialog's accessible name.
- */
+// Header slot of the compound Modal. Carries the id referenced by the dialog's
+// `aria-labelledby`, so its text becomes the dialog's accessible name.
 export function ModalHeader({ children, className }: ModalHeaderProps) {
   const { titleId } = useModalContext();
   return (

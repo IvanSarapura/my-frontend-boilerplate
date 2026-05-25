@@ -10,9 +10,8 @@ export const env = envSchema.parse({
   NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 });
 
-// Defaults keep `npm run dev` zero-config, but they should never silently ship
-// to production. Warn (do not crash) when a public var falls back to its default
-// in a production build so the misconfiguration is visible in logs.
+// Defaults keep dev zero-config but shouldn't ship to production. Warn (don't
+// crash) when a public var falls back to its default in a production build.
 if (process.env.NODE_ENV === 'production') {
   for (const key of ['NEXT_PUBLIC_APP_NAME', 'NEXT_PUBLIC_APP_URL'] as const) {
     if (!process.env[key]) {

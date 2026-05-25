@@ -24,16 +24,13 @@ const THEME_CHANGE_EVENT = 'theme:change';
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-// Module-scoped fallback so theme changes survive when localStorage is blocked
-// (private browsing, strict cookie policies). It also avoids returning a fresh
-// 'system' from getSnapshot when storage is unreadable, which would mask a
-// just-applied in-memory change. Updated by writeStoredTheme().
+// Fallback so theme changes survive when localStorage is blocked (private
+// browsing). Updated by writeStoredTheme().
 let memoryTheme: Theme = 'system';
 
-// Lazy, module-level singleton: matchMedia returns a fresh MediaQueryList per
-// call, but useSyncExternalStore invokes subscribe/getSnapshot repeatedly.
-// `.matches` is a live getter, so reusing one object is correct and avoids
-// re-instantiating a MediaQueryList on every snapshot read.
+// Lazy singleton: matchMedia returns a fresh object per call, but
+// useSyncExternalStore reads snapshots repeatedly. `.matches` is a live getter,
+// so reusing one MediaQueryList is correct and avoids re-instantiation.
 let darkMql: MediaQueryList | null = null;
 const getDarkMql = () => (darkMql ??= window.matchMedia(DARK_QUERY));
 
@@ -84,9 +81,8 @@ const SERVER_THEME: Theme = 'system';
 const SERVER_SYSTEM_DARK = false;
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // useSyncExternalStore keeps SSR and CSR consistent (server snapshot is the
-  // neutral 'system' baseline; after hydration we switch to the real stored
-  // value with no setState-in-effect anti-patterns).
+  // useSyncExternalStore keeps SSR/CSR consistent: server renders the neutral
+  // 'system' baseline, hydration switches to the real stored value.
   const theme = useSyncExternalStore(
     subscribeTheme,
     readStoredTheme,
@@ -102,7 +98,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const resolvedTheme: ResolvedTheme =
     theme === 'system' ? (systemPrefersDark ? 'dark' : 'light') : theme;
 
-  // Effect = the valid place to mutate the external DOM (document attribute).
+  // Effect is the right place to mutate the DOM attribute.
   useEffect(() => {
     const root = document.documentElement;
     if (theme === 'system') {
@@ -127,9 +123,8 @@ export function useTheme() {
   return ctx;
 }
 
-// Test-only: reset the module-scoped fallback between cases so order of tests
-// does not leak preferences. Also drops the cached MediaQueryList so it does
-// not retain a previous test's matchMedia mock. Not exported from the barrel.
+// Test-only: reset module-scoped state between cases (theme fallback + cached
+// MediaQueryList). Not exported from the barrel.
 export function __resetThemeMemoryForTests() {
   memoryTheme = 'system';
   darkMql = null;

@@ -8,24 +8,9 @@ import { DEMO_API_ORIGIN } from '@/lib/constants';
 const LOCALE_COOKIE = 'NEXT_LOCALE';
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year
 
-/**
- * Build the per-request Content-Security-Policy header.
- *
- * - `'nonce-XYZ'` authorizes our inline scripts (theme init, JSON-LD, the RSC
- *   flight-data scripts Next nonces automatically). `'self'` authorizes the
- *   same-origin bundle chunks under `/_next/static`.
- * - `'strict-dynamic'` is intentionally NOT used: it disables the `'self'`
- *   allowlist, and Turbopack's chunk loader (Next.js 16 default) injects the
- *   lazy `<script>` chunks without propagating the nonce, so the browser would
- *   block every client chunk → no hydration in production. `'self'` + nonce is
- *   the Turbopack-compatible policy.
- * - `'unsafe-eval'` is dev-only — React uses eval for enhanced stack traces.
- *   Not needed in production.
- * - `style-src` keeps `'unsafe-inline'` in dev (Next.js dev server injects
- *   un-noncable inline styles); production locks it down to the nonce.
- * - Hardening directives: `object-src 'none'`, `base-uri 'self'`,
- *   `form-action 'self'`, `upgrade-insecure-requests`.
- */
+// Per-request CSP header. `'strict-dynamic'` is omitted on purpose: it would
+// disable the `'self'` allowlist and Turbopack injects lazy chunks without the
+// nonce, breaking hydration in production. See README → Important Notes → proxy.ts.
 function buildCspHeader(nonce: string, isDev: boolean): string {
   return [
     "default-src 'self'",
@@ -76,9 +61,8 @@ export function proxy(request: NextRequest) {
   const isDev = process.env.NODE_ENV === 'development';
   const cspHeader = buildCspHeader(nonce, isDev);
 
-  // Propagate nonce + CSP via request headers so Next.js can extract the
-  // nonce and inject it into framework scripts, and Server Components can
-  // read it with `headers()`.
+  // Propagate via request headers so Next.js nonces its framework scripts and
+  // Server Components can read the nonce with `headers()`.
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
   requestHeaders.set('Content-Security-Policy', cspHeader);

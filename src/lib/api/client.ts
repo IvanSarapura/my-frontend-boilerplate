@@ -27,9 +27,8 @@ export async function apiClient<T>(
     ...fetchOptions
   } = options;
 
-  // Own controller so we can enforce a timeout while still honouring a caller's
-  // AbortSignal (e.g. React Query's). The timer is always cleared in `finally`
-  // so it never lingers in tests or serverless invocations.
+  // Own controller to enforce the timeout while still honouring the caller's
+  // AbortSignal (e.g. React Query's); the timer is cleared in `finally`.
   const controller = new AbortController();
   const onCallerAbort = () => controller.abort(callerSignal?.reason);
   if (callerSignal?.aborted) controller.abort(callerSignal.reason);
@@ -47,9 +46,7 @@ export async function apiClient<T>(
       },
     });
   } catch (err) {
-    // Our timeout fired (the caller did not abort) → surface a gateway timeout.
-    // A caller-initiated cancellation is re-thrown untouched so React Query and
-    // other callers can detect their own abort.
+    // Our timeout fired → 504. A caller-initiated abort is re-thrown untouched.
     if (controller.signal.aborted && !callerSignal?.aborted) {
       throw new ApiError(`Request timed out after ${timeoutMs}ms`, 504);
     }

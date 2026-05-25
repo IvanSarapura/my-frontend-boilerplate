@@ -86,11 +86,8 @@ export default async function LocaleLayout({
       suppressHydrationWarning
     >
       <head>
-        {/*
-          HeadScripts reads the CSP nonce via headers() — must stay inside
-          <Suspense> so the layout shell remains pre-renderable (PPR).
-          See src/components/head-scripts/head-scripts.tsx for rationale.
-        */}
+        {/* HeadScripts reads the nonce via headers(); keep in <Suspense> to
+            preserve PPR. See README → proxy.ts. */}
         <Suspense fallback={null}>
           <HeadScripts
             appName={env.NEXT_PUBLIC_APP_NAME}

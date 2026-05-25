@@ -38,7 +38,6 @@
   letter-spacing: var(--tracking-wide);
 }
 
-/* shapes */
 .circle {
   border-radius: 50%;
 }
@@ -47,7 +46,6 @@
   border-radius: var(--radius-md);
 }
 
-/* sizes */
 .sm {
   width: 1.5rem;
   height: 1.5rem;
@@ -72,7 +70,6 @@
   font-size: var(--text-xl);
 }
 
-/* status indicator */
 .status {
   position: absolute;
   right: 0;
@@ -86,7 +83,7 @@
   border-radius: 50%;
 }
 
-/* status colors must come after .status for spec order */
+/* Status colors: cascade after .status */
 .status-online {
   background: var(--color-success);
 }

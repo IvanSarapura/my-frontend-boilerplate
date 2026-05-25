@@ -1,9 +1,4 @@
-// Stub for the `server-only` import used by modules that must not be bundled
-// into client code (see src/lib/env.server.ts, src/i18n/dictionaries.ts).
-//
-// Next.js provides `server-only` internally at build time and Webpack/Turbopack
-// resolve it via their own aliases. Standalone Vite (used by Vitest) does not
-// know about that resolution, so we alias `server-only` to this empty stub in
-// vitest.config.ts. The real package would throw if reached from a client
-// bundle — under tests we want server modules to be importable directly.
+// Empty stub aliased to `server-only` in vitest.config.ts. Vite (unlike
+// Next.js) can't resolve the real package, so this lets tests import server
+// modules (env.server.ts, dictionaries.ts) directly.
 export {};

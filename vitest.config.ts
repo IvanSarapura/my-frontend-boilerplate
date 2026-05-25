@@ -6,9 +6,8 @@ import { defineConfig } from 'vitest/config';
 
 const alias = {
   '@': path.resolve(__dirname, './src'),
-  // `server-only` is supplied by Next.js at build time; standalone Vite
-  // can't resolve it. Point it at an empty stub so server modules are
-  // importable in jsdom tests. See src/mocks/server-only.ts.
+  // Vite can't resolve `server-only` (Next.js-only); alias to a stub so server
+  // modules are importable in tests. See src/mocks/server-only.ts.
   'server-only': path.resolve(__dirname, './src/mocks/server-only.ts'),
 };
 
@@ -16,7 +15,7 @@ export default defineConfig({
   test: {
     coverage: {
       provider: 'v8',
-      // css modules, stories, and mocks have no testable logic — skip them
+      // Files without testable logic.
       exclude: [
         '**/*.module.css',
         '**/*.stories.tsx',
@@ -52,12 +51,9 @@ export default defineConfig({
         },
       },
       {
-        // Runs every story as a test in a real browser. addon-vitest (>=10.3)
-        // auto-applies the preview annotations and the addon-a11y checks, so
-        // with `a11y.test: 'error'` in preview.ts, accessibility violations
-        // fail this project — no manual setup file needed. Browser-dependent
-        // and slower, so it is excluded from `npm test` (unit only) and runs
-        // via `npm run test:storybook` / CI. See https://storybook.js.org/docs/writing-tests/integrations/vitest-addon
+        // Runs every story as a test in a real browser, applying the a11y
+        // checks from preview.ts. Slower, so it's excluded from `npm test`
+        // (unit only) and runs via `npm run test:storybook` / CI.
         plugins: [
           storybookTest({ configDir: path.join(__dirname, '.storybook') }),
         ],

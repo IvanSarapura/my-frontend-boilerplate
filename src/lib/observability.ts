@@ -1,15 +1,5 @@
-/**
- * Vendor-agnostic error reporting hook.
- *
- * The boilerplate ships without an external error-tracking SDK on purpose: the
- * choice of vendor (Sentry, Rollbar, Highlight, Datadog…) belongs to the
- * product, not to the platform. This module exposes a stable `reportError`
- * surface that error boundaries and Server Actions can call today, so adopting
- * a vendor later becomes a single-file change instead of a refactor.
- *
- * See README → "Optional Integrations → Error Tracking" for the full
- * rationale and the recommended adoption recipe.
- */
+// Vendor-agnostic error reporting hook. Callers get a stable `reportError`
+// surface; adopting an SDK later is a one-file change. See README → Error Tracking.
 
 export type ErrorContext = {
   /** Where the error was caught — e.g. 'root-error-boundary', 'server-action:contact'. */
@@ -28,14 +18,6 @@ export function reportError(error: unknown, context: ErrorContext = {}): void {
     return;
   }
 
-  // Production: intentional no-op. Replace this block with your vendor SDK
-  // call when the product picks one. Example with Sentry:
-  //
-  //   import * as Sentry from '@sentry/nextjs';
-  //   Sentry.captureException(error, {
-  //     tags: { source: context.source, digest: context.digest },
-  //     extra: context.extra,
-  //   });
-  //
-  // Keep the function signature stable so callers do not change.
+  // Production: intentional no-op. Replace this body with your SDK call,
+  // keeping the signature stable. See README → Error Tracking.
 }

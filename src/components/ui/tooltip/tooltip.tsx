@@ -71,10 +71,8 @@ export function Tooltip({
 
   if (disabled) return <>{children}</>;
 
-  // Forward ref and interaction props onto the trigger. getReferenceProps()
-  // includes an aria-describedby pointing at the tooltip; merge it with any
-  // aria-describedby the trigger already has (e.g. a form error) instead of
-  // overwriting it, so both are announced.
+  // Merge the tooltip's aria-describedby with any the trigger already has
+  // (e.g. a form error) instead of overwriting, so both are announced.
   const referenceProps = getReferenceProps();
   const childDescribedBy = (
     React.Children.only(children).props as { 'aria-describedby'?: string }

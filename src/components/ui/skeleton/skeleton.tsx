@@ -13,10 +13,8 @@ type SkeletonProps = {
   className?: string | undefined;
   style?: CSSProperties | undefined;
   /**
-   * Optional accessible name. When supplied, the skeleton is announced as
-   * a live `role="status"` region (useful for block-level loading
-   * placeholders so screen readers receive a "loading" cue). When omitted,
-   * the element stays fully decorative with `aria-hidden`.
+   * Accessible name. When set, the skeleton becomes a live `role="status"`
+   * region; when omitted, it stays decorative with `aria-hidden`.
    */
   label?: string | undefined;
 };

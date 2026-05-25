@@ -15,7 +15,7 @@
     color var(--transition-fast);
 }
 
-/* ── Sizes — button and icon scale in lockstep via ICON_SIZE in TSX ───── */
+/* Sizes (locked with TSX ICON_SIZE) */
 .sm {
   width: 28px;
   height: 28px;

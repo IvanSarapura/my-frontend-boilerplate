@@ -10,21 +10,8 @@ updates:
         patterns:
           - '*'
     ignore:
-      # TODO: Remove this ignore rule once eslint-plugin-import supports ESLint 10.
-      #
-      # Context:
-      #   Dependabot attempted to bump eslint from ^9 to ^10 (2026-05-01), which
-      #   caused npm ci to fail with ERESOLVE because eslint-plugin-import@2.32.0
-      #   declares a peer dependency capped at eslint ^9.
-      #
-      # Unblock criteria (check all before removing):
-      #   1. eslint-plugin-import releases a version compatible with eslint ^10.
-      #   2. eslint-config-next ( Next.js ) updates its internal eslint-plugin-import
-      #      transitive dependency to that compatible version.
-      #   3. After removing this rule, the Dependabot PR for eslint passes CI
-      #      (format, lint, typecheck, test, build, e2e).
-      #
-      # When ready, delete the entire `ignore:` block below and commit.
+      # TODO: drop once eslint-plugin-import supports ESLint 10 (it caps at ^9,
+      # so a major bump breaks npm ci). See README → Important Notes (ESLint v9 pin).
       - dependency-name: 'eslint'
         update-types:
           - 'version-update:semver-major'

@@ -3,20 +3,8 @@ import type { MetadataRoute } from 'next';
 import { defaultLocale, type Locale, locales } from '@/i18n/config';
 import { env } from '@/lib/env';
 
-// Static routes served by the app, defined once per path (no locale prefix).
-// The sitemap multiplies this list by `locales` to produce one entry per
-// (path × locale) combination, with hreflang alternates inside.
-//
-// To add dynamic routes (e.g. CMS posts, DB items), fetch them inside the
-// default export and concat the generated entries — e.g.:
-//   const posts = await getPosts();
-//   const postEntries = posts.flatMap((p) =>
-//     locales.map((locale) => ({
-//       url: buildLocaleUrl(locale, `/posts/${p.slug}`),
-//       lastModified: new Date(p.updatedAt),
-//       alternates: { languages: buildLanguageAlternates(`/posts/${p.slug}`) },
-//     })),
-//   );
+// Paths without locale prefix; the sitemap expands them across `locales` with
+// hreflang alternates. For dynamic routes, fetch and concat entries in the export.
 const STATIC_PATHS = ['', '/contact', '/posts', '/posts/mock'] as const;
 
 function buildLocaleUrl(locale: Locale, path: string): string {

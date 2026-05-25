@@ -11,10 +11,9 @@ type SpinnerProps = {
   /** Accessible label announced by screen readers. Defaults to "Loading". */
   label?: string;
   /**
-   * When `true`, the spinner is purely visual: it drops `role="status"`/label
-   * and is `aria-hidden`. Use it inside an element that already announces the
-   * loading state (e.g. a wrapping `role="status"` region) to avoid nesting two
-   * live regions. Defaults to `false` (announces on its own).
+   * Purely visual: drops `role="status"`/label and sets `aria-hidden`. Use
+   * inside an element that already announces loading, to avoid nested live
+   * regions. Defaults to `false`.
    */
   decorative?: boolean;
   className?: string;

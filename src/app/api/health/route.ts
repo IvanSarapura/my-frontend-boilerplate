@@ -1,14 +1,7 @@
-// CORS policy: the health endpoint is a public monitoring surface (uptime
-// monitors, status dashboards, browser-based observability tools). It only
-// exposes { status, timestamp } — no user data, no auth-derived state — so a
-// wildcard allow-origin is appropriate and matches industry convention for
-// health endpoints (Vercel, GitHub, AWS, Cloudflare all do the same).
-//
-// IMPORTANT: this permissive policy is scoped to /api/health alone. Any other
-// route under /api/ must declare its own (more restrictive) CORS headers and
-// MUST NOT copy these blindly.
-// 1 day — browsers cache the CORS preflight result this long before re-asking.
-const CORS_PREFLIGHT_MAX_AGE_SECONDS = '86400';
+// Wildcard CORS is safe here: this public monitoring endpoint exposes only
+// { status, timestamp } — no user or auth data. Scoped to /api/health alone;
+// other /api/ routes must set their own, more restrictive headers.
+const CORS_PREFLIGHT_MAX_AGE_SECONDS = '86400'; // 1 day preflight cache
 const HTTP_NO_CONTENT = 204;
 
 const CORS_HEADERS = {

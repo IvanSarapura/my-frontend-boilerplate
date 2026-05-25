@@ -14,10 +14,9 @@ type ModalProps = {
   open: boolean;
   onClose: () => void;
   /**
-   * Optional convenience title. When provided, Modal renders the legacy
-   * structure (title row + close button inline + body + optional footer).
-   * When omitted, Modal renders `children` directly so the consumer can
-   * compose `<ModalHeader>`, `<ModalBody>`, `<ModalFooter>` as needed.
+   * Convenience title. When set, Modal renders title + close button + body;
+   * when omitted, it renders `children` for compound composition
+   * (`<ModalHeader>`, `<ModalBody>`, `<ModalFooter>`).
    */
   title?: string;
   children: React.ReactNode;

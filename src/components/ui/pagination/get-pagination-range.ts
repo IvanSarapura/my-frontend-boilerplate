@@ -12,12 +12,8 @@ function range(start: number, end: number): number[] {
   return Array.from({ length: end - start + 1 }, (_, i) => start + i);
 }
 
-/**
- * Returns the page-button sequence for a pagination component.
- * Algorithm based on Material-UI's usePagination — preserves visual
- * consistency when the current page is near the boundaries by extending
- * the visible window in the opposite direction.
- */
+// Returns the page-button sequence. Based on Material-UI's usePagination:
+// near a boundary, the visible window extends in the opposite direction.
 export function getPaginationRange({
   currentPage,
   totalPages,
