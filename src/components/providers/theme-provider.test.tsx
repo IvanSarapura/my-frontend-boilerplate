@@ -16,7 +16,11 @@ function createMatchMediaMock(initialMatches: boolean) {
   const listeners = new Set<(e: MediaQueryListEvent) => void>();
   const state = { matches: initialMatches };
   const matchMedia = vi.fn((query: string) => ({
-    matches: state.matches,
+    // Live getter mirrors the real MediaQueryList (its `matches` updates as the
+    // media state changes), so a cached MediaQueryList still reflects emit().
+    get matches() {
+      return state.matches;
+    },
     media: query,
     onchange: null,
     addEventListener: (_: string, cb: (e: MediaQueryListEvent) => void) =>

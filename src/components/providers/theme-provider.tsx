@@ -30,6 +30,13 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 // just-applied in-memory change. Updated by writeStoredTheme().
 let memoryTheme: Theme = 'system';
 
+// Lazy, module-level singleton: matchMedia returns a fresh MediaQueryList per
+// call, but useSyncExternalStore invokes subscribe/getSnapshot repeatedly.
+// `.matches` is a live getter, so reusing one object is correct and avoids
+// re-instantiating a MediaQueryList on every snapshot read.
+let darkMql: MediaQueryList | null = null;
+const getDarkMql = () => (darkMql ??= window.matchMedia(DARK_QUERY));
+
 function readStoredTheme(): Theme {
   if (typeof window === 'undefined') return 'system';
   try {
@@ -64,13 +71,13 @@ function subscribeTheme(callback: () => void) {
 }
 
 function subscribeMedia(callback: () => void) {
-  const media = window.matchMedia(DARK_QUERY);
+  const media = getDarkMql();
   media.addEventListener('change', callback);
   return () => media.removeEventListener('change', callback);
 }
 
 function getMediaSnapshot(): boolean {
-  return window.matchMedia(DARK_QUERY).matches;
+  return getDarkMql().matches;
 }
 
 const SERVER_THEME: Theme = 'system';
@@ -121,7 +128,9 @@ export function useTheme() {
 }
 
 // Test-only: reset the module-scoped fallback between cases so order of tests
-// does not leak preferences. Not exported from the package barrel.
+// does not leak preferences. Also drops the cached MediaQueryList so it does
+// not retain a previous test's matchMedia mock. Not exported from the barrel.
 export function __resetThemeMemoryForTests() {
   memoryTheme = 'system';
+  darkMql = null;
 }
