@@ -68,10 +68,11 @@ export default async function PostDetailPage({ params }: PageProps) {
   const parsed = parseParams(raw.locale, raw.id);
   if (!parsed) notFound();
 
-  const post = await getPostById(parsed.numericId);
+  const [post, dict] = await Promise.all([
+    getPostById(parsed.numericId),
+    getDictionary(parsed.locale),
+  ]);
   if (!post) notFound();
-
-  const dict = await getDictionary(parsed.locale);
 
   return (
     <main className={styles.main}>

@@ -26,8 +26,10 @@ export default async function PostsPage({
   const { locale } = await params;
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
-  const dict = await getDictionary(locale as Locale);
-  const posts = await getPosts();
+  const [dict, posts] = await Promise.all([
+    getDictionary(locale as Locale),
+    getPosts(),
+  ]);
 
   return (
     <main className={styles.main}>
