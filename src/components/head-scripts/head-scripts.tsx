@@ -3,6 +3,7 @@ import { headers } from 'next/headers';
 import {
   generateOrganizationJsonLd,
   generateWebsiteJsonLd,
+  serializeJsonLd,
 } from '@/lib/json-ld';
 
 // Anti-FOUC: applies data-theme before first paint. Keep in sync with
@@ -48,14 +49,14 @@ export async function HeadScripts({
         nonce={nonce}
         suppressHydrationWarning
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(websiteJsonLd) }}
       />
       <script
         nonce={nonce}
         suppressHydrationWarning
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(organizationJsonLd),
+          __html: serializeJsonLd(organizationJsonLd),
         }}
       />
     </>

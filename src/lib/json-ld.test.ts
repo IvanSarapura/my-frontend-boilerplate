@@ -4,6 +4,7 @@ import {
   generateBreadcrumbListJsonLd,
   generateOrganizationJsonLd,
   generateWebsiteJsonLd,
+  serializeJsonLd,
 } from './json-ld';
 
 describe('generateWebsiteJsonLd', () => {
@@ -124,5 +125,32 @@ describe('generateBreadcrumbListJsonLd', () => {
       'Posts',
       'Post 42',
     ]);
+  });
+});
+
+describe('serializeJsonLd', () => {
+  it('escapes characters that could break out of a <script> block', () => {
+    const json = serializeJsonLd(
+      generateWebsiteJsonLd({
+        name: '</script><img src=x onerror=alert(1)>',
+        url: 'https://example.com',
+        description: 'a & b',
+      }),
+    );
+
+    expect(json).not.toContain('<');
+    expect(json).not.toContain('>');
+    expect(json).toContain('\\u003c');
+    expect(json).toContain('\\u003e');
+    expect(json).toContain('\\u0026');
+  });
+
+  it('still produces valid JSON that round-trips to the original object', () => {
+    const data = generateWebsiteJsonLd({
+      name: 'A & B </script>',
+      url: 'https://example.com',
+      description: 'desc',
+    });
+    expect(JSON.parse(serializeJsonLd(data))).toEqual(data);
   });
 });

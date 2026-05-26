@@ -61,6 +61,16 @@ export function proxy(request: NextRequest) {
   const isDev = process.env.NODE_ENV === 'development';
   const cspHeader = buildCspHeader(nonce, isDev);
 
+  // httpOnly: the cookie is only read server-side (here + server actions).
+  // secure: off in dev since localhost is HTTP.
+  const localeCookieOptions = {
+    maxAge: COOKIE_MAX_AGE_SECONDS,
+    path: '/',
+    sameSite: 'lax' as const,
+    httpOnly: true,
+    secure: !isDev,
+  };
+
   // Propagate via request headers so Next.js nonces its framework scripts and
   // Server Components can read the nonce with `headers()`.
   const requestHeaders = new Headers(request.headers);
@@ -76,11 +86,7 @@ export function proxy(request: NextRequest) {
       request: { headers: requestHeaders },
     });
     if (cookieLocale !== pathLocale) {
-      response.cookies.set(LOCALE_COOKIE, pathLocale, {
-        maxAge: COOKIE_MAX_AGE_SECONDS,
-        path: '/',
-        sameSite: 'lax',
-      });
+      response.cookies.set(LOCALE_COOKIE, pathLocale, localeCookieOptions);
     }
     return applySecurityResponseHeaders(response, nonce, cspHeader);
   }
@@ -88,11 +94,7 @@ export function proxy(request: NextRequest) {
   const locale = detectLocale(request);
   request.nextUrl.pathname = `/${locale}${pathname}`;
   const response = NextResponse.redirect(request.nextUrl);
-  response.cookies.set(LOCALE_COOKIE, locale, {
-    maxAge: COOKIE_MAX_AGE_SECONDS,
-    path: '/',
-    sameSite: 'lax',
-  });
+  response.cookies.set(LOCALE_COOKIE, locale, localeCookieOptions);
   return applySecurityResponseHeaders(response, nonce, cspHeader);
 }
 
