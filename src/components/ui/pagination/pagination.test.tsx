@@ -145,6 +145,36 @@ describe('Pagination', () => {
     ).toBeInTheDocument();
   });
 
+  it('calls onPageChange with 1 when First is clicked', async () => {
+    const user = userEvent.setup();
+    const onPageChange = vi.fn();
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        showFirstLast
+        onPageChange={onPageChange}
+      />,
+    );
+    await user.click(screen.getByRole('button', { name: 'First page' }));
+    expect(onPageChange).toHaveBeenCalledWith(1);
+  });
+
+  it('calls onPageChange with totalPages when Last is clicked', async () => {
+    const user = userEvent.setup();
+    const onPageChange = vi.fn();
+    render(
+      <Pagination
+        currentPage={5}
+        totalPages={10}
+        showFirstLast
+        onPageChange={onPageChange}
+      />,
+    );
+    await user.click(screen.getByRole('button', { name: 'Last page' }));
+    expect(onPageChange).toHaveBeenCalledWith(10);
+  });
+
   it('renders ellipsis when there is a gap between pages', () => {
     render(
       <Pagination currentPage={5} totalPages={20} onPageChange={() => {}} />,

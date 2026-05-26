@@ -42,6 +42,22 @@ describe('Avatar', () => {
     expect(screen.getByText('MH')).toBeInTheDocument();
   });
 
+  it('resets the error state when src changes after a failed load', () => {
+    const { rerender } = render(
+      <Avatar src="https://broken.invalid/x.png" alt="A" name="Ada Lovelace" />,
+    );
+    fireEvent.error(
+      screen.getByRole('img', { name: 'A' }).querySelector('img')!,
+    );
+    expect(screen.getByText('AL')).toBeInTheDocument();
+
+    rerender(
+      <Avatar src="https://example.com/new.png" alt="A" name="Ada Lovelace" />,
+    );
+    const inner = screen.getByRole('img', { name: 'A' }).querySelector('img');
+    expect(inner).toHaveAttribute('src', 'https://example.com/new.png');
+  });
+
   it('uses "?" when neither src nor name is provided', () => {
     render(<Avatar alt="Unknown user" />);
     expect(screen.getByText('?')).toBeInTheDocument();

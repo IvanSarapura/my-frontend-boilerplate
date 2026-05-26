@@ -135,6 +135,18 @@ describe('Tabs', () => {
     expect(tab2).toHaveAttribute('aria-selected', 'false');
   });
 
+  it('ArrowLeft moves focus to the previous tab', async () => {
+    const user = userEvent.setup();
+    render(<ThreeTabs defaultValue="two" />);
+    const tab1 = screen.getByRole('tab', { name: /tab one/i });
+    const tab2 = screen.getByRole('tab', { name: /tab two/i });
+
+    await user.click(tab2);
+    await user.keyboard('{ArrowLeft}');
+
+    expect(document.activeElement).toBe(tab1);
+  });
+
   it('Enter activates the focused tab', async () => {
     const user = userEvent.setup();
     render(<ThreeTabs defaultValue="one" />);

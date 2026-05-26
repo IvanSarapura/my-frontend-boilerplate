@@ -97,4 +97,11 @@ describe('Post detail page', () => {
     });
     expect(meta).toEqual({});
   });
+
+  it('generateMetadata returns empty metadata for invalid params', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'fr', id: 'abc' }),
+    });
+    expect(meta).toEqual({});
+  });
 });

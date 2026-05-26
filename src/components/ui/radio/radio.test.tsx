@@ -110,4 +110,39 @@ describe('Radio + RadioGroup', () => {
     render(<Group disabled />);
     screen.getAllByRole('radio').forEach(r => expect(r).toBeDisabled());
   });
+
+  it('works standalone outside a RadioGroup as an uncontrolled input', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Radio name="standalone" value="a" label="A" onChange={onChange} />);
+    const radio = screen.getByRole('radio') as HTMLInputElement;
+    expect(radio).toHaveAttribute('name', 'standalone');
+    expect(radio).not.toBeChecked();
+
+    await user.click(radio);
+    expect(onChange).toHaveBeenCalled();
+    expect(radio).toBeChecked();
+  });
+
+  it('omits aria-labelledby when no label is provided', () => {
+    render(
+      <RadioGroup name="x">
+        <Radio value="a" label="A" />
+        <Radio value="b" label="B" />
+      </RadioGroup>,
+    );
+    expect(screen.getByRole('radiogroup')).not.toHaveAttribute(
+      'aria-labelledby',
+    );
+  });
+
+  it('applies the horizontal orientation class', () => {
+    const { container } = render(
+      <RadioGroup name="x" label="X" orientation="horizontal">
+        <Radio value="a" label="A" />
+        <Radio value="b" label="B" />
+      </RadioGroup>,
+    );
+    expect(container.querySelector('.horizontal')).toBeInTheDocument();
+  });
 });

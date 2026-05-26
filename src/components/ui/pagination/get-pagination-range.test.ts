@@ -64,4 +64,16 @@ describe('getPaginationRange', () => {
       getPaginationRange({ currentPage: 10, totalPages: 20, boundaryCount: 2 }),
     ).toEqual([1, 2, 'ellipsis', 9, 10, 11, 'ellipsis', 19, 20]);
   });
+
+  it('returns adjacent pages without ellipsis when totalPages is 2', () => {
+    expect(getPaginationRange({ currentPage: 1, totalPages: 2 })).toEqual([
+      1, 2,
+    ]);
+  });
+
+  it('handles boundaryCount larger than totalPages', () => {
+    expect(
+      getPaginationRange({ currentPage: 1, totalPages: 2, boundaryCount: 2 }),
+    ).toEqual([1, 2]);
+  });
 });

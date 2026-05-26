@@ -86,12 +86,14 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const theme = useSyncExternalStore(
     subscribeTheme,
     readStoredTheme,
+    /* v8 ignore next -- SSR hydration baseline; not invoked under jsdom */
     () => SERVER_THEME,
   );
 
   const systemPrefersDark = useSyncExternalStore(
     subscribeMedia,
     getMediaSnapshot,
+    /* v8 ignore next -- SSR hydration baseline; not invoked under jsdom */
     () => SERVER_SYSTEM_DARK,
   );
 
