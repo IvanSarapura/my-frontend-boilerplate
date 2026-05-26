@@ -44,7 +44,7 @@ export async function submitContactAction(
     };
   }
 
-  // TODO: send via transactional email (Resend, Postmark, etc.)
+  // Envío opt-in: conectar aquí un email transaccional (Resend, Postmark…).
 
   return {
     success: true,

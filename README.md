@@ -55,6 +55,9 @@
 - [Optional Integrations](#optional-integrations)
   - [TanStack Query Devtools](#tanstack-query-devtools)
   - [Error Tracking (Sentry / Rollbar / Bugsnag / …)](#error-tracking-sentry--rollbar--bugsnag--)
+  - [Authentication](#authentication)
+  - [Transactional Email](#transactional-email)
+  - [Rate Limiting](#rate-limiting)
 - [Git Conventions](#git-conventions)
   - [Commit Format](#commit-format)
   - [Allowed Types](#allowed-types)
@@ -604,6 +607,68 @@ npx @sentry/wizard@latest -i nextjs   # creates sentry.*.config.ts + instrumenta
 > **When to add it:** any production deployment that handles user-facing errors should adopt an error tracking SDK. Wire it into `reportError` and you're done — no boilerplate caller in the app needs to change. **When not to:** prototypes, internal tools, or apps in pre-launch with no traffic.
 >
 > **Rule of thumb:** any new surface that may throw at runtime (Error Boundaries, Server Actions, route handlers, jobs) should route errors through `reportError` — never `console.error` directly in production code.
+
+### Authentication
+
+No auth is bundled — it is a **product decision**, not a platform one. The natural gate is `src/proxy.ts`, which already intercepts every request (locale + CSP). Add a protected-route check there, keeping the session lookup behind a `getSession` helper so the rest of the app never couples to a vendor:
+
+```ts
+// src/proxy.ts — inside proxy(request), after the locale is resolved
+const PROTECTED = ['/dashboard', '/account'];
+if (PROTECTED.some(p => pathname.includes(p)) && !(await getSession(request))) {
+  const url = request.nextUrl.clone();
+  url.pathname = `/${locale}/login`;
+  return applySecurityResponseHeaders(
+    NextResponse.redirect(url),
+    nonce,
+    cspHeader,
+  );
+}
+```
+
+**Providers:** Auth.js (NextAuth), Clerk, Better Auth, WorkOS, or your own cookie-based backend. Only the body of `getSession` (and a parallel `getCurrentUser()` for Server Components / Actions) changes if you switch vendors.
+
+> **When to add it:** any app with per-user data or private routes. **When not to:** public marketing sites or docs.
+
+### Transactional Email
+
+`submitContactAction` (`src/features/contact/actions.ts`) validates with Zod but **does not send anything** — sending is the opt-in piece. Plug a provider in after a successful parse:
+
+```ts
+import { Resend } from 'resend';
+
+const resend = new Resend(process.env.RESEND_API_KEY); // validate in env.server.ts
+await resend.emails.send({
+  from: 'Contact <noreply@yourdomain.com>',
+  to: process.env.CONTACT_INBOX!,
+  replyTo: parsed.data.email,
+  subject: `New message from ${parsed.data.name}`,
+  text: parsed.data.message,
+});
+```
+
+**Providers:** Resend, Postmark, AWS SES, SendGrid. Add the API key as a **server-only secret** validated in `src/lib/env.server.ts` (never `NEXT_PUBLIC_*`), and route send failures through `reportError` so a provider outage never breaks the form UX.
+
+### Rate Limiting
+
+Not bundled — protect abusable surfaces (the contact Server Action, API routes like `/api/health`) by adding a limiter behind a helper so the store can change without touching callers:
+
+```ts
+const hits = new Map<string, { count: number; resetAt: number }>();
+function rateLimit(key: string, max = 5, windowMs = 60_000): boolean {
+  const now = Date.now();
+  const entry = hits.get(key);
+  if (!entry || now > entry.resetAt) {
+    hits.set(key, { count: 1, resetAt: now + windowMs });
+    return true;
+  }
+  if (entry.count >= max) return false;
+  entry.count++;
+  return true;
+}
+```
+
+> **Caveat:** an in-memory `Map` does **not** work on serverless (each instance has its own and they reset). For multi-instance production use a shared store such as `@upstash/ratelimit` (Redis), keyed by IP (`x-forwarded-for`) or user id. Return `429` when the limiter rejects.
 
 ---
 
