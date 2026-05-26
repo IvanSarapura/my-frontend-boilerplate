@@ -15,7 +15,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const dict = await getDictionary(locale as Locale);
-  return { title: `${dict.posts.title} (Mock)` };
+  return {
+    title: `${dict.posts.title} (Mock)`,
+    // Demo route: keep out of the index but let crawlers follow its links.
+    robots: { index: false, follow: true },
+  };
 }
 
 export default async function MockPostsPage({

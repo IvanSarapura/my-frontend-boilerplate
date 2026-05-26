@@ -87,7 +87,19 @@ describe('Post detail page', () => {
       title: 'First Post',
       description: 'Body one',
       type: 'article',
-      locale: 'en',
+      locale: 'en_US',
+    });
+  });
+
+  it('generateMetadata sets a self-referencing canonical for the post', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en', id: '1' }),
+    });
+    expect(meta.alternates?.canonical).toBe('/en/posts/1');
+    expect(meta.alternates?.languages).toMatchObject({
+      en: '/en/posts/1',
+      es: '/es/posts/1',
+      'x-default': '/en/posts/1',
     });
   });
 

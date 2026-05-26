@@ -5,6 +5,7 @@ import { getPosts, PostComments, PostList } from '@/features/posts';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
+import { buildAlternates } from '@/lib/seo';
 
 import styles from './posts.module.css';
 
@@ -15,7 +16,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const dict = await getDictionary(locale as Locale);
-  return { title: dict.posts.title };
+  return {
+    title: dict.posts.title,
+    description: dict.posts.description,
+    alternates: buildAlternates(locale as Locale, '/posts'),
+  };
 }
 
 export default async function PostsPage({

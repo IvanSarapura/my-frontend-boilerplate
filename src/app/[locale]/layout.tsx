@@ -10,8 +10,9 @@ import { QueryProvider } from '@/components/providers/query-provider';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ToastProvider } from '@/components/providers/toast-provider';
 import { Toaster } from '@/components/ui/toaster';
-import { defaultLocale, locales } from '@/i18n/config';
+import { defaultLocale, type Locale, locales } from '@/i18n/config';
 import { env } from '@/lib/env';
+import { buildAlternates, localeToOgLocale } from '@/lib/seo';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -34,36 +35,38 @@ export const viewport: Viewport = {
   ],
 };
 
-export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: {
-    default: env.NEXT_PUBLIC_APP_NAME,
-    template: `%s | ${env.NEXT_PUBLIC_APP_NAME}`,
-  },
-  description: APP_DESCRIPTION,
-  alternates: {
-    canonical: '/',
-    languages: {
-      ...Object.fromEntries(locales.map(l => [l, `/${l}`])),
-      'x-default': `/${defaultLocale}`,
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+    title: {
+      default: env.NEXT_PUBLIC_APP_NAME,
+      template: `%s | ${env.NEXT_PUBLIC_APP_NAME}`,
     },
-  },
-  openGraph: {
-    title: env.NEXT_PUBLIC_APP_NAME,
     description: APP_DESCRIPTION,
-    type: 'website',
-    locale: 'en_US',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: env.NEXT_PUBLIC_APP_NAME,
-    description: APP_DESCRIPTION,
-  },
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/favicon.ico',
-  },
-};
+    alternates: buildAlternates(locale as Locale, ''),
+    openGraph: {
+      title: env.NEXT_PUBLIC_APP_NAME,
+      description: APP_DESCRIPTION,
+      type: 'website',
+      locale:
+        localeToOgLocale[locale as Locale] ?? localeToOgLocale[defaultLocale],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: env.NEXT_PUBLIC_APP_NAME,
+      description: APP_DESCRIPTION,
+    },
+    icons: {
+      icon: '/favicon.ico',
+      apple: '/favicon.ico',
+    },
+  };
+}
 
 export function generateStaticParams() {
   return locales.map(locale => ({ locale }));

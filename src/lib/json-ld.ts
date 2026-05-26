@@ -82,6 +82,36 @@ export function generateBreadcrumbListJsonLd(
   };
 }
 
+type JsonLdArticle = {
+  '@context': 'https://schema.org';
+  '@type': 'Article';
+  headline: string;
+  description: string;
+  url: string;
+  inLanguage: string;
+};
+
+export function generateArticleJsonLd({
+  headline,
+  description,
+  url,
+  inLanguage,
+}: {
+  headline: string;
+  description: string;
+  url: string;
+  inLanguage: string;
+}): JsonLdArticle {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline,
+    description,
+    url,
+    inLanguage,
+  };
+}
+
 // JSON.stringify leaves `<`, `>`, `&` intact, so a value containing
 // `</script>` could break out of an inline JSON-LD block. Escape them (plus the
 // U+2028/U+2029 line separators) before injecting via dangerouslySetInnerHTML.

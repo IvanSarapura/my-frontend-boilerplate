@@ -5,6 +5,7 @@ import { ContactForm } from '@/features/contact';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
+import { buildAlternates } from '@/lib/seo';
 
 import styles from './contact.module.css';
 
@@ -15,7 +16,11 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const dict = await getDictionary(locale as Locale);
-  return { title: dict.contact.title };
+  return {
+    title: dict.contact.title,
+    description: dict.contact.subtitle,
+    alternates: buildAlternates(locale as Locale, '/contact'),
+  };
 }
 
 export default async function ContactPage({

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  generateArticleJsonLd,
   generateBreadcrumbListJsonLd,
   generateOrganizationJsonLd,
   generateWebsiteJsonLd,
@@ -125,6 +126,26 @@ describe('generateBreadcrumbListJsonLd', () => {
       'Posts',
       'Post 42',
     ]);
+  });
+});
+
+describe('generateArticleJsonLd', () => {
+  it('returns a valid Article JSON-LD payload', () => {
+    expect(
+      generateArticleJsonLd({
+        headline: 'First Post',
+        description: 'A short summary',
+        url: 'https://example.com/en/posts/1',
+        inLanguage: 'en',
+      }),
+    ).toEqual({
+      '@context': 'https://schema.org',
+      '@type': 'Article',
+      headline: 'First Post',
+      description: 'A short summary',
+      url: 'https://example.com/en/posts/1',
+      inLanguage: 'en',
+    });
   });
 });
 

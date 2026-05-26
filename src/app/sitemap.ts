@@ -5,7 +5,7 @@ import { env } from '@/lib/env';
 
 // Paths without locale prefix; the sitemap expands them across `locales` with
 // hreflang alternates. For dynamic routes, fetch and concat entries in the export.
-const STATIC_PATHS = ['', '/contact', '/posts', '/posts/mock'] as const;
+const STATIC_PATHS = ['', '/contact', '/posts'] as const;
 
 function buildLocaleUrl(locale: Locale, path: string): string {
   return `${env.NEXT_PUBLIC_APP_URL}/${locale}${path}`;
