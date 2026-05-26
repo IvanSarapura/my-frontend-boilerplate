@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import LocalePage from './page';
+import LocalePage, { generateMetadata } from './page';
 
 vi.mock('next/navigation', () => ({
   notFound: vi.fn(),
@@ -32,6 +32,14 @@ describe('Locale home page', () => {
     });
     render(jsx);
     expect(screen.getByText('Next.js · TypeScript')).toBeInTheDocument();
+  });
+
+  it('generateMetadata returns the translated title and description', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en' }),
+    });
+    expect(meta.title).toBe('Frontend Boilerplate');
+    expect(meta.description).toBe('Next.js · TypeScript');
   });
 
   it('calls notFound for an unknown locale', async () => {
