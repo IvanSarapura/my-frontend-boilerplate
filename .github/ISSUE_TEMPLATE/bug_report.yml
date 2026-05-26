@@ -1,0 +1,43 @@
+name: Bug report
+description: Report something that isn't working as expected.
+labels: ['bug']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please search existing issues first to avoid duplicates.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: What's wrong? What did you expect instead?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Go to '...'
+        2. Click '...'
+        3. See error
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Node version, OS, and browser if relevant.
+      placeholder: |
+        - Node: 22.x
+        - OS: ...
+        - Browser: ...
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Logs / screenshots
+      description: Optional. Paste error output or attach screenshots.
+    validations:
+      required: false
