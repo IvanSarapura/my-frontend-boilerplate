@@ -1,0 +1,16 @@
+# gitleaks config — extends the built-in ruleset with project allowlists.
+# Docs: https://github.com/gitleaks/gitleaks#configuration
+title = "my-frontend-boilerplate"
+
+[extend]
+# Keep all of gitleaks' default secret detectors, then layer the rules below.
+useDefault = true
+
+[allowlist]
+description = "Project-wide false-positive allowlist"
+paths = [
+  # Template env file ships placeholder values, not real secrets.
+  '''\.env\.local\.example$''',
+  # Lockfile integrity hashes look high-entropy but are not credentials.
+  '''package-lock\.json$''',
+]

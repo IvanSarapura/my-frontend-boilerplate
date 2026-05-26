@@ -698,20 +698,23 @@ GitHub Actions runs on **push and pull requests to `main` and `develop`**.
 ### Pipeline
 
 ```
+secret-scan   (independent)
+
 quality ──┬──▶ storybook
           ├──▶ test ──▶ coverage ──┐
           │                        ▼
           └──▶ ─────────────────▶ build ──▶ e2e
 ```
 
-| Job           | Description                                                                                                                             |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| **quality**   | format check → lint → typecheck → security audit (prod gate: `--omit=dev`; full-tree audit: all deps) → commitlint validation (PR only) |
-| **test**      | unit/component suite (Vitest, no coverage thresholds)                                                                                   |
-| **coverage**  | same test suite with v8 coverage report and threshold enforcement; HTML report uploaded as artifact                                     |
-| **storybook** | build Storybook and run accessibility (a11y) audits against the stories                                                                 |
-| **build**     | production build; bundle-size summary posted to job summary; build artifact packaged as tarball and uploaded                            |
-| **e2e**       | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)                                      |
+| Job             | Description                                                                                                                             |
+| --------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **secret-scan** | gitleaks scans full git history for committed credentials; runs in parallel, off the critical path                                      |
+| **quality**     | format check → lint → typecheck → security audit (prod gate: `--omit=dev`; full-tree audit: all deps) → commitlint validation (PR only) |
+| **test**        | unit/component suite (Vitest, no coverage thresholds)                                                                                   |
+| **coverage**    | same test suite with v8 coverage report and threshold enforcement; HTML report uploaded as artifact                                     |
+| **storybook**   | build Storybook and run accessibility (a11y) audits against the stories                                                                 |
+| **build**       | production build; bundle-size summary posted to job summary; build artifact packaged as tarball and uploaded                            |
+| **e2e**         | Playwright Chromium tests against the built artifact; Playwright report uploaded (7-day retention)                                      |
 
 ### Artifact Strategy
 
