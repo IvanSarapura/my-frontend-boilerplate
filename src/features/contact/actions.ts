@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { z } from 'zod';
 
 import { defaultLocale, type Locale, locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
@@ -40,7 +41,7 @@ export async function submitContactAction(
   if (!parsed.success) {
     return {
       success: false,
-      errors: parsed.error.flatten().fieldErrors,
+      errors: z.flattenError(parsed.error).fieldErrors,
     };
   }
 
