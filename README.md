@@ -90,24 +90,24 @@ Key principles:
 
 ## What's Included
 
-| Feature                           | Description                                                                                                     |
-| --------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                                                          |
-| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                                                     |
-| **Custom Design System**          | 22 primitive UI components + 171 tree-shakeable icon components, all CSS Modules                                |
-| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC                                                 |
-| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK                                              |
-| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                                                    |
-| **Server Actions**                | Modern form mutations with validation end-to-end                                                                |
-| **React Hook Form**               | Performant form handling integrated with Zod                                                                    |
-| **TanStack Query**                | Client-side server state with prefetching and caching                                                           |
-| **i18n (en/es)**                  | Locale-prefixed routes, `NEXT_LOCALE` cookie + `Accept-Language` fallback                                       |
-| **MSW**                           | Deterministic tests by mocking network requests                                                                 |
-| **Storybook**                     | Living styleguide with a11y audits and Chromatic integration                                                    |
-| **Complete SEO**                  | JSON-LD (WebSite + Organization), hreflang, multi-locale sitemap, OG, robots                                    |
-| **Security Headers**              | Nonce-based CSP (`'self'` + per-request nonce, Turbopack-compatible), HSTS, X-Frame-Options, Permissions-Policy |
-| **Partial Prerendering**          | Cache Components + per-request nonce isolated via `<Suspense>`                                                  |
-| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)                                                    |
+| Feature                           | Description                                                                                                                                                                                 |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                                                                                                                                      |
+| **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                                                                                                                                 |
+| **Custom Design System**          | 22 primitive UI components + 171 tree-shakeable icon components, all CSS Modules                                                                                                            |
+| **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC                                                                                                                             |
+| **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK                                                                                                                          |
+| **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                                                                                                                                |
+| **Server Actions**                | Modern form mutations with validation end-to-end                                                                                                                                            |
+| **React Hook Form**               | Performant form handling integrated with Zod                                                                                                                                                |
+| **TanStack Query**                | Client-side server state with prefetching and caching                                                                                                                                       |
+| **i18n (en/es)**                  | Locale-prefixed routes, `NEXT_LOCALE` cookie + `Accept-Language` fallback                                                                                                                   |
+| **MSW**                           | Deterministic tests by mocking network requests                                                                                                                                             |
+| **Storybook**                     | Living styleguide with a11y audits; Chromatic-ready (opt-in, not bundled by default)                                                                                                        |
+| **Complete SEO**                  | JSON-LD (WebSite + Organization auto-injected; Article + BreadcrumbList per page, XSS-escaped), per-page canonical + hreflang, multi-locale sitemap, OG, robots                             |
+| **Security Headers**              | Nonce-based CSP (`'self'` + per-request nonce, Turbopack-compatible), HSTS, X-Frame-Options, X-Content-Type-Options, X-Permitted-Cross-Domain-Policies, Referrer-Policy, Permissions-Policy |
+| **Partial Prerendering**          | Cache Components + per-request nonce isolated via `<Suspense>`                                                                                                                              |
+| **3-Level Testing**               | Unit (Vitest), Component (Testing Library), E2E (Playwright)                                                                                                                                |
 
 ---
 
@@ -178,24 +178,26 @@ npm run storybook   # Opens at http://localhost:6006
 
 ## Available Scripts
 
-| Script                    | Description                           |
-| ------------------------- | ------------------------------------- |
-| `npm run dev`             | Start development server              |
-| `npm run build`           | Build for production                  |
-| `npm start`               | Start production server               |
-| `npm run lint`            | Run ESLint across the project         |
-| `npm run typecheck`       | TypeScript type check (no emit)       |
-| `npm run format`          | Format all files with Prettier        |
-| `npm run format:check`    | Check formatting without writing      |
-| `npm test`                | Run unit / component tests once       |
-| `npm run test:watch`      | Run tests in watch mode               |
-| `npm run test:coverage`   | Run tests with v8 coverage report     |
-| `npm run test:e2e`        | Run Playwright E2E tests              |
-| `npm run test:e2e:ui`     | Open Playwright UI mode               |
-| `npm run stylelint`       | Lint CSS files                        |
-| `npm run stylelint:fix`   | Auto-fix stylelint violations         |
-| `npm run storybook`       | Start Storybook dev server on `:6006` |
-| `npm run storybook:build` | Build Storybook for static deploy     |
+| Script                    | Description                                              |
+| ------------------------- | -------------------------------------------------------- |
+| `npm run dev`             | Start development server                                 |
+| `npm run build`           | Build for production                                     |
+| `npm start`               | Start production server                                  |
+| `npm run analyze`         | Build with the bundle analyzer (`ANALYZE=true`, webpack) |
+| `npm run lint`            | Run ESLint across the project                            |
+| `npm run typecheck`       | TypeScript type check (no emit)                          |
+| `npm run format`          | Format all files with Prettier                           |
+| `npm run format:check`    | Check formatting without writing                         |
+| `npm test`                | Run unit / component tests once                          |
+| `npm run test:watch`      | Run tests in watch mode                                  |
+| `npm run test:coverage`   | Run tests with v8 coverage report                        |
+| `npm run test:storybook`  | Run every story as a test in a real browser (a11y)       |
+| `npm run test:e2e`        | Run Playwright E2E tests                                 |
+| `npm run test:e2e:ui`     | Open Playwright UI mode                                  |
+| `npm run stylelint`       | Lint CSS files                                           |
+| `npm run stylelint:fix`   | Auto-fix stylelint violations                            |
+| `npm run storybook`       | Start Storybook dev server on `:6006`                    |
+| `npm run storybook:build` | Build Storybook for static deploy                        |
 
 ---
 
@@ -497,7 +499,7 @@ Components and hooks are tested in isolation with Vitest and Testing Library.
 
 - **Threshold:** 70% minimum for statements, branches, functions, and lines.
 - **Per-file enforcement:** `vitest.config.ts` uses `perFile: true`, meaning every individual file must meet the threshold. A single file with 100% coverage cannot mask another with 0%.
-- **Excluded from coverage:** CSS Modules (static, no executable logic), Storybook stories, MSW mocks, and test files themselves are excluded so they do not dilute the metric.
+- **Excluded from coverage:** CSS Modules (static, no executable logic), Storybook stories, MSW mocks, test files, E2E specs, and pure re-export barrels (`**/index.ts`) are excluded so they do not dilute the metric.
 
 **Test categories:**
 
@@ -900,7 +902,7 @@ Next.js 16 uses `proxy.ts` (exporting a `proxy` function) instead of the legacy 
 The `proxy` function does three things on every request:
 
 1. **Locale routing.** Detects the visitor's preferred locale (cookie `NEXT_LOCALE` takes priority over `Accept-Language`) and redirects `/(path)` to `/[locale]/(path)` before the request reaches any page.
-2. **Locale cookie sync.** Sets/updates `NEXT_LOCALE` (1-year, sameSite=lax) so the user's explicit choice persists across visits.
+2. **Locale cookie sync.** Sets/updates `NEXT_LOCALE` (1-year, `sameSite=lax`, `httpOnly`, `secure` in production) so the user's explicit choice persists across visits. The cookie is read server-side only (here + Server Actions); the client-side locale comes from the URL prefix, so `httpOnly` costs nothing.
 3. **CSP nonce.** Generates a fresh `crypto.randomUUID()` nonce per request, builds the `Content-Security-Policy` header with `script-src 'self' 'nonce-XYZ'` (`'strict-dynamic'` is intentionally **omitted** — it disables the `'self'` allowlist and Turbopack's chunk loader injects lazy `<script>` chunks without the nonce, which would block hydration in production), and propagates it through both request headers (for `next/headers`-based reading in Server Components) and response headers (for browser enforcement). The CSP is intentionally **not** defined in `next.config.ts` — nonces must be generated per request, which static config cannot do.
 
 API routes, static assets, metadata files, and prefetches are excluded via the `matcher` config.
@@ -908,6 +910,10 @@ API routes, static assets, metadata files, and prefetches are excluded via the `
 > **Note on hydration mismatch:** browsers strip the `nonce` attribute from the DOM after using it for CSP enforcement (per the CSP3 spec §6.6.4.6 — anti-exfiltration measure). React's hydration will flag a benign attribute mismatch on those `<script>` tags as a result; the relevant elements use `suppressHydrationWarning` for this reason. The CSP enforcement itself is unaffected — the script ran because it carried the valid nonce at parse time.
 >
 > **Note on Partial Prerendering:** the inline `<script nonce>` elements that depend on `headers()` are isolated in a dedicated server component wrapped in `<Suspense>` at the call site. This preserves the static shell of the layout (PPR keeps working) while only the nonced scripts resolve per request.
+
+### SEO metadata
+
+Every page sets its own `metadata` via Next's Metadata API. Per-page canonical + hreflang come from `buildAlternates(locale, path)` (`src/lib/seo.ts`), so deep pages canonical to themselves rather than the homepage. `WebSite` + `Organization` JSON-LD are injected globally by `HeadScripts`; `Article` and `BreadcrumbList` are opt-in per page (see `app/[locale]/posts/[id]/page.tsx`). All JSON-LD is emitted through `serializeJsonLd()` (`src/lib/json-ld.ts`), which escapes `<`, `>`, `&` and the U+2028/U+2029 line separators so an injected value can never break out of the inline `<script>` block.
 
 ### `npm ci` failures with peer dependencies
 
@@ -917,8 +923,9 @@ If you see `ERESOLVE` errors during `npm ci`, check `.github/dependabot.yml` for
 
 ### Coverage policy
 
-- **CSS Modules** (`*.module.css`) are excluded from coverage because they contain no executable JavaScript logic. Including them would artificially lower the metric.
+- **CSS Modules** (`*.module.css`) are excluded from coverage because they contain no executable JavaScript logic. Including them would artificially lower the metric. The same applies to Storybook stories, MSW mocks, E2E specs, and pure re-export barrels (`**/index.ts`).
 - **Per-file thresholds** are enforced. If you add a new file, it must reach 70% coverage on its own. You cannot rely on other files to compensate.
+- **Structurally unreachable branches** (SSR-only guards, defensive checks behind disabled UI) are marked with a documented `/* v8 ignore … */` pragma rather than chased with synthetic tests.
 - **Console output in tests:** If a component intentionally logs to `console.error` (e.g. an error boundary), wrap the render in a `vi.spyOn(console, 'error').mockImplementation(() => {})` to prevent Vitest from treating it as a test runner error.
 
 ### Lint-staged performance
