@@ -24,6 +24,8 @@ export default defineConfig({
         '**/*.spec.tsx',
         'e2e/**',
         'coverage/**',
+        // Pure re-export barrels — no executable logic to cover.
+        '**/index.ts',
       ],
       thresholds: {
         lines: 70,

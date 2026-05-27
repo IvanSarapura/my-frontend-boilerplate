@@ -44,6 +44,17 @@ describe('ToggleSwitch', () => {
     );
   });
 
+  it('renders the label before the switch when labelPosition is "left"', () => {
+    render(<ToggleSwitch label="Dark mode" id="dm" labelPosition="left" />);
+    const label = screen.getByText('Dark mode');
+    const input = screen.getByRole('checkbox');
+    expect(label).toBeInTheDocument();
+    // DOCUMENT_POSITION_FOLLOWING (4) means input comes after the label.
+    expect(
+      label.compareDocumentPosition(input) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+  });
+
   it('uses name as fallback id when id is not provided', () => {
     render(<ToggleSwitch label="Theme" name="theme" />);
     expect(screen.getByLabelText('Theme')).toHaveAttribute('id', 'theme');

@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -63,6 +63,42 @@ describe('Select', () => {
     await userEvent.keyboard('{ArrowDown}');
     await userEvent.keyboard('{Enter}');
     expect(onChange).toHaveBeenCalledWith('a');
+  });
+
+  it('closes the menu on an outside mousedown', async () => {
+    render(<Select options={options} onChange={vi.fn()} />);
+    await userEvent.click(screen.getByRole('button'));
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    fireEvent.mouseDown(document.body);
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+  });
+
+  it('keeps the menu open on a mousedown inside the wrapper', async () => {
+    render(<Select options={options} onChange={vi.fn()} />);
+    const trigger = screen.getByRole('button');
+    await userEvent.click(trigger);
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    fireEvent.mouseDown(trigger);
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+  });
+
+  it('marks the option matching the value prop as selected', async () => {
+    render(<Select options={options} value="b" onChange={vi.fn()} />);
+    await userEvent.click(screen.getByRole('button'));
+    const optionB = screen.getByRole('option', { name: 'Option B' });
+    expect(optionB).toHaveAttribute('aria-selected', 'true');
+    expect(optionB).toHaveClass('selected');
+  });
+
+  it('does not select anything on Enter when no option is focused', async () => {
+    const onChange = vi.fn();
+    render(<Select options={options} onChange={onChange} />);
+    await userEvent.click(screen.getByRole('button'));
+    // focusedIndex is -1, so the keydown handler's Enter branch is a no-op.
+    await userEvent.keyboard('{Enter}');
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   it('links the error message via aria-describedby', () => {

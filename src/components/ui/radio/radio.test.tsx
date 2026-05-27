@@ -124,6 +124,11 @@ describe('Radio + RadioGroup', () => {
     expect(radio).toBeChecked();
   });
 
+  it('derives a fallback id from the value when no id or name is given', () => {
+    render(<Radio value="a" label="A" />);
+    expect(screen.getByRole('radio')).toHaveAttribute('id', 'radio-a');
+  });
+
   it('omits aria-labelledby when no label is provided', () => {
     render(
       <RadioGroup name="x">

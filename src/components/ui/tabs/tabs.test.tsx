@@ -160,6 +160,31 @@ describe('Tabs', () => {
     expect(tab2).toHaveAttribute('aria-selected', 'true');
   });
 
+  it('Space activates the focused tab', async () => {
+    const user = userEvent.setup();
+    render(<ThreeTabs defaultValue="one" />);
+    const tab2 = screen.getByRole('tab', { name: /tab two/i });
+
+    await user.click(screen.getByRole('tab', { name: /tab one/i }));
+    await user.keyboard('{ArrowRight}');
+    expect(document.activeElement).toBe(tab2);
+
+    await user.keyboard('[Space]');
+    expect(tab2).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('ArrowRight skips a disabled tab when moving focus', async () => {
+    const user = userEvent.setup();
+    render(<ThreeTabs disabledTwo />);
+    const tab1 = screen.getByRole('tab', { name: /tab one/i });
+    const tab3 = screen.getByRole('tab', { name: /tab three/i });
+
+    await user.click(tab1);
+    await user.keyboard('{ArrowRight}');
+
+    expect(document.activeElement).toBe(tab3);
+  });
+
   it('Home moves focus to the first tab', async () => {
     const user = userEvent.setup();
     render(<ThreeTabs defaultValue="three" />);

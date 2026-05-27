@@ -140,6 +140,22 @@ describe('apiClient', () => {
 
     await expect(promise).rejects.not.toBeInstanceOf(ApiError);
   });
+
+  it('aborts immediately when the caller signal is already aborted', async () => {
+    server.use(
+      http.get('https://api.test/pre-aborted', async () => {
+        await delay('infinite');
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    const controller = new AbortController();
+    controller.abort();
+
+    await expect(
+      apiClient('https://api.test/pre-aborted', { signal: controller.signal }),
+    ).rejects.not.toBeInstanceOf(ApiError);
+  });
 });
 
 describe('ApiError', () => {

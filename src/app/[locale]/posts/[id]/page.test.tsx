@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it, vi } from 'vitest';
+import { act, render, screen } from '@testing-library/react';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import PostDetailPage, { generateMetadata, generateStaticParams } from './page';
 
@@ -7,6 +7,13 @@ vi.mock('next/navigation', () => ({
   notFound: vi.fn(() => {
     throw new Error('NEXT_NOT_FOUND');
   }),
+}));
+
+// PostStructuredData reads the per-request nonce via headers(); mock it so the
+// async Suspense child resolves under jsdom. Controlled per test.
+const mockHeadersGet = vi.fn<(name: string) => string | null>();
+vi.mock('next/headers', () => ({
+  headers: () => Promise.resolve({ get: mockHeadersGet }),
 }));
 
 vi.mock('@/i18n/dictionaries', () => ({
@@ -33,15 +40,48 @@ vi.mock('@/features/posts', () => ({
 }));
 
 describe('Post detail page', () => {
+  beforeEach(() => {
+    mockHeadersGet.mockReset();
+  });
+
   it('renders title and body for an existing post', async () => {
+    mockHeadersGet.mockReturnValue('test-nonce');
     const jsx = await PostDetailPage({
       params: Promise.resolve({ locale: 'en', id: '1' }),
     });
-    render(jsx);
+    // act is required to flush the async <PostStructuredData> Server Component
+    // Suspense boundary; plain render() leaves it suspended on the null fallback.
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- flushing an async Server Component, not a plain util call
+    await act(async () => {
+      render(jsx);
+    });
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'First Post',
     );
     expect(screen.getByText('Body one')).toBeInTheDocument();
+
+    // The JSON-LD scripts carry the nonce returned by headers().
+    const scripts = document.querySelectorAll(
+      'script[type="application/ld+json"]',
+    );
+    expect(scripts).toHaveLength(2);
+    expect(scripts[0]).toHaveAttribute('nonce', 'test-nonce');
+  });
+
+  it('omits the nonce on the JSON-LD scripts when no x-nonce header is set', async () => {
+    mockHeadersGet.mockReturnValue(null);
+    const jsx = await PostDetailPage({
+      params: Promise.resolve({ locale: 'en', id: '1' }),
+    });
+    // eslint-disable-next-line testing-library/no-unnecessary-act -- flushing an async Server Component, not a plain util call
+    await act(async () => {
+      render(jsx);
+    });
+    const scripts = document.querySelectorAll(
+      'script[type="application/ld+json"]',
+    );
+    expect(scripts).toHaveLength(2);
+    expect(scripts[0]).not.toHaveAttribute('nonce');
   });
 
   it('calls notFound for a missing post id', async () => {

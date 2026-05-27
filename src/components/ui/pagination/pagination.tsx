@@ -65,8 +65,10 @@ export function Pagination({
   const isLast = currentPage >= totalPages;
 
   const go = (page: number) => {
+    /* v8 ignore start -- defensive guards; the UI disables out-of-range and disabled buttons */
     if (disabled) return;
     if (page < 1 || page > totalPages) return;
+    /* v8 ignore stop */
     if (page === currentPage) return;
     onPageChange(page);
   };

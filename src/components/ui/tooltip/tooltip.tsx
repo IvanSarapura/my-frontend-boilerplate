@@ -82,11 +82,18 @@ export function Tooltip({
       .filter(Boolean)
       .join(' ') || undefined;
 
-  const trigger = React.cloneElement(React.Children.only(children), {
-    ref: refs.setReference,
-    ...referenceProps,
-    'aria-describedby': ariaDescribedBy,
-  } as any); // eslint-disable-line @typescript-eslint/no-explicit-any
+  // Children.only() returns ReactElement<unknown>; widen to a string-keyed
+  // props bag so cloneElement accepts the callback ref + merged a11y props.
+  const trigger = React.cloneElement(
+    React.Children.only(children) as React.ReactElement<
+      Record<string, unknown>
+    >,
+    {
+      ref: refs.setReference,
+      ...referenceProps,
+      'aria-describedby': ariaDescribedBy,
+    },
+  );
 
   return (
     <>

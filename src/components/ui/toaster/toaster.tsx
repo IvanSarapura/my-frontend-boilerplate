@@ -32,6 +32,7 @@ function useIsClient() {
   return useSyncExternalStore(
     () => () => {},
     () => true,
+    /* v8 ignore next -- getServerSnapshot only runs during SSR; jsdom is client-only */
     () => false,
   );
 }
@@ -110,6 +111,7 @@ export function Toaster({
     [removeToast],
   );
 
+  /* v8 ignore next -- SSR guard; useIsClient is always true under jsdom */
   if (!isClient) return null;
 
   return createPortal(

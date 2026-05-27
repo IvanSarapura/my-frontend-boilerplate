@@ -35,6 +35,7 @@ let darkMql: MediaQueryList | null = null;
 const getDarkMql = () => (darkMql ??= window.matchMedia(DARK_QUERY));
 
 function readStoredTheme(): Theme {
+  /* v8 ignore next -- SSR guard; window is always defined under jsdom */
   if (typeof window === 'undefined') return 'system';
   try {
     const stored = window.localStorage.getItem(THEME_STORAGE_KEY);

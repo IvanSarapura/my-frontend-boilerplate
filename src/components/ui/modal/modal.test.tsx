@@ -141,6 +141,51 @@ describe('Modal', () => {
     );
   });
 
+  it('does not trap Tab when focus is not on the last element', () => {
+    render(
+      <Modal open title="T" onClose={vi.fn()}>
+        <button type="button">Inner</button>
+      </Modal>,
+    );
+    // "Close dialog" is the first focusable, not the last → Tab should not wrap.
+    const close = screen.getByLabelText('Close dialog');
+    close.focus();
+    fireEvent.keyDown(document, { key: 'Tab', shiftKey: false });
+    expect(document.activeElement).toBe(close);
+  });
+
+  it('restores focus to the previously focused element on close', () => {
+    const { rerender } = render(
+      <>
+        <button type="button">Opener</button>
+        <Modal open={false} title="T" onClose={vi.fn()}>
+          C
+        </Modal>
+      </>,
+    );
+    const opener = screen.getByRole('button', { name: 'Opener' });
+    opener.focus();
+    expect(document.activeElement).toBe(opener);
+
+    rerender(
+      <>
+        <button type="button">Opener</button>
+        <Modal open title="T" onClose={vi.fn()}>
+          C
+        </Modal>
+      </>,
+    );
+    rerender(
+      <>
+        <button type="button">Opener</button>
+        <Modal open={false} title="T" onClose={vi.fn()}>
+          C
+        </Modal>
+      </>,
+    );
+    expect(document.activeElement).toBe(opener);
+  });
+
   describe('compound API', () => {
     it('renders ModalHeader/Body/Footer composition when title is omitted', () => {
       render(
