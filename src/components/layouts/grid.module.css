@@ -1,0 +1,40 @@
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.gap-2 {
+  gap: var(--space-2);
+}
+
+.gap-4 {
+  gap: var(--space-4);
+}
+
+.gap-6 {
+  gap: var(--space-6);
+}
+
+.gap-8 {
+  gap: var(--space-8);
+}
+
+/* Tablet (md): every variant goes to 2 columns. */
+@media (width >= 768px) {
+  .cols-2,
+  .cols-3,
+  .cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Desktop (lg): fan out to the requested column count. */
+@media (width >= 1024px) {
+  .cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
