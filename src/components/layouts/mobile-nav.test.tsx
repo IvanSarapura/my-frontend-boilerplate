@@ -1,24 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
 
 import { MobileNav } from './mobile-nav';
 
-function mockMatchMedia(matches: boolean) {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: vi.fn().mockImplementation((query: string) => ({
-      matches,
-      media: query,
-      onchange: null,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
-      dispatchEvent: vi.fn(),
-    })),
-  });
-}
-
+// matchMedia is polyfilled globally in vitest.setup.ts (matches: false), which
+// is exactly the below-`md` viewport these tests exercise — no local mock needed.
 function setup() {
   return render(
     <MobileNav label="Main">
@@ -29,14 +15,6 @@ function setup() {
 }
 
 describe('MobileNav', () => {
-  beforeEach(() => {
-    mockMatchMedia(false); // viewport below `md`
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it('renders a navigation landmark with the drawer collapsed', () => {
     setup();
     expect(
