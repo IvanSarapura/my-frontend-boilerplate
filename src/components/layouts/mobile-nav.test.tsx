@@ -85,4 +85,16 @@ describe('MobileNav', () => {
     fireEvent.pointerDown(screen.getByRole('dialog'));
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
+
+  it('closes the drawer on a rightward swipe of the panel', () => {
+    setup();
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    const panel = screen.getByRole('dialog').firstElementChild!;
+
+    fireEvent.touchStart(panel, { touches: [{ clientX: 80 }] });
+    fireEvent.touchMove(panel, { touches: [{ clientX: 220 }] });
+    fireEvent.touchEnd(panel);
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
 });

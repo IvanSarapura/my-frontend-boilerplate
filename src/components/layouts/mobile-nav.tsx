@@ -5,6 +5,7 @@ import { type AriaRole, useCallback, useEffect, useId, useRef } from 'react';
 import { CloseIcon, MenuIcon } from '@/components/ui/icon';
 import { useBreakpoint } from '@/hooks/use-media-query';
 import { useModalBehavior } from '@/hooks/use-modal-behavior';
+import { useSwipe } from '@/hooks/use-swipe';
 import { useToggle } from '@/hooks/use-toggle';
 import { cx } from '@/lib/utils';
 
@@ -41,6 +42,8 @@ export function MobileNav({
   const close = useCallback(() => setOpen(false), [setOpen]);
   // Focus trap + Esc + backdrop click, shared with Modal.
   useModalBehavior(open, close, overlayRef);
+  // Swipe the panel toward the edge it slid from to dismiss it.
+  const swipe = useSwipe({ onSwipeRight: close });
 
   // The drawer is desktop-hidden; close it if the viewport grows past `md`
   // (e.g. orientation change) so focus and state never get stranded.
@@ -74,7 +77,7 @@ export function MobileNav({
         className={cx(styles.overlay, open && styles.overlayOpen)}
         {...dialogProps}
       >
-        <div id={menuId} className={styles.menu}>
+        <div id={menuId} className={styles.menu} {...swipe}>
           {open && (
             <button
               type="button"
