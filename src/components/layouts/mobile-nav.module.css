@@ -44,10 +44,12 @@
 
 /* Mobile: off-canvas panel sliding from the right. */
 .menu {
+  --drawer-width: min(80vw, 20rem);
+
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
-  width: min(80vw, 20rem);
+  width: var(--drawer-width);
   height: 100%;
   padding: var(--space-6);
   padding-block-start: max(var(--space-6), var(--safe-top));

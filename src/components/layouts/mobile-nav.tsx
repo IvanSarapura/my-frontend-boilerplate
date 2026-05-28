@@ -1,6 +1,6 @@
 'use client';
 
-import { type AriaRole, useCallback, useEffect, useId, useRef } from 'react';
+import { useCallback, useEffect, useId, useRef } from 'react';
 
 import { CloseIcon, MenuIcon } from '@/components/ui/icon';
 import { useBreakpoint } from '@/hooks/use-media-query';
@@ -55,7 +55,7 @@ export function MobileNav({
   // Dialog semantics only while the mobile drawer is open — never on the
   // desktop inline bar.
   const dialogProps = open
-    ? { role: 'dialog' as AriaRole, 'aria-modal': true, 'aria-label': label }
+    ? ({ role: 'dialog', 'aria-modal': true, 'aria-label': label } as const)
     : {};
 
   return (
