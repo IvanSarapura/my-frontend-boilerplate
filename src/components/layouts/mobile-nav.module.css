@@ -1,0 +1,142 @@
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+/* Hamburger — visible only below `md`. */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-inline-size: var(--touch-target-min);
+  min-block-size: var(--touch-target-min);
+  color: var(--foreground);
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: background var(--transition-fast);
+}
+
+.toggle:hover {
+  background: var(--card-bg);
+}
+
+.toggle:focus-visible {
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--color-focus-ring-offset);
+}
+
+/* Mobile: full-screen backdrop, hidden until open. */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: none;
+  justify-content: flex-end;
+  background: var(--overlay-bg);
+  animation: fade-in var(--transition-fast);
+}
+
+.overlayOpen {
+  display: flex;
+}
+
+/* Mobile: off-canvas panel sliding from the right. */
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: min(80vw, 20rem);
+  height: 100%;
+  padding: var(--space-6);
+  padding-block-start: max(var(--space-6), var(--safe-top));
+  padding-inline-end: max(var(--space-6), var(--safe-right));
+  overflow-y: auto;
+  background: var(--background);
+  border-inline-start: 1px solid var(--card-border);
+  box-shadow: var(--shadow-lg);
+  animation: slide-in-right var(--transition-base);
+}
+
+.close {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-end;
+  justify-content: center;
+  min-inline-size: var(--touch-target-min);
+  min-block-size: var(--touch-target-min);
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: color var(--transition-fast);
+}
+
+.close:hover {
+  color: var(--foreground);
+}
+
+.close:focus-visible {
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--color-focus-ring-offset);
+}
+
+/* Desktop: hamburger gone, links flow inline. */
+@media (width >= 768px) {
+  .toggle {
+    display: none;
+  }
+
+  .overlay,
+  .overlayOpen {
+    position: static;
+    z-index: auto;
+    display: flex;
+    justify-content: flex-start;
+    background: none;
+    animation: none;
+  }
+
+  .menu {
+    flex-direction: row;
+    gap: var(--space-4);
+    align-items: center;
+    width: auto;
+    height: auto;
+    padding: 0;
+    overflow: visible;
+    background: none;
+    border: none;
+    box-shadow: none;
+    animation: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .menu {
+    animation: none;
+  }
+}

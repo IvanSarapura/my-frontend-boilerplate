@@ -1,0 +1,93 @@
+'use client';
+
+import { type AriaRole, useCallback, useEffect, useId, useRef } from 'react';
+
+import { CloseIcon, MenuIcon } from '@/components/ui/icon';
+import { useBreakpoint } from '@/hooks/use-media-query';
+import { useModalBehavior } from '@/hooks/use-modal-behavior';
+import { useToggle } from '@/hooks/use-toggle';
+import { cx } from '@/lib/utils';
+
+import styles from './mobile-nav.module.css';
+
+interface MobileNavProps {
+  /** Links/content: shown inline on desktop, inside the drawer on mobile. */
+  children: React.ReactNode;
+  /** Accessible name for the <nav> landmark and the open drawer. */
+  label?: string;
+  /** Accessible name for the hamburger button. */
+  menuLabel?: string;
+  /** Accessible name for the in-drawer close button. */
+  closeLabel?: string;
+  className?: string;
+}
+
+/**
+ * Responsive navigation: an inline bar from `md` up, and a hamburger-driven
+ * off-canvas drawer below it. Single DOM tree — CSS decides the presentation,
+ * so it renders identically on the server (no breakpoint flash on hydration).
+ */
+export function MobileNav({
+  children,
+  label = 'Main navigation',
+  menuLabel = 'Open menu',
+  closeLabel = 'Close menu',
+  className,
+}: MobileNavProps) {
+  const [open, toggle, setOpen] = useToggle(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+
+  const close = useCallback(() => setOpen(false), [setOpen]);
+  // Focus trap + Esc + backdrop click, shared with Modal.
+  useModalBehavior(open, close, overlayRef);
+
+  // The drawer is desktop-hidden; close it if the viewport grows past `md`
+  // (e.g. orientation change) so focus and state never get stranded.
+  const isDesktop = useBreakpoint('md');
+  useEffect(() => {
+    if (isDesktop) setOpen(false);
+  }, [isDesktop, setOpen]);
+
+  // Dialog semantics only while the mobile drawer is open — never on the
+  // desktop inline bar.
+  const dialogProps = open
+    ? { role: 'dialog' as AriaRole, 'aria-modal': true, 'aria-label': label }
+    : {};
+
+  return (
+    <nav aria-label={label} className={cx(styles.nav, className)}>
+      <button
+        type="button"
+        className={styles.toggle}
+        aria-label={menuLabel}
+        aria-expanded={open}
+        aria-controls={menuId}
+        aria-haspopup="dialog"
+        onClick={toggle}
+      >
+        <MenuIcon size={24} />
+      </button>
+
+      <div
+        ref={overlayRef}
+        className={cx(styles.overlay, open && styles.overlayOpen)}
+        {...dialogProps}
+      >
+        <div id={menuId} className={styles.menu}>
+          {open && (
+            <button
+              type="button"
+              className={styles.close}
+              aria-label={closeLabel}
+              onClick={close}
+            >
+              <CloseIcon size={24} />
+            </button>
+          )}
+          {children}
+        </div>
+      </div>
+    </nav>
+  );
+}
