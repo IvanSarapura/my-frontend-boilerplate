@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { useMediaQuery } from './use-media-query';
+import { useBreakpoint, useIsMobile, useMediaQuery } from './use-media-query';
 
 type Listener = (e: MediaQueryListEvent) => void;
 
@@ -70,5 +70,44 @@ describe('useMediaQuery', () => {
     expect(ctrl.listenerCount()).toBe(1);
     unmount();
     expect(ctrl.listenerCount()).toBe(0);
+  });
+});
+
+describe('useBreakpoint', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('queries the canonical breakpoint and reports a match', () => {
+    const matchMedia = installMatchMedia(true);
+    const { result } = renderHook(() => useBreakpoint('md'));
+
+    expect(result.current).toBe(true);
+    expect(matchMedia.mql.media).toBeDefined();
+    expect(window.matchMedia).toHaveBeenCalledWith('(width >= 768px)');
+  });
+
+  it('reports no match below the breakpoint', () => {
+    installMatchMedia(false);
+    const { result } = renderHook(() => useBreakpoint('lg'));
+    expect(result.current).toBe(false);
+  });
+});
+
+describe('useIsMobile', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('is true below md', () => {
+    installMatchMedia(false);
+    const { result } = renderHook(() => useIsMobile());
+    expect(result.current).toBe(true);
+  });
+
+  it('is false at md and up', () => {
+    installMatchMedia(true);
+    const { result } = renderHook(() => useIsMobile());
+    expect(result.current).toBe(false);
   });
 });
