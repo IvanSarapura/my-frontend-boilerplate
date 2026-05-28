@@ -79,6 +79,9 @@
   flex-shrink: 0;
   align-items: center;
   align-self: center;
+  justify-content: center;
+  min-inline-size: var(--touch-target-min);
+  min-block-size: var(--touch-target-min);
   padding: 0;
   color: var(--muted);
   cursor: pointer;
