@@ -3,9 +3,8 @@ import type { HTMLAttributes } from 'react';
 import { cx } from '@/lib/utils';
 
 import styles from './cluster.module.css';
-
-/** Spacing between children, mapped to the global --space scale. */
-type Gap = 2 | 4 | 6 | 8;
+import gapStyles from './gap.module.css';
+import type { Gap } from './types';
 
 interface ClusterProps extends HTMLAttributes<HTMLDivElement> {
   gap?: Gap;
@@ -20,7 +19,7 @@ export function Cluster({
 }: ClusterProps) {
   return (
     <div
-      className={cx(styles.cluster, styles[`gap-${gap}`], className)}
+      className={cx(styles.cluster, gapStyles[`gap-${gap}`], className)}
       {...props}
     >
       {children}

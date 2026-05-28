@@ -2,10 +2,9 @@ import type { HTMLAttributes } from 'react';
 
 import { cx } from '@/lib/utils';
 
+import gapStyles from './gap.module.css';
 import styles from './stack.module.css';
-
-/** Spacing between children, mapped to the global --space scale. */
-type Gap = 2 | 4 | 6 | 8;
+import type { Gap } from './types';
 
 interface StackProps extends HTMLAttributes<HTMLDivElement> {
   gap?: Gap;
@@ -15,7 +14,7 @@ interface StackProps extends HTMLAttributes<HTMLDivElement> {
 export function Stack({ gap = 4, className, children, ...props }: StackProps) {
   return (
     <div
-      className={cx(styles.stack, styles[`gap-${gap}`], className)}
+      className={cx(styles.stack, gapStyles[`gap-${gap}`], className)}
       {...props}
     >
       {children}

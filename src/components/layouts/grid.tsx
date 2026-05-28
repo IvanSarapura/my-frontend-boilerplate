@@ -2,12 +2,9 @@ import type { HTMLAttributes } from 'react';
 
 import { cx } from '@/lib/utils';
 
+import gapStyles from './gap.module.css';
 import styles from './grid.module.css';
-
-/** Max columns on desktop (lg). Always 1 on mobile, 2 from tablet (md) up. */
-type Cols = 2 | 3 | 4;
-/** Spacing between cells, mapped to the global --space scale. */
-type Gap = 2 | 4 | 6 | 8;
+import type { Cols, Gap } from './types';
 
 interface GridProps extends HTMLAttributes<HTMLDivElement> {
   cols?: Cols;
@@ -27,7 +24,7 @@ export function Grid({
       className={cx(
         styles.grid,
         styles[`cols-${cols}`],
-        styles[`gap-${gap}`],
+        gapStyles[`gap-${gap}`],
         className,
       )}
       {...props}
