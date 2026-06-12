@@ -29,11 +29,39 @@ describe('env', () => {
     vi.stubEnv('NODE_ENV', 'production');
     vi.stubEnv('NEXT_PUBLIC_APP_NAME', 'My Real App');
     vi.stubEnv('NEXT_PUBLIC_APP_URL', 'https://example.com');
+    vi.stubEnv('NEXT_PUBLIC_API_ORIGIN', 'https://api.example.com');
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
     const { env } = await import('./env');
 
     expect(env.NEXT_PUBLIC_APP_NAME).toBe('My Real App');
     expect(warn).not.toHaveBeenCalled();
+  });
+
+  it('defaults NEXT_PUBLIC_API_ORIGIN to the demo API when unset', async () => {
+    vi.resetModules();
+    vi.stubEnv('NEXT_PUBLIC_API_ORIGIN', undefined);
+
+    const { env } = await import('./env');
+
+    expect(env.NEXT_PUBLIC_API_ORIGIN).toBe(
+      'https://jsonplaceholder.typicode.com',
+    );
+  });
+
+  it('normalizes NEXT_PUBLIC_API_ORIGIN to a bare origin', async () => {
+    vi.resetModules();
+    vi.stubEnv('NEXT_PUBLIC_API_ORIGIN', 'https://api.example.com/v1/');
+
+    const { env } = await import('./env');
+
+    expect(env.NEXT_PUBLIC_API_ORIGIN).toBe('https://api.example.com');
+  });
+
+  it('throws when NEXT_PUBLIC_API_ORIGIN is not a valid URL', async () => {
+    vi.resetModules();
+    vi.stubEnv('NEXT_PUBLIC_API_ORIGIN', 'not-a-url');
+
+    await expect(import('./env')).rejects.toThrow();
   });
 });

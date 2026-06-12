@@ -2,7 +2,7 @@ import { cacheLife } from 'next/cache';
 import { z } from 'zod';
 
 import { apiClient, ApiError } from '@/lib/api/client';
-import { DEMO_API_ORIGIN } from '@/lib/constants';
+import { env } from '@/lib/env';
 
 import type { Post } from '../types';
 
@@ -17,7 +17,7 @@ export async function getPosts(): Promise<Post[]> {
   'use cache';
   cacheLife('minutes');
 
-  return apiClient(`${DEMO_API_ORIGIN}/posts?_limit=10`, {
+  return apiClient(`${env.NEXT_PUBLIC_API_ORIGIN}/posts?_limit=10`, {
     schema: z.array(postSchema),
   });
 }
@@ -27,7 +27,7 @@ export async function getPostById(id: number): Promise<Post | null> {
   cacheLife('minutes');
 
   try {
-    return await apiClient(`${DEMO_API_ORIGIN}/posts/${id}`, {
+    return await apiClient(`${env.NEXT_PUBLIC_API_ORIGIN}/posts/${id}`, {
       schema: postSchema,
     });
   } catch (error) {

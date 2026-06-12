@@ -41,6 +41,7 @@
   - [Domain-Driven Features](#domain-driven-features)
   - [Custom Design System](#custom-design-system)
   - [Typography](#typography)
+  - [Responsive / Mobile-First](#responsive--mobile-first)
   - [Tri-State Theming](#tri-state-theming)
   - [Type-Safe API Client](#type-safe-api-client)
 - [Data Fetching & State Management](#data-fetching--state-management)
@@ -302,7 +303,6 @@ my-frontend-boilerplate/
 │   ├── lib/
 │   │   ├── api/
 │   │   │   └── client.ts            # Generic type-safe fetch client (timeout + Zod)
-│   │   ├── constants.ts             # Shared constants (e.g. DEMO_API_ORIGIN)
 │   │   ├── env.ts                   # Public env (NEXT_PUBLIC_*) validated with Zod
 │   │   ├── env.server.ts            # Server-only secrets (server-only import guard)
 │   │   ├── json-ld.ts
@@ -403,6 +403,24 @@ The typography system is a three-layer scale in `src/app/globals.css`: raw size 
 ```
 
 In Next.js, the hashed family name from `next/font` wins. In Storybook, that var is undefined and the literal `'Geist'` resolves against the `@font-face` injected by `preview-head.html`. Single source of truth, no decorators, no patches. To swap the typeface, edit the `next/font` binding in `[locale]/layout.tsx` and the Google Fonts URL in `preview-head.html` — no component CSS needs to change.
+
+### Responsive / Mobile-First
+
+The UI is **mobile-first**: base styles target the smallest screen and every `@media (width >= …)` block only _enhances_ upward — it never resets. Styling is **CSS Modules + design tokens** (no Tailwind).
+
+| Piece                               | Where                                                                              |
+| ----------------------------------- | ---------------------------------------------------------------------------------- |
+| Breakpoint contract (single source) | `src/lib/breakpoints.ts` — `sm 640 / md 768 / lg 1024 / xl 1280` + `mediaUp()`     |
+| Viewport hooks                      | `src/hooks/use-media-query.ts` — `useMediaQuery` / `useBreakpoint` / `useIsMobile` |
+| Swipe gesture hook                  | `src/hooks/use-swipe.ts` — `useSwipe`                                              |
+| Layout primitives                   | `src/components/layouts/` — `Container` / `Stack` / `Cluster` / `Grid`             |
+| Mobile navigation                   | `src/components/layouts/mobile-nav.tsx` — hamburger + off-canvas drawer            |
+| Touch / safe-area tokens            | `src/app/globals.css` — `--touch-target-min` (44px), `--touch-gap-min`, `--safe-*` |
+| Viewport tests                      | `e2e/responsive.spec.ts` — anti-overflow matrix at 320/390/768/1024                |
+
+Breakpoint px are literal in CSS because media queries can't read `var()`; `breakpoints.ts` is the canonical source for JS/tests — change a value there and update the matching px in the `*.module.css` files.
+
+The full standard (philosophy, DO/DON'T, gutters, safe-area, gestures, performance, testing) lives in [`.agents/RESPONSIVE.md`](.agents/RESPONSIVE.md), and is codified as the project skill `.agents/skills/mobile-first-modules/` for reuse across projects.
 
 ### Tri-State Theming
 
@@ -887,9 +905,12 @@ Copy `.env.local.example` to `.env.local` and fill in the values:
 ```bash
 NEXT_PUBLIC_APP_NAME=My App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_ORIGIN=https://jsonplaceholder.typicode.com
 ```
 
 Public variables (`NEXT_PUBLIC_*`) are validated with Zod (`src/lib/env.ts`) and ship with development defaults so a fresh clone runs zero-config — in production they **warn** (they do not throw) if unset, making the misconfiguration visible in the logs. Server-only secrets live in `src/lib/env.server.ts` (no defaults, guarded by `server-only`) and **throw** at startup if missing or malformed.
+
+`NEXT_PUBLIC_API_ORIGIN` is the origin of the demo posts/comments API. It feeds both the API services (`src/features/posts/api/`) and the CSP `connect-src` allowlist in `src/proxy.ts`, so swapping in a real API is a single env change — the CSP stays in sync by construction. The value is normalized to a bare origin (no path, no trailing slash) by the Zod schema.
 
 ---
 

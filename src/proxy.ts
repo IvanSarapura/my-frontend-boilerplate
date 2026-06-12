@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 
 import type { Locale } from '@/i18n/config';
 import { defaultLocale, locales } from '@/i18n/config';
-import { DEMO_API_ORIGIN } from '@/lib/constants';
+import { env } from '@/lib/env';
 
 const LOCALE_COOKIE = 'NEXT_LOCALE';
 const COOKIE_MAX_AGE_SECONDS = 60 * 60 * 24 * 365; // 1 year
@@ -18,7 +18,9 @@ function buildCspHeader(nonce: string, isDev: boolean): string {
     `style-src 'self' ${isDev ? "'unsafe-inline'" : `'nonce-${nonce}'`}`,
     "img-src 'self' blob: data:",
     "font-src 'self'",
-    `connect-src 'self' ${DEMO_API_ORIGIN}`,
+    // Same env var the posts/comments services fetch from — keeps the CSP
+    // allowlist in sync with the API origin by construction.
+    `connect-src 'self' ${env.NEXT_PUBLIC_API_ORIGIN}`,
     "object-src 'none'",
     "base-uri 'self'",
     "form-action 'self'",

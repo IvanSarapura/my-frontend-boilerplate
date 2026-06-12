@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 import { apiClient } from '@/lib/api/client';
-import { DEMO_API_ORIGIN } from '@/lib/constants';
+import { env } from '@/lib/env';
 
 const commentSchema = z.object({
   postId: z.number(),
@@ -14,7 +14,7 @@ const commentSchema = z.object({
 export type Comment = z.infer<typeof commentSchema>;
 
 export async function getComments(postId: number): Promise<Comment[]> {
-  return apiClient(`${DEMO_API_ORIGIN}/posts/${postId}/comments`, {
+  return apiClient(`${env.NEXT_PUBLIC_API_ORIGIN}/posts/${postId}/comments`, {
     schema: z.array(commentSchema),
   });
 }
