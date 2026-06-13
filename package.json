@@ -25,8 +25,7 @@
     "stylelint:fix": "stylelint \"src/**/*.css\" --fix",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006",
-    "storybook:build": "storybook build",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build"
   },
   "lint-staged": {
     "*.{ts,tsx,mts}": "eslint --fix --cache",
