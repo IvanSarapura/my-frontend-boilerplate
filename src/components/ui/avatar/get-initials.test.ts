@@ -31,4 +31,15 @@ describe('getInitials', () => {
   it('uppercases the result', () => {
     expect(getInitials('ada lovelace')).toBe('AL');
   });
+
+  it('takes whole grapheme clusters, not broken UTF-16 halves', () => {
+    // Emoji (surrogate pair): charAt(0) would return a lone surrogate.
+    expect(getInitials('😀 Smith')).toBe('😀S');
+    // Base letter + combining acute accent (U+0301): the mark stays attached.
+    expect(getInitials('éllen')).toBe('É');
+    // ZWJ emoji sequence: the full family cluster, not a split fragment.
+    expect(getInitials('👨‍👩‍👧 Family')).toBe('👨‍👩‍👧F');
+    // Regional-indicator flag: two code points, one grapheme.
+    expect(getInitials('🇫🇷 France')).toBe('🇫🇷F');
+  });
 });
