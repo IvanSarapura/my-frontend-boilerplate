@@ -63,6 +63,19 @@ describe('useMediaQuery', () => {
     expect(result.current).toBe(false);
   });
 
+  it('re-reads the snapshot from the MediaQueryList on each notification', () => {
+    const ctrl = installMatchMedia(false);
+    const { result } = renderHook(() => useMediaQuery('(min-width: 768px)'));
+
+    // Mutate the list's live state, then notify without trusting the event
+    // payload: useSyncExternalStore must reflect the re-read `.matches`.
+    act(() => {
+      ctrl.mql.matches = true;
+      ctrl.fire(true);
+    });
+    expect(result.current).toBe(true);
+  });
+
   it('removes its listener on unmount to avoid leaks', () => {
     const ctrl = installMatchMedia(false);
     const { unmount } = renderHook(() => useMediaQuery('(min-width: 768px)'));
