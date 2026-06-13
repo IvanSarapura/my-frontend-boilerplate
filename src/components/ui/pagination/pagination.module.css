@@ -51,7 +51,13 @@
 
 .pageButton:not(:disabled):hover,
 .navButton:not(:disabled):hover {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+  border-color: var(--muted);
+}
+
+.pageButton:not(:disabled):active,
+.navButton:not(:disabled):active {
+  background: var(--color-active-surface);
   border-color: var(--muted);
 }
 
@@ -64,7 +70,7 @@
 .current:not(:disabled):hover {
   background: var(--accent);
   border-color: var(--accent);
-  opacity: 0.9;
+  opacity: var(--opacity-hover);
 }
 
 .ellipsis {

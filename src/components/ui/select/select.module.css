@@ -85,7 +85,11 @@
 
 .option:hover,
 .option.focused {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+}
+
+.option:active {
+  background: var(--color-active-surface);
 }
 
 .option.selected {

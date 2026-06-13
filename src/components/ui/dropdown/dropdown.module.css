@@ -14,7 +14,11 @@
 }
 
 .trigger:hover {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+}
+
+.trigger:active {
+  background: var(--color-active-surface);
 }
 
 .trigger:focus-visible {
@@ -52,7 +56,11 @@
 
 .item:hover,
 .item:focus {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+}
+
+.item:active {
+  background: var(--color-active-surface);
 }
 
 .itemDisabled {
@@ -61,7 +69,8 @@
 }
 
 .itemDisabled:hover,
-.itemDisabled:focus {
+.itemDisabled:focus,
+.itemDisabled:active {
   background: transparent;
 }
 

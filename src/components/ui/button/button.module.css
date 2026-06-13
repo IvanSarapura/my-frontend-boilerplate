@@ -49,7 +49,7 @@
 }
 
 .primary:not(:disabled):hover {
-  opacity: 0.85;
+  opacity: var(--opacity-hover);
 }
 
 .secondary {
@@ -58,8 +58,10 @@
   border: 1px solid var(--card-border);
 }
 
+/* Secondary sits on --card-bg, so it hovers to the stronger active surface
+ * to stay visibly distinct from its base. */
 .secondary:not(:disabled):hover {
-  background: var(--card-border);
+  background: var(--color-active-surface);
 }
 
 .ghost {
@@ -68,7 +70,11 @@
 }
 
 .ghost:not(:disabled):hover {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+}
+
+.ghost:not(:disabled):active {
+  background: var(--color-active-surface);
 }
 
 /* icon variant: square button, intended for a single <Icon> child */
@@ -80,7 +86,11 @@
 }
 
 .icon:not(:disabled):hover {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+}
+
+.icon:not(:disabled):active {
+  background: var(--color-active-surface);
 }
 
 .icon.sm {

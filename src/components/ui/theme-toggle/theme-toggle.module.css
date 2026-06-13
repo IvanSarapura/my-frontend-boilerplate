@@ -42,5 +42,9 @@
 }
 
 .toggle:hover:not(:disabled) {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+}
+
+.toggle:active:not(:disabled) {
+  background: var(--color-active-surface);
 }

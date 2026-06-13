@@ -42,7 +42,11 @@
 }
 
 .trigger:not(:disabled):hover {
-  background: var(--card-bg);
+  background: var(--color-hover-surface);
+}
+
+.trigger:not(:disabled):active {
+  background: var(--color-active-surface);
 }
 
 .triggerLabel {

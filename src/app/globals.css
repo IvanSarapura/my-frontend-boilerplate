@@ -46,11 +46,15 @@
    * | --color-success (#10b981) on #fff   |  2.54:1 | Fails AA — decorative only (filled badges, icons)            |
    * | --color-info (#0070f3) on #fff      |  4.46:1 | AA Normal, AAA Large — same as --accent                      |
    * | --color-on-accent (#fff) on --accent|  4.46:1 | AA Normal, AAA Large — text/icons on accent fills            |
+   * | --color-on-warning (#000) on --color-warning      |  9.68:1 | AAA — near-black text on amber warning fills (badges)  |
+   * | --foreground on --color-hover-surface (≈#f1f1f1)  | 15.40:1 | AAA — text on menu/option/button hover surface         |
+   * | --foreground on --color-active-surface (≈#e8e8e8) | 14.10:1 | AAA — text on pressed/active surface                   |
    *
    * Dark mode (against --background: #0a0a0a):
    * | --foreground (#ededed) on #0a0a0a   | 16.74:1 | AAA Normal + AAA Large                                       |
    * | --muted (#969696) on #0a0a0a        |  6.69:1 | AA Normal + AAA Large (5.88:1 on --card-bg #1a1a1a)          |
    * | --color-error-text (#f87171) dark   |  7.16:1 | AA Normal on #0a0a0a (6.29:1 on --card-bg #1a1a1a)           |
+   * | --foreground on hover/active-surface (dark)       |  ≥14:1  | AAA — surfaces derive from --foreground/--background, auto-adapt |
    *
    * Rules of thumb enforced by these ratios:
    * - Primary body text uses --foreground. --muted is AA Normal and valid for
@@ -73,6 +77,10 @@
     /* Foreground for text/icons sitting on an --accent (or semantic) fill.
      * Stays white in dark mode since the fills remain saturated. */
     --color-on-accent: #fff;
+
+    /* On-fill text for --color-warning: the amber fill is too light for white,
+     * so warning badges use near-black text. Theme-independent (fill stays amber). */
+    --color-on-warning: #000;
     --muted: #6b6b6b;
 
     /* Semantic colors — see contrast table above for usage rules. */
@@ -91,14 +99,16 @@
 
     /*
      * Interactive state tokens.
-     * Centralize focus + disabled appearance so a11y refinements and theme
-     * swaps are single-line changes. The focus ring aliases --accent by
-     * default — overriding it does not require touching component CSS.
+     * Centralize focus, disabled, hover, and active appearance so a11y
+     * refinements and theme swaps are single-line changes. The focus ring
+     * aliases --accent by default — overriding it does not require touching
+     * component CSS.
      *
-     * Hover/active are intentionally NOT tokenized: those states are highly
-     * context-dependent (button-hover ≠ link-hover ≠ card-hover). Components
-     * derive them per-case with color-mix(in srgb, ...) instead — this keeps
-     * the global token surface tight and avoids over-constraining design.
+     * Hover/active surfaces derive from --foreground over --background via
+     * color-mix, so they auto-adapt to dark mode with no separate override.
+     * --opacity-hover dims solid fills (e.g. primary button) on hover.
+     * Contextual hovers that tint a brand color (accent borders, text-color
+     * shifts) stay per-component — only the neutral surface is tokenized.
      */
     --color-focus-ring: var(--accent);
     --color-focus-ring-width: 2px;
@@ -106,6 +116,17 @@
     --color-disabled-fg: var(--muted);
     --color-disabled-bg: var(--card-bg);
     --opacity-disabled: 0.6;
+    --color-hover-surface: color-mix(
+      in srgb,
+      var(--foreground) 6%,
+      var(--background)
+    );
+    --color-active-surface: color-mix(
+      in srgb,
+      var(--foreground) 10%,
+      var(--background)
+    );
+    --opacity-hover: 0.85;
 
     /* Spacing scale */
     --space-1: 0.25rem;
