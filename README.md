@@ -456,7 +456,7 @@ function ThemeIndicator() {
 
 ### Type-Safe API Client
 
-A thin wrapper around `fetch` with optional **Zod schema validation** guarantees that what you receive matches what you expect:
+A thin wrapper around `fetch` with required **Zod schema validation** guarantees that what you receive matches what you expect:
 
 ```ts
 import { apiClient } from '@/lib/api/client';
@@ -470,7 +470,7 @@ const user = await apiClient('/api/user', {
 // user is typed AND validated at runtime
 ```
 
-Beyond schema validation, the client enforces a request **timeout** (`timeoutMs`, default 10s) via an internal `AbortController` that composes with any caller-provided `signal`, **guards** `res.json()` (raising a structured `ApiError` on a non-JSON response), and **warns in development** when called without a `schema`.
+The `schema` is **required** — every response is validated against its Zod contract, so a new endpoint can never silently return unvalidated data (for a deliberate passthrough, pass `z.unknown()` explicitly). Beyond validation, the client enforces a request **timeout** (`timeoutMs`, default 10s) via an internal `AbortController` that composes with any caller-provided `signal`, and **guards** `res.json()` (raising a structured `ApiError` on a non-JSON response).
 
 ---
 

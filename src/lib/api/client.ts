@@ -1,7 +1,9 @@
 import { z } from 'zod';
 
 type ApiClientOptions<T> = RequestInit & {
-  schema?: z.ZodSchema<T>;
+  /** Required: the response is always validated against this Zod contract.
+   * For an intentional passthrough, pass `z.unknown()` explicitly. */
+  schema: z.ZodSchema<T>;
   /** Abort the request after this many ms. Defaults to 10s. */
   timeoutMs?: number;
 };
@@ -39,7 +41,7 @@ function safeStatusMessage(status: number): string {
 
 export async function apiClient<T>(
   url: string,
-  options: ApiClientOptions<T> = {},
+  options: ApiClientOptions<T>,
 ): Promise<T> {
   const {
     schema,
@@ -88,22 +90,12 @@ export async function apiClient<T>(
     throw new ApiError('Invalid JSON response from upstream', 502);
   }
 
-  if (schema) {
-    const parsed = schema.safeParse(data);
-    if (!parsed.success) {
-      throw new ApiError(
-        `Schema validation failed: ${parsed.error.message}`,
-        422,
-      );
-    }
-    return parsed.data;
-  }
-
-  if (process.env.NODE_ENV !== 'production') {
-    console.warn(
-      `[apiClient] No schema provided for ${url}; returning unvalidated data. ` +
-        'Pass a Zod schema to validate the response.',
+  const parsed = schema.safeParse(data);
+  if (!parsed.success) {
+    throw new ApiError(
+      `Schema validation failed: ${parsed.error.message}`,
+      422,
     );
   }
-  return data as T;
+  return parsed.data;
 }
