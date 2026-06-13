@@ -16,6 +16,27 @@ export class ApiError extends Error {
   }
 }
 
+// Fixed, safe messages keyed by status — never echo upstream `statusText`,
+// which is backend-controlled and can leak implementation details. The exact
+// code stays available on `ApiError.status` for programmatic handling.
+const STATUS_MESSAGES: Record<number, string> = {
+  400: 'Bad request',
+  401: 'Unauthorized',
+  403: 'Forbidden',
+  404: 'Not found',
+  408: 'Request timeout',
+  409: 'Conflict',
+  429: 'Too many requests',
+  500: 'Server error',
+  502: 'Bad gateway',
+  503: 'Service unavailable',
+  504: 'Gateway timeout',
+};
+
+function safeStatusMessage(status: number): string {
+  return STATUS_MESSAGES[status] ?? 'Request failed';
+}
+
 export async function apiClient<T>(
   url: string,
   options: ApiClientOptions<T> = {},
@@ -57,7 +78,7 @@ export async function apiClient<T>(
   }
 
   if (!res.ok) {
-    throw new ApiError(`HTTP ${res.status}: ${res.statusText}`, res.status);
+    throw new ApiError(safeStatusMessage(res.status), res.status);
   }
 
   let data: unknown;

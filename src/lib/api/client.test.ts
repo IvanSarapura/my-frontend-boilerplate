@@ -50,6 +50,43 @@ describe('apiClient', () => {
     await expect(apiClient('https://api.test/missing')).rejects.toMatchObject({
       name: 'ApiError',
       status: 404,
+      message: 'Not found',
+    });
+  });
+
+  it('never leaks the upstream statusText in the error message', async () => {
+    server.use(
+      http.get(
+        'https://api.test/boom',
+        () =>
+          new HttpResponse(null, {
+            status: 500,
+            statusText: 'DB at db-internal:5432 down',
+          }),
+      ),
+    );
+
+    const error = (await apiClient('https://api.test/boom').catch(
+      (e: unknown) => e,
+    )) as ApiError;
+    expect(error).toBeInstanceOf(ApiError);
+    expect(error.status).toBe(500);
+    expect(error.message).toBe('Server error');
+    expect(error.message).not.toContain('db-internal');
+  });
+
+  it('falls back to a generic message for unmapped statuses', async () => {
+    server.use(
+      http.get(
+        'https://api.test/teapot',
+        () => new HttpResponse(null, { status: 418 }),
+      ),
+    );
+
+    await expect(apiClient('https://api.test/teapot')).rejects.toMatchObject({
+      name: 'ApiError',
+      status: 418,
+      message: 'Request failed',
     });
   });
 
