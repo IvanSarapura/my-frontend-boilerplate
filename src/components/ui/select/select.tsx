@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  useCallback,
-  useEffect,
-  useEffectEvent,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { useEffect, useEffectEvent, useId, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
@@ -52,12 +44,9 @@ export function Select({
   const triggerId = `${baseId}-trigger`;
   const listboxId = `${baseId}-listbox`;
   const optionId = (index: number) => `${baseId}-option-${index}`;
-  const selectedLabel = useMemo(
-    () => options.find(o => o.value === value)?.label,
-    [options, value],
-  );
+  const selectedLabel = options.find(o => o.value === value)?.label;
 
-  const close = useCallback(() => {
+  const close = () => {
     // Return focus to the trigger only when it's still inside the widget
     // (Escape / selection); on an outside click the focus already moved away.
     if (wrapperRef.current?.contains(document.activeElement)) {
@@ -65,16 +54,18 @@ export function Select({
     }
     setOpen(false);
     setFocusedIndex(-1);
-  }, []);
+  };
+
+  const onOutsideClick = useEffectEvent((e: MouseEvent) => {
+    if (!wrapperRef.current?.contains(e.target as Node)) close();
+  });
 
   useEffect(() => {
     if (!open) return;
-    const handleClick = (e: MouseEvent) => {
-      if (!wrapperRef.current?.contains(e.target as Node)) close();
-    };
+    const handleClick = (e: MouseEvent) => onOutsideClick(e);
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
-  }, [open, close]);
+  }, [open]);
 
   const onKeyDown = useEffectEvent((e: KeyboardEvent) => {
     if (e.key === 'Escape') {

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 
 import { CloseIcon, MenuIcon } from '@/components/ui/icon';
 import { useBreakpoint } from '@/hooks/use-media-query';
@@ -39,7 +39,7 @@ export function MobileNav({
   const overlayRef = useRef<HTMLDivElement>(null);
   const menuId = useId();
 
-  const close = useCallback(() => setOpen(false), [setOpen]);
+  const close = () => setOpen(false);
   // Focus trap + Esc + backdrop click, shared with Modal.
   useModalBehavior(open, close, overlayRef);
   // Swipe the panel toward the edge it slid from to dismiss it.

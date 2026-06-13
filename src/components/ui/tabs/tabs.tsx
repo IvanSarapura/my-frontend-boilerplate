@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useId, useMemo, useState } from 'react';
+import { useId, useState } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -31,18 +31,12 @@ export function Tabs({
   const [internal, setInternal] = useState<string>(defaultValue);
   const activeTab = isControlled ? controlledValue : internal;
 
-  const setActiveTab = useCallback(
-    (next: string) => {
-      if (!isControlled) setInternal(next);
-      onValueChange?.(next);
-    },
-    [isControlled, onValueChange],
-  );
+  const setActiveTab = (next: string) => {
+    if (!isControlled) setInternal(next);
+    onValueChange?.(next);
+  };
 
-  const ctxValue = useMemo(
-    () => ({ activeTab, setActiveTab, orientation, idPrefix }),
-    [activeTab, setActiveTab, orientation, idPrefix],
-  );
+  const ctxValue = { activeTab, setActiveTab, orientation, idPrefix };
 
   return (
     <TabsContext.Provider value={ctxValue}>

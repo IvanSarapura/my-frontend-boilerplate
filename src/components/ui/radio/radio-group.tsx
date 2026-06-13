@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useId, useState } from 'react';
+import { useId, useState } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -44,13 +44,10 @@ export function RadioGroup({
   const [internal, setInternal] = useState<string | undefined>(defaultValue);
   const value = isControlled ? controlledValue : internal;
 
-  const handleChange = useCallback(
-    (next: string) => {
-      if (!isControlled) setInternal(next);
-      onChange?.(next);
-    },
-    [isControlled, onChange],
-  );
+  const handleChange = (next: string) => {
+    if (!isControlled) setInternal(next);
+    onChange?.(next);
+  };
 
   const describedBy = error ? errorId : helper ? helperId : undefined;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
 
 import {
@@ -106,11 +106,6 @@ export function Toaster({
   const isClient = useIsClient();
   const { toasts, removeToast } = useToast();
 
-  const handleRemove = useCallback(
-    (id: string) => removeToast(id),
-    [removeToast],
-  );
-
   /* v8 ignore next -- SSR guard; useIsClient is always true under jsdom */
   if (!isClient) return null;
 
@@ -125,7 +120,7 @@ export function Toaster({
         <ToastItem
           key={toast.id}
           {...toast}
-          onRemove={handleRemove}
+          onRemove={removeToast}
           dismissLabel={dismissLabel}
         />
       ))}

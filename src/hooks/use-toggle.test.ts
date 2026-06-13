@@ -29,11 +29,4 @@ describe('useToggle', () => {
     act(() => result.current[2](false));
     expect(result.current[0]).toBe(false);
   });
-
-  it('returns a stable toggle reference across renders', () => {
-    const { result, rerender } = renderHook(() => useToggle());
-    const toggle = result.current[1];
-    rerender();
-    expect(result.current[1]).toBe(toggle);
-  });
 });

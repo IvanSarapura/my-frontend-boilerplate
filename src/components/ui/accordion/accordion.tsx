@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -40,37 +40,28 @@ export function Accordion(props: AccordionProps) {
     toSet(props.defaultValue),
   );
 
-  const openItems = useMemo(
-    () => (isControlled ? toSet(props.value) : internal),
-    [isControlled, props.value, internal],
-  );
+  const openItems = isControlled ? toSet(props.value) : internal;
 
-  const toggle = useCallback(
-    (value: string) => {
-      const next = new Set(openItems);
-      if (next.has(value)) {
-        next.delete(value);
-      } else {
-        if (type === 'single') next.clear();
-        next.add(value);
-      }
+  const toggle = (value: string) => {
+    const next = new Set(openItems);
+    if (next.has(value)) {
+      next.delete(value);
+    } else {
+      if (type === 'single') next.clear();
+      next.add(value);
+    }
 
-      if (!isControlled) setInternal(next);
+    if (!isControlled) setInternal(next);
 
-      if (type === 'single') {
-        const single = next.values().next().value ?? '';
-        (props as SingleProps).onValueChange?.(single);
-      } else {
-        (props as MultipleProps).onValueChange?.(Array.from(next));
-      }
-    },
-    [openItems, type, isControlled, props],
-  );
+    if (type === 'single') {
+      const single = next.values().next().value ?? '';
+      (props as SingleProps).onValueChange?.(single);
+    } else {
+      (props as MultipleProps).onValueChange?.(Array.from(next));
+    }
+  };
 
-  const ctxValue = useMemo(
-    () => ({ type, openItems, toggle }),
-    [type, openItems, toggle],
-  );
+  const ctxValue = { type, openItems, toggle };
 
   return (
     <AccordionContext.Provider value={ctxValue}>

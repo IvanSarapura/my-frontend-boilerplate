@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useMemo } from 'react';
+import { useId } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -26,10 +26,7 @@ export function AccordionItem({
   const contentId = `accordion-content-${reactId}`;
   const isOpen = openItems.has(value);
 
-  const ctxValue = useMemo(
-    () => ({ value, isOpen, disabled, triggerId, contentId }),
-    [value, isOpen, disabled, triggerId, contentId],
-  );
+  const ctxValue = { value, isOpen, disabled, triggerId, contentId };
 
   return (
     <AccordionItemContext.Provider value={ctxValue}>
