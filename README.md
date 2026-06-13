@@ -42,6 +42,7 @@
   - [Custom Design System](#custom-design-system)
   - [Typography](#typography)
   - [Responsive / Mobile-First](#responsive--mobile-first)
+  - [Keyboard Navigation](#keyboard-navigation)
   - [Tri-State Theming](#tri-state-theming)
   - [Type-Safe API Client](#type-safe-api-client)
 - [Data Fetching & State Management](#data-fetching--state-management)
@@ -421,6 +422,41 @@ The UI is **mobile-first**: base styles target the smallest screen and every `@m
 Breakpoint px are literal in CSS because media queries can't read `var()`; `breakpoints.ts` is the canonical source for JS/tests — change a value there and update the matching px in the `*.module.css` files.
 
 The full standard (philosophy, DO/DON'T, gutters, safe-area, gestures, performance, testing) lives in [`.agents/RESPONSIVE.md`](.agents/RESPONSIVE.md), and is codified as the project skill `.agents/skills/mobile-first-modules/` for reuse across projects.
+
+### Keyboard Navigation
+
+Composite widgets need real keyboard support (arrow keys, `Home`/`End`, wrap-around). Rather than re-implementing it per component, pick the right tool for the widget's **archetype**:
+
+| Widget archetype                                             | Use                                                        | Reference example |
+| ------------------------------------------------------------ | ---------------------------------------------------------- | ----------------- |
+| Static composite, real DOM focus (tablist, toolbar, menubar) | `useRovingFocus` (`src/hooks/use-roving-focus.ts`)         | `Tabs`            |
+| Floating popover / menu / combobox (needs positioning)       | `@floating-ui/react` (`useFloating` + `useListNavigation`) | `Dropdown`        |
+| Listbox with virtual focus (`aria-activedescendant`)         | virtual-focus pattern                                      | `Select`          |
+
+`useRovingFocus` is the reusable primitive for the **static composite** archetype. Attach the ref + handler to the container; items are discovered by selector in DOM order, so there's no per-item registration. Activation (`Enter`/`Space`) stays in your component — the hook only moves focus.
+
+```tsx
+'use client';
+import { useRovingFocus } from '@/hooks';
+
+function Toolbar() {
+  const { containerRef, onKeyDown } = useRovingFocus<HTMLDivElement>({
+    orientation: 'horizontal', // 'vertical' | 'both'
+    loop: true,
+    manageTabIndex: true, // hook owns the roving tabindex (no external selection)
+  });
+
+  return (
+    <div ref={containerRef} role="toolbar" onKeyDown={onKeyDown}>
+      <button type="button">Bold</button>
+      <button type="button">Italic</button>
+      <button type="button">Underline</button>
+    </div>
+  );
+}
+```
+
+Use `manageTabIndex: false` (the default) when an external state already decides which item is tabbable — that's how `Tabs` keeps the selected tab as the single tab stop. The full design, the Tabs migration, and the archetype decision matrix live in [`.agents/KEYBOARD-NAVIGATION.md`](.agents/KEYBOARD-NAVIGATION.md).
 
 ### Tri-State Theming
 
