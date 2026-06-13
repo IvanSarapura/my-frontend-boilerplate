@@ -101,6 +101,42 @@ describe('Select', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it('gives the listbox an accessible name from the label', async () => {
+    render(<Select options={options} onChange={vi.fn()} label="Country" />);
+    await userEvent.click(screen.getByRole('button'));
+    expect(
+      screen.getByRole('listbox', { name: 'Country' }),
+    ).toBeInTheDocument();
+  });
+
+  it('points aria-activedescendant at the active option while navigating', async () => {
+    render(<Select options={options} onChange={vi.fn()} />);
+    await userEvent.click(screen.getByRole('button'));
+    const listbox = screen.getByRole('listbox');
+    const opts = screen.getAllByRole('option');
+
+    // Each option is addressable by id and nothing is active before navigation.
+    expect(opts[0]).toHaveAttribute('id');
+    expect(listbox).not.toHaveAttribute('aria-activedescendant');
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(listbox).toHaveAttribute('aria-activedescendant', opts[0]!.id);
+
+    await userEvent.keyboard('{ArrowDown}');
+    expect(listbox).toHaveAttribute('aria-activedescendant', opts[1]!.id);
+  });
+
+  it('returns focus to the trigger on Escape', async () => {
+    render(<Select options={options} onChange={vi.fn()} />);
+    const trigger = screen.getByRole('button');
+    await userEvent.click(trigger);
+    expect(screen.getByRole('listbox')).toBeInTheDocument();
+
+    await userEvent.keyboard('{Escape}');
+    expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
+    expect(trigger).toHaveFocus();
+  });
+
   it('links the error message via aria-describedby', () => {
     render(<Select options={options} onChange={vi.fn()} error="Required" />);
     const describedBy = screen

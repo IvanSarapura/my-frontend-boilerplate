@@ -44,13 +44,25 @@ export function Select({
   const [open, setOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState(-1);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const errorId = `${useId()}-error`;
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const listboxRef = useRef<HTMLUListElement>(null);
+  const baseId = useId();
+  const errorId = `${baseId}-error`;
+  const labelId = label ? `${baseId}-label` : undefined;
+  const triggerId = `${baseId}-trigger`;
+  const listboxId = `${baseId}-listbox`;
+  const optionId = (index: number) => `${baseId}-option-${index}`;
   const selectedLabel = useMemo(
     () => options.find(o => o.value === value)?.label,
     [options, value],
   );
 
   const close = useCallback(() => {
+    // Return focus to the trigger only when it's still inside the widget
+    // (Escape / selection); on an outside click the focus already moved away.
+    if (wrapperRef.current?.contains(document.activeElement)) {
+      triggerRef.current?.focus();
+    }
     setOpen(false);
     setFocusedIndex(-1);
   }, []);
@@ -92,10 +104,22 @@ export function Select({
     return () => document.removeEventListener('keydown', listener);
   }, [open]);
 
+  // Focus the listbox on open so its `aria-activedescendant` is announced as
+  // the user arrows through options.
+  useEffect(() => {
+    if (open) listboxRef.current?.focus();
+  }, [open]);
+
   return (
     <div className={cx(styles.wrapper, className)} ref={wrapperRef}>
-      {label && <span className={styles.label}>{label}</span>}
+      {label && (
+        <span id={labelId} className={styles.label}>
+          {label}
+        </span>
+      )}
       <button
+        ref={triggerRef}
+        id={triggerId}
         type="button"
         className={cx(
           styles.trigger,
@@ -106,6 +130,7 @@ export function Select({
         disabled={disabled}
         aria-haspopup="listbox"
         aria-expanded={open}
+        aria-controls={open ? listboxId : undefined}
         aria-describedby={error ? errorId : undefined}
       >
         <span className={!selectedLabel ? styles.placeholder : undefined}>
@@ -114,10 +139,21 @@ export function Select({
         <ChevronDownIcon className={styles.chevron} />
       </button>
       {open && (
-        <ul className={styles.menu} role="listbox">
+        <ul
+          ref={listboxRef}
+          id={listboxId}
+          className={styles.menu}
+          role="listbox"
+          tabIndex={-1}
+          aria-labelledby={labelId ?? triggerId}
+          aria-activedescendant={
+            focusedIndex >= 0 ? optionId(focusedIndex) : undefined
+          }
+        >
           {options.map((option, index) => (
             <li
               key={option.value}
+              id={optionId(index)}
               className={cx(
                 styles.option,
                 value === option.value && styles.selected,
