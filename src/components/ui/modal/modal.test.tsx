@@ -239,6 +239,53 @@ describe('Modal', () => {
     });
   });
 
+  describe('background inert', () => {
+    // jsdom reflects the `inert` IDL property but not the attribute, and does
+    // not enforce its behaviour — assert the property; real pointer/focus
+    // blocking is covered by the Playwright e2e suite.
+    it('marks sibling elements inert while open and restores on close', () => {
+      const background = document.createElement('div');
+      document.body.appendChild(background);
+      const { rerender } = render(
+        <Modal open title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      expect(background.inert).toBe(true);
+
+      rerender(
+        <Modal open={false} title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      // Restored to its prior non-inert state (jsdom leaves this `undefined`).
+      expect(background.inert).toBeFalsy();
+      background.remove();
+    });
+
+    it('restores a sibling to its prior inert state on close (LIFO)', () => {
+      // Mimics an outer overlay that already made this element inert.
+      const background = document.createElement('div');
+      background.inert = true;
+      document.body.appendChild(background);
+      const { rerender } = render(
+        <Modal open title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      expect(background.inert).toBe(true);
+
+      rerender(
+        <Modal open={false} title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      // Restored to its prior value (true), not blindly cleared to false.
+      expect(background.inert).toBe(true);
+      background.remove();
+    });
+  });
+
   describe('compound API', () => {
     it('renders ModalHeader/Body/Footer composition when title is omitted', () => {
       render(

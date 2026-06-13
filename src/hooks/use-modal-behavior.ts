@@ -5,6 +5,29 @@ import { type RefObject, useEffect, useEffectEvent, useRef } from 'react';
 const FOCUSABLE_SELECTOR =
   'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
+// Isolate the dialog from the rest of the page: walk from it up to <body> and,
+// at each level, mark every sibling that is not on the path to the dialog as
+// `inert` (blocks pointer + focus and drops it from the a11y tree). Works for
+// both the portalled Modal (overlay is a direct child of <body>) and the inline
+// MobileNav drawer (overlay is nested). Returns an undo that restores each
+// element's prior `inert`, so stacked overlays unwind LIFO like the scroll-lock.
+function hideOthers(dialog: HTMLElement): () => void {
+  const undo: Array<() => void> = [];
+  let node: HTMLElement | null = dialog;
+  while (node && node !== document.body && node.parentElement) {
+    for (const sibling of Array.from(node.parentElement.children)) {
+      if (sibling === node || !(sibling instanceof HTMLElement)) continue;
+      const previous = sibling.inert;
+      sibling.inert = true;
+      undo.push(() => {
+        sibling.inert = previous;
+      });
+    }
+    node = node.parentElement;
+  }
+  return () => undo.forEach(restore => restore());
+}
+
 export function useModalBehavior(
   open: boolean,
   onClose: () => void,
@@ -42,6 +65,16 @@ export function useModalBehavior(
       document.body.style.paddingRight = paddingRight;
     };
   }, [open]);
+
+  // Make the rest of the document inert so pointer/AT can't reach the backdrop;
+  // the keyboard focus-trap below only covers Tab. Snapshot is taken on open, so
+  // body children added later (e.g. a new toast) aren't covered — acceptable.
+  useEffect(() => {
+    if (!open) return;
+    const dialog = overlayRef.current;
+    if (!dialog) return;
+    return hideOthers(dialog);
+  }, [open, overlayRef]);
 
   const onKeyDown = useEffectEvent((e: KeyboardEvent) => {
     if (e.key === 'Escape') {

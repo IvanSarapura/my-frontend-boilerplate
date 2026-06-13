@@ -136,7 +136,8 @@ export const Compound: Story = {
 /**
  * Interactive story — Modal trigger pattern verified by a play function:
  * a Button opens the dialog, Escape closes it. Covers the a11y contract
- * (focus trap + keyboard dismiss) end-to-end inside Storybook.
+ * (focus trap + keyboard dismiss + background `inert`) end-to-end in a real
+ * browser, where `inert` is actually enforced (unlike jsdom).
  */
 export const Interactive: Story = {
   render: () => {
@@ -173,13 +174,26 @@ export const Interactive: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole('button', { name: 'Open Modal' }));
+    // Capture the trigger before opening: once the dialog is open the
+    // background is inert and drops out of the accessibility tree, so a
+    // role query would no longer find it.
+    const trigger = canvas.getByRole('button', { name: 'Open Modal' });
+    await userEvent.click(trigger);
 
     // Modal renders into a portal, so we query against the full document body.
     const dialog = await screen.findByRole('dialog');
     expect(dialog).toHaveAttribute('aria-modal', 'true');
 
+    // A11Y-3: the background is inert while open — the trigger cannot take
+    // focus (a real browser enforces this).
+    trigger.focus();
+    expect(trigger).not.toHaveFocus();
+
     await userEvent.keyboard('{Escape}');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+
+    // ...and the background is interactive again once the dialog closes.
+    trigger.focus();
+    expect(trigger).toHaveFocus();
   },
 };

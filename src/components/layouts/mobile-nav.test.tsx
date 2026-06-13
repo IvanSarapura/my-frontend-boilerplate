@@ -74,6 +74,28 @@ describe('MobileNav', () => {
     expect(document.body.style.paddingRight).toBe('');
   });
 
+  it('inerts the page background while open but keeps the dialog and its ancestors live', () => {
+    // jsdom reflects the `inert` property but does not enforce its behaviour;
+    // real pointer/focus blocking is covered by the Playwright e2e suite.
+    const background = document.createElement('div');
+    document.body.appendChild(background);
+
+    setup();
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    const dialog = screen.getByRole('dialog', { name: 'Main' });
+
+    expect(background.inert).toBe(true); // page content behind the drawer
+    expect(dialog.inert).toBeFalsy(); // the dialog itself stays interactive
+    expect(dialog.parentElement?.inert).toBeFalsy(); // ...and its <nav> ancestor
+    // The hamburger is a sibling of the overlay, so it goes inert too; closing
+    // still works via the in-drawer close button, Esc, backdrop or swipe.
+    expect(screen.getByRole('button', { name: 'Open menu' }).inert).toBe(true);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close menu' }));
+    expect(background.inert).toBeFalsy();
+    background.remove();
+  });
+
   it('closes the drawer on a rightward swipe of the panel', () => {
     setup();
     fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
