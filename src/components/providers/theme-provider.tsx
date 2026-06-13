@@ -2,7 +2,6 @@
 
 import {
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useSyncExternalStore,
@@ -60,11 +59,16 @@ function writeStoredTheme(theme: Theme) {
 }
 
 function subscribeTheme(callback: () => void) {
+  // Only react to our own key; `e.key === null` is a localStorage.clear(),
+  // which should also re-read. Other tabs' unrelated writes are ignored.
+  const onStorage = (e: StorageEvent) => {
+    if (!e.key || e.key === THEME_STORAGE_KEY) callback();
+  };
   window.addEventListener(THEME_CHANGE_EVENT, callback);
-  window.addEventListener('storage', callback);
+  window.addEventListener('storage', onStorage);
   return () => {
     window.removeEventListener(THEME_CHANGE_EVENT, callback);
-    window.removeEventListener('storage', callback);
+    window.removeEventListener('storage', onStorage);
   };
 }
 
@@ -111,7 +115,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [theme]);
 
-  const setTheme = useCallback((next: Theme) => writeStoredTheme(next), []);
+  const setTheme = (next: Theme) => writeStoredTheme(next);
 
   return (
     <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme }}>

@@ -118,6 +118,32 @@ describe('ThemeProvider', () => {
     expect(document.documentElement.hasAttribute('data-theme')).toBe(false);
   });
 
+  it('only re-reads on storage events for its own key', () => {
+    installMatchMedia(createMatchMediaMock(false));
+    render(
+      <ThemeProvider>
+        <Probe />
+      </ThemeProvider>,
+    );
+    expect(screen.getByTestId('theme')).toHaveTextContent('system');
+
+    // Another tab wrote the stored theme, but the storage event names an
+    // unrelated key → ignore it (no re-read), so the theme stays 'system'.
+    window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
+    act(() => {
+      window.dispatchEvent(new StorageEvent('storage', { key: 'unrelated' }));
+    });
+    expect(screen.getByTestId('theme')).toHaveTextContent('system');
+
+    // A storage event for our own key syncs the value across tabs.
+    act(() => {
+      window.dispatchEvent(
+        new StorageEvent('storage', { key: THEME_STORAGE_KEY }),
+      );
+    });
+    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
+  });
+
   it('reflects system preference changes when theme is system', async () => {
     const mock = createMatchMediaMock(false);
     installMatchMedia(mock);
