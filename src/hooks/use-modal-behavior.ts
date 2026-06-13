@@ -25,6 +25,24 @@ export function useModalBehavior(
     }
   }, [open, overlayRef]);
 
+  useEffect(() => {
+    if (!open) return;
+    // Saving the previous inline values (instead of resetting to '') keeps
+    // pre-existing body styles intact and makes nested overlays restore LIFO.
+    const { overflow, paddingRight } = document.body.style;
+    // Compensate for the hidden scrollbar to avoid horizontal layout shift.
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+    document.body.style.overflow = 'hidden';
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+    return () => {
+      document.body.style.overflow = overflow;
+      document.body.style.paddingRight = paddingRight;
+    };
+  }, [open]);
+
   const onKeyDown = useEffectEvent((e: KeyboardEvent) => {
     if (e.key === 'Escape') {
       onClose();

@@ -64,6 +64,16 @@ describe('MobileNav', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('locks body scroll while the drawer is open and restores it on close', () => {
+    setup();
+    fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));
+    expect(document.body.style.overflow).toBe('hidden');
+
+    fireEvent.click(screen.getByRole('button', { name: 'Close menu' }));
+    expect(document.body.style.overflow).toBe('');
+    expect(document.body.style.paddingRight).toBe('');
+  });
+
   it('closes the drawer on a rightward swipe of the panel', () => {
     setup();
     fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));

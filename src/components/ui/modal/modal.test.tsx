@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { userEvent } from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { Modal } from './modal';
 import { ModalBody } from './modal-body';
@@ -184,6 +184,59 @@ describe('Modal', () => {
       </>,
     );
     expect(document.activeElement).toBe(opener);
+  });
+
+  describe('body scroll lock', () => {
+    afterEach(() => {
+      document.body.style.overflow = '';
+      document.body.style.paddingRight = '';
+      vi.unstubAllGlobals();
+    });
+
+    it('locks body scroll while open and compensates for the scrollbar', () => {
+      // jsdom: innerWidth=1024, documentElement.clientWidth=0 → width 1024.
+      const { unmount } = render(
+        <Modal open title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.style.paddingRight).toBe('1024px');
+
+      unmount();
+      expect(document.body.style.overflow).toBe('');
+      expect(document.body.style.paddingRight).toBe('');
+    });
+
+    it('restores pre-existing inline body styles on close', () => {
+      document.body.style.overflow = 'auto';
+      document.body.style.paddingRight = '7px';
+      const { rerender } = render(
+        <Modal open title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      expect(document.body.style.overflow).toBe('hidden');
+
+      rerender(
+        <Modal open={false} title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      expect(document.body.style.overflow).toBe('auto');
+      expect(document.body.style.paddingRight).toBe('7px');
+    });
+
+    it('skips scrollbar compensation when no scrollbar is visible', () => {
+      vi.stubGlobal('innerWidth', 0);
+      render(
+        <Modal open title="T" onClose={vi.fn()}>
+          C
+        </Modal>,
+      );
+      expect(document.body.style.overflow).toBe('hidden');
+      expect(document.body.style.paddingRight).toBe('');
+    });
   });
 
   describe('compound API', () => {
