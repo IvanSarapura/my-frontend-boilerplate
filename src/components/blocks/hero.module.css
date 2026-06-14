@@ -1,0 +1,38 @@
+.eyebrow {
+  margin-block-end: var(--space-3);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+}
+
+.title {
+  font-size: var(--font-display-2);
+  font-weight: var(--font-display-2-weight);
+  line-height: var(--font-display-2-lh);
+  letter-spacing: var(--font-display-2-tracking);
+}
+
+.subtitle {
+  max-inline-size: 60ch;
+  margin-block-start: var(--space-4);
+  font-size: var(--font-body-lg);
+  color: var(--muted);
+}
+
+.actions {
+  margin-block-start: var(--space-6);
+}
+
+.center {
+  text-align: center;
+}
+
+.center .subtitle {
+  margin-inline: auto;
+}
+
+.center .actions {
+  justify-content: center;
+}
