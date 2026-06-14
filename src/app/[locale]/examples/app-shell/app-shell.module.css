@@ -1,0 +1,33 @@
+.shell {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+  padding-block: var(--space-8);
+}
+
+@media (width >= 1024px) {
+  .shell {
+    grid-template-columns: 14rem 1fr;
+  }
+}
+
+.sidebarList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  list-style: none;
+}
+
+.sidebarLink {
+  inline-size: 100%;
+}
+
+/* Prevent the content column from overflowing the grid track. */
+.content {
+  min-inline-size: 0;
+}
+
+.intro {
+  margin-block: var(--space-2) var(--space-8);
+  color: var(--muted);
+}

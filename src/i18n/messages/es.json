@@ -43,7 +43,37 @@
     "product": "Producto",
     "company": "Empresa",
     "legal": "Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
     "rights": "Todos los derechos reservados."
+  },
+  "features": {
+    "heading": "Todo lo que necesitas",
+    "items": [
+      {
+        "title": "Mobile-first",
+        "description": "Diseños responsive que funcionan desde 320px hacia arriba."
+      },
+      {
+        "title": "Accesible",
+        "description": "Contraste WCAG AA, anillos de foco y áreas táctiles de 44px."
+      },
+      {
+        "title": "Sin dependencias UI",
+        "description": "Construido sobre design tokens y CSS Modules — sin lock-in de framework."
+      }
+    ]
+  },
+  "examples": {
+    "title": "Plantillas wireframe",
+    "intro": "Tres puntos de partida profesionales. Copia el que quieras a tu ruta y borra la carpeta examples/.",
+    "view": "Ver plantilla",
+    "minimalName": "Minimal",
+    "minimalDesc": "Hero centrado, sin cromo — páginas coming-soon o apps de una pantalla.",
+    "marketingName": "Marketing",
+    "marketingDesc": "Navbar sticky, hero, rejilla de features, banda CTA y footer.",
+    "appShellName": "App shell",
+    "appShellDesc": "Header, barra lateral y región de contenido — base para dashboards."
   },
   "posts": {
     "title": "Publicaciones",

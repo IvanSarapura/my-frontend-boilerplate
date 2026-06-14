@@ -1,0 +1,15 @@
+.sectionHeading {
+  margin-block-end: var(--space-8);
+  text-align: center;
+}
+
+.cta {
+  text-align: center;
+}
+
+.ctaText {
+  max-inline-size: 50ch;
+  margin-block: var(--space-3) var(--space-6);
+  margin-inline: auto;
+  color: var(--muted);
+}
