@@ -440,9 +440,9 @@ A layer of **content-agnostic structure primitives** plus **page-region blocks**
 
 Layout primitives export from `@/components/layouts`, content blocks from `@/components/blocks`. Width and rhythm come from tokens in `src/app/globals.css` — `--layout-max-{prose,default,wide}` and `--section-py` — never hardcode them.
 
-**How do I pick a starting layout?** Three navigable wireframes live in `src/app/[locale]/examples/` — **Minimal** (centered hero), **Marketing** (header + hero + features + CTA + footer), and **App-Shell** (header + sidebar + content). Browse them at `/en/examples`.
+**How do I pick a starting layout?** Three navigable wireframes live in `src/app/[locale]/examples/` — **Minimal** (centered hero), **Marketing** (header + hero + features + CTA + footer), and **App-Shell** (header + sidebar + content). Browse them at `/en/examples`, or follow the demo home's **"Get started"** CTA, which links there.
 
-**How do I use one?** Copy the preset you want into your own route, adapt the copy, and **delete `src/app/[locale]/examples/`** — it's a self-contained, throwaway segment (excluded from sitemap, `robots: { index: false }`). A typical composition:
+**How do I use one?** Copy the preset you want into your own route, adapt the copy, and **delete `src/app/[locale]/examples/`** — it's a self-contained, throwaway segment (excluded from sitemap, `robots: { index: false }`). The only inbound link is the demo home's "Get started" CTA; repoint or drop it when you delete the folder. A typical composition:
 
 ```tsx
 import { Container, Section } from '@/components/layouts';

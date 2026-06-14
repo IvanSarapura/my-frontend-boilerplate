@@ -2,12 +2,11 @@
 
 import type { ButtonHTMLAttributes } from 'react';
 
-import { cx } from '@/lib/utils';
-
-import styles from './button.module.css';
-
-type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'icon';
-type ButtonSize = 'sm' | 'md' | 'lg';
+import {
+  buttonClassName,
+  type ButtonSize,
+  type ButtonVariant,
+} from './button-class';
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   variant?: ButtonVariant;
@@ -23,7 +22,7 @@ export function Button({
 }: ButtonProps) {
   return (
     <button
-      className={cx(styles.button, styles[variant], styles[size], className)}
+      className={buttonClassName({ variant, size, className })}
       {...props}
     >
       {children}

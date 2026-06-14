@@ -17,8 +17,11 @@ never reach search engines.
    page at `src/app/[locale]/page.tsx`.
 3. Adapt the copy (it reads from `src/i18n/messages/*.json`) and swap the `Acme`
    placeholder brand.
-4. **Delete this entire `examples/` folder.** Nothing else imports it, so removal is
-   clean — `build`, `typecheck` and `lint` stay green.
+4. **Delete this entire `examples/` folder.** No code imports it, so removal keeps
+   `build`, `typecheck` and `lint` green. One runtime link points here: the demo
+   home (`src/app/[locale]/page.tsx`) wires its **"Get started"** CTA to
+   `/[locale]/examples`. Repoint or remove that CTA when you delete this folder
+   (you'll be replacing the demo home anyway), or it 404s.
 
 All presets are built only from the shared primitives in `@/components/layouts`,
 `@/components/blocks` and `@/components/ui` — no preset-specific components.

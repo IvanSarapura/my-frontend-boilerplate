@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { Hero } from '@/components/blocks';
 import { Container } from '@/components/layouts';
-import { Button } from '@/components/ui';
+import { Button, ButtonLink } from '@/components/ui';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
@@ -43,7 +43,9 @@ export default async function LocalePage({
           subtitle={dict.home.subtitle}
           actions={
             <>
-              <Button variant="primary">{dict.home.ctaPrimary}</Button>
+              <ButtonLink href={`/${locale}/examples`} variant="primary">
+                {dict.home.ctaPrimary}
+              </ButtonLink>
               <Button variant="secondary">{dict.home.ctaSecondary}</Button>
             </>
           }

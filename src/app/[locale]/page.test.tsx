@@ -40,14 +40,15 @@ describe('Locale home page', () => {
     expect(screen.getByText('Next.js · TypeScript')).toBeInTheDocument();
   });
 
-  it('renders the primary call-to-action', async () => {
+  it('links the primary call-to-action to the examples gallery', async () => {
     const jsx = await LocalePage({
       params: Promise.resolve({ locale: 'en' }),
     });
     render(jsx);
-    expect(
-      screen.getByRole('button', { name: 'Get started' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Get started' })).toHaveAttribute(
+      'href',
+      '/en/examples',
+    );
   });
 
   it('generateMetadata returns the translated title and description', async () => {

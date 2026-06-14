@@ -18,3 +18,12 @@ test('/es homepage has Spanish heading', async ({ page }) => {
     'Boilerplate Frontend',
   );
 });
+
+test('the "Get started" CTA navigates to the examples gallery', async ({
+  page,
+}) => {
+  await page.goto('/en');
+  await page.getByRole('link', { name: 'Get started' }).click();
+  await expect(page).toHaveURL(/\/en\/examples$/);
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
+});
