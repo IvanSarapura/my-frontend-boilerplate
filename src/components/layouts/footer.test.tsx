@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { Footer } from './footer';
 
@@ -57,5 +57,31 @@ describe('Footer', () => {
   it('renders without columns', () => {
     render(<Footer brand="Acme" />);
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('renders repeated hrefs in a column without key collisions', () => {
+    const errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    render(
+      <Footer
+        columns={[
+          {
+            heading: 'Legal',
+            links: [
+              { href: '#', label: 'Privacy' },
+              { href: '#', label: 'Terms' },
+            ],
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole('link', { name: 'Privacy' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Terms' })).toBeInTheDocument();
+    const warnedAboutKeys = errorSpy.mock.calls.some(
+      args => typeof args[0] === 'string' && args[0].includes('same key'),
+    );
+    expect(warnedAboutKeys).toBe(false);
+
+    errorSpy.mockRestore();
   });
 });

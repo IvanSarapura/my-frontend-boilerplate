@@ -61,7 +61,9 @@ export function Footer({
                   <h2 className={styles.heading}>{column.heading}</h2>
                   <ul className={styles.list}>
                     {column.links.map(link => (
-                      <li key={link.href}>
+                      // Key on href + label: hrefs can repeat (placeholder `#`,
+                      // or two labels pointing at the same destination).
+                      <li key={`${link.href}-${link.label}`}>
                         <Link href={link.href} className={styles.link}>
                           {link.label}
                         </Link>
