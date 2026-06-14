@@ -1,0 +1,9 @@
+.section {
+  padding-block: var(--section-py);
+}
+
+/* Full-width background band. --card-bg is AAA with --foreground (see the
+   contrast table in globals.css), so no new color token is needed. */
+.muted {
+  background: var(--card-bg);
+}
