@@ -56,6 +56,13 @@ describe('App-shell preset page', () => {
     );
   });
 
+  it('introduces the feature grid with an h2 (no heading-order gap)', async () => {
+    await renderPage();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Everything you need' }),
+    ).toBeInTheDocument();
+  });
+
   it('marks the current sidebar link active', async () => {
     await renderPage();
     const active = screen

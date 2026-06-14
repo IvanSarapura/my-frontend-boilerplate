@@ -42,6 +42,7 @@
   - [Custom Design System](#custom-design-system)
   - [Typography](#typography)
   - [Responsive / Mobile-First](#responsive--mobile-first)
+  - [Page Shell & Wireframes](#page-shell--wireframes)
   - [Keyboard Navigation](#keyboard-navigation)
   - [Tri-State Theming](#tri-state-theming)
   - [Type-Safe API Client](#type-safe-api-client)
@@ -422,6 +423,57 @@ The UI is **mobile-first**: base styles target the smallest screen and every `@m
 Breakpoint px are literal in CSS because media queries can't read `var()`; `breakpoints.ts` is the canonical source for JS/tests — change a value there and update the matching px in the `*.module.css` files.
 
 The full standard (philosophy, DO/DON'T, gutters, safe-area, gestures, performance, testing) lives in [`.agents/RESPONSIVE.md`](.agents/RESPONSIVE.md), and is codified as the project skill `.agents/skills/mobile-first-modules/` for reuse across projects.
+
+### Page Shell & Wireframes
+
+A layer of **content-agnostic structure primitives** plus **page-region blocks** so a real page never starts from a blank `<main>` with hand-rolled margins. Wrap content in `Container` and correct side gutters + max-width come for free at every breakpoint — the root cause of "content touching the edge" and inconsistent spacing.
+
+**Pieces:**
+
+| Piece                  | Where                                  | Responsibility                                                                           |
+| ---------------------- | -------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `Container` (`size`)   | `src/components/layouts/container.tsx` | Side gutters (16→24→32px) + max-width per `size`: `prose` / `default` / `wide` / `bleed` |
+| `Section`              | `src/components/layouts/section.tsx`   | Semantic `<section>` with vertical rhythm (`--section-py`); `surface="muted"`            |
+| `Header` / `NavLink`   | `src/components/layouts/`              | Sticky `<header>`; active-aware nav links (`aria-current` via `usePathname`)             |
+| `Footer`               | `src/components/layouts/footer.tsx`    | Responsive multi-column footer (1→N) + legal row                                         |
+| `Hero` / `FeatureGrid` | `src/components/blocks/`               | Page-region blocks: hero (eyebrow + headline + CTAs), feature card grid                  |
+
+Layout primitives export from `@/components/layouts`, content blocks from `@/components/blocks`. Width and rhythm come from tokens in `src/app/globals.css` — `--layout-max-{prose,default,wide}` and `--section-py` — never hardcode them.
+
+**How do I pick a starting layout?** Three navigable wireframes live in `src/app/[locale]/examples/` — **Minimal** (centered hero), **Marketing** (header + hero + features + CTA + footer), and **App-Shell** (header + sidebar + content). Browse them at `/en/examples`.
+
+**How do I use one?** Copy the preset you want into your own route, adapt the copy, and **delete `src/app/[locale]/examples/`** — it's a self-contained, throwaway segment (excluded from sitemap, `robots: { index: false }`). A typical composition:
+
+```tsx
+import { Container, Section } from '@/components/layouts';
+import { Hero, FeatureGrid } from '@/components/blocks';
+
+export default function Page() {
+  return (
+    <main>
+      <Section>
+        <Container size="wide">
+          <Hero eyebrow="…" title="…" subtitle="…" actions={/* Buttons */} />
+        </Container>
+      </Section>
+      <Section surface="muted">
+        <Container>
+          <FeatureGrid features={/* … */} />
+        </Container>
+      </Section>
+    </main>
+  );
+}
+```
+
+**Anti-error checklist** (full version in `.agents/WIREFRAME.md §8`):
+
+- Content always flows through `<Container>` — never set `max-width` / `margin: 0 auto` / inline padding on a page `.main` (a stylelint guardrail enforces this; see [`.stylelintrc.json`](.stylelintrc.json)).
+- Mobile-first: base CSS is the smallest screen; `@media` only enhances upward.
+- No horizontal overflow at 320px.
+- Spacing from the `--space-*` scale and primitive gaps, not magic px.
+
+The full phased design (gutter standard, width scale, the three presets, a11y contract) lives in `.agents/WIREFRAME.md`.
 
 ### Keyboard Navigation
 

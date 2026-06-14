@@ -31,3 +31,7 @@
   margin-block: var(--space-2) var(--space-8);
   color: var(--muted);
 }
+
+.sectionHeading {
+  margin-block-end: var(--space-4);
+}

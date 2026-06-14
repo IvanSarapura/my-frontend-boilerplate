@@ -11,9 +11,17 @@ const VIEWPORTS = [
   { name: 'iPhone 14', width: 390, height: 844 },
   { name: 'iPad', width: 768, height: 1024 },
   { name: 'Desktop', width: 1024, height: 768 },
+  { name: 'Desktop Wide', width: 1280, height: 800 },
 ] as const;
 
-const PAGES = ['/en', '/en/contact'] as const;
+const PAGES = [
+  '/en',
+  '/en/contact',
+  '/en/posts',
+  '/en/examples/minimal',
+  '/en/examples/marketing',
+  '/en/examples/app-shell',
+] as const;
 
 for (const vp of VIEWPORTS) {
   test.describe(`${vp.name} (${vp.width}px)`, () => {

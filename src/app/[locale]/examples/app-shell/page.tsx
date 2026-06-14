@@ -74,6 +74,7 @@ export default async function AppShellPreset({
           <main className={styles.content}>
             <h1>{dict.examples.appShellName}</h1>
             <p className={styles.intro}>{dict.examples.appShellDesc}</p>
+            <h2 className={styles.sectionHeading}>{dict.features.heading}</h2>
             <FeatureGrid features={dict.features.items} cols={2} />
           </main>
         </div>
