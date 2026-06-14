@@ -138,6 +138,15 @@
     --space-12: 3rem;
     --space-16: 4rem;
 
+    /* Layout — page-shell content widths + section rhythm.
+       Container consumes these in WIREFRAME Fase 1; Section reads
+       --section-py in Fase 2. --layout-max-default mirrors Container's
+       current 1200px. */
+    --layout-max-prose: 65ch;
+    --layout-max-default: 1200px;
+    --layout-max-wide: 1440px;
+    --section-py: clamp(2.5rem, 6vw, 5rem);
+
     /*
      * Typography — font families.
      * `--font-sans` / `--font-mono` are the public, framework-agnostic aliases

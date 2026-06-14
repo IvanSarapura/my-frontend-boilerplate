@@ -12,7 +12,38 @@
   },
   "home": {
     "title": "Boilerplate Frontend",
-    "subtitle": "Next.js · TypeScript · Vitest · Prettier · ESLint"
+    "subtitle": "Next.js · TypeScript · Vitest · Prettier · ESLint",
+    "eyebrow": "Listo para producción",
+    "ctaPrimary": "Comenzar",
+    "ctaSecondary": "Ver en GitHub"
+  },
+  "nav": {
+    "label": "Navegación principal",
+    "home": "Inicio",
+    "features": "Características",
+    "pricing": "Precios",
+    "contact": "Contacto",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "hero": {
+    "eyebrow": "Nuevo",
+    "title": "Construye tu próxima idea, más rápido",
+    "subtitle": "Un punto de partida profesional, accesible y responsive — listo para adaptar a tu marca.",
+    "ctaPrimary": "Comenzar",
+    "ctaSecondary": "Saber más"
+  },
+  "cta": {
+    "title": "¿Listo para empezar?",
+    "subtitle": "Clona el boilerplate y publica en minutos.",
+    "button": "Empezar ahora"
+  },
+  "footer": {
+    "tagline": "Un boilerplate frontend profesional con Next.js.",
+    "product": "Producto",
+    "company": "Empresa",
+    "legal": "Legal",
+    "rights": "Todos los derechos reservados."
   },
   "posts": {
     "title": "Publicaciones",

@@ -1,6 +1,5 @@
 .container {
   width: 100%;
-  max-width: 1200px;
   padding-inline: var(--space-4);
   margin-inline: auto;
 }
@@ -15,4 +14,25 @@
   .container {
     padding-inline: var(--space-8);
   }
+}
+
+/* Content-width scale — single source for the max-widths in globals.css. */
+.prose {
+  max-width: var(--layout-max-prose);
+}
+
+.default {
+  max-width: var(--layout-max-default);
+}
+
+.wide {
+  max-width: var(--layout-max-wide);
+}
+
+/* Full-bleed: spans the viewport edge-to-edge (no max-width, no gutters).
+   Re-contain the inner content with a nested <Container> for banded sections
+   that need a full-width background but centered, gutter-padded content. */
+.bleed {
+  max-width: none;
+  padding-inline: 0;
 }

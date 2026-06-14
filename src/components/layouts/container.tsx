@@ -4,11 +4,22 @@ import { cx } from '@/lib/utils';
 
 import styles from './container.module.css';
 
-type ContainerProps = HTMLAttributes<HTMLDivElement>;
+/** Content-width scale — see globals.css `--layout-max-*`. `bleed` spans
+ * edge-to-edge; re-contain inner content with a nested `<Container>`. */
+type ContainerSize = 'prose' | 'default' | 'wide' | 'bleed';
 
-export function Container({ className, children, ...props }: ContainerProps) {
+interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
+  size?: ContainerSize;
+}
+
+export function Container({
+  size = 'default',
+  className,
+  children,
+  ...props
+}: ContainerProps) {
   return (
-    <div className={cx(styles.container, className)} {...props}>
+    <div className={cx(styles.container, styles[size], className)} {...props}>
       {children}
     </div>
   );

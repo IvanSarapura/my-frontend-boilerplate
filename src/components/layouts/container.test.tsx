@@ -14,6 +14,23 @@ describe('Container', () => {
     expect(screen.getByTestId('c')).toHaveClass('container');
   });
 
+  it('applies the default size when none is given', () => {
+    render(<Container data-testid="c">X</Container>);
+    expect(screen.getByTestId('c')).toHaveClass('container', 'default');
+  });
+
+  it.each(['prose', 'wide', 'bleed'] as const)(
+    'applies the requested size: %s',
+    size => {
+      render(
+        <Container size={size} data-testid="c">
+          X
+        </Container>,
+      );
+      expect(screen.getByTestId('c')).toHaveClass('container', size);
+    },
+  );
+
   it('merges custom className', () => {
     render(
       <Container className="extra" data-testid="c">
