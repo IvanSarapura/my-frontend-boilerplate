@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 
+import { Container } from '@/components/layouts';
 import { getPostById, getPosts } from '@/features/posts';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
@@ -135,23 +136,25 @@ export default async function PostDetailPage({ params }: PageProps) {
 
   return (
     <main className={styles.main}>
-      <Suspense fallback={null}>
-        <PostStructuredData
-          locale={parsed.locale}
-          title={post.title}
-          body={post.body}
-          numericId={parsed.numericId}
-          homeTitle={dict.home.title}
-          postsTitle={dict.posts.title}
-        />
-      </Suspense>
-      <Link href={`/${parsed.locale}/posts`} className={styles.back}>
-        ← {dict.posts.title}
-      </Link>
-      <article className={styles.article}>
-        <h1 className={styles.title}>{post.title}</h1>
-        <p className={styles.body}>{post.body}</p>
-      </article>
+      <Container size="prose">
+        <Suspense fallback={null}>
+          <PostStructuredData
+            locale={parsed.locale}
+            title={post.title}
+            body={post.body}
+            numericId={parsed.numericId}
+            homeTitle={dict.home.title}
+            postsTitle={dict.posts.title}
+          />
+        </Suspense>
+        <Link href={`/${parsed.locale}/posts`} className={styles.back}>
+          ← {dict.posts.title}
+        </Link>
+        <article className={styles.article}>
+          <h1 className={styles.title}>{post.title}</h1>
+          <p className={styles.body}>{post.body}</p>
+        </article>
+      </Container>
     </main>
   );
 }

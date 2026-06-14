@@ -1,23 +1,8 @@
 .main {
   display: flex;
   flex: 1;
-  flex-direction: column;
-  gap: var(--space-4);
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-  padding: var(--space-8);
-  font-family: var(--font-sans);
-}
-
-.title {
-  font-size: var(--text-4xl);
-  font-weight: var(--weight-bold);
-  color: var(--foreground);
-  letter-spacing: var(--tracking-snug);
-}
-
-.subtitle {
-  font-size: var(--text-base);
-  color: var(--muted);
+  min-block-size: 100vh;
+  padding-block: var(--space-8);
 }

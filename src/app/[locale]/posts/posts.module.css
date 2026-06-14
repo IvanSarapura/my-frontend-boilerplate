@@ -1,7 +1,5 @@
 .main {
-  max-width: 800px;
-  padding: var(--space-8) var(--space-4);
-  margin: 0 auto;
+  padding-block: var(--space-8);
 }
 
 .title {

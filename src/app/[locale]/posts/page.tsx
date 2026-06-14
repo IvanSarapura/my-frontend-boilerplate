@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { Container } from '@/components/layouts';
 import { getPosts, PostComments, PostList } from '@/features/posts';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
@@ -38,10 +39,15 @@ export default async function PostsPage({
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>{dict.posts.title}</h1>
-      <p className={styles.description}>{dict.posts.description}</p>
-      <PostList posts={posts} getHref={post => `/${locale}/posts/${post.id}`} />
-      <PostComments posts={posts} />
+      <Container size="prose">
+        <h1 className={styles.title}>{dict.posts.title}</h1>
+        <p className={styles.description}>{dict.posts.description}</p>
+        <PostList
+          posts={posts}
+          getHref={post => `/${locale}/posts/${post.id}`}
+        />
+        <PostComments posts={posts} />
+      </Container>
     </main>
   );
 }

@@ -9,7 +9,13 @@ vi.mock('next/navigation', () => ({
 
 vi.mock('@/i18n/dictionaries', () => ({
   getDictionary: vi.fn().mockResolvedValue({
-    home: { title: 'Frontend Boilerplate', subtitle: 'Next.js · TypeScript' },
+    home: {
+      title: 'Frontend Boilerplate',
+      subtitle: 'Next.js · TypeScript',
+      eyebrow: 'Production-ready',
+      ctaPrimary: 'Get started',
+      ctaSecondary: 'View on GitHub',
+    },
     common: {},
     posts: {},
   }),
@@ -32,6 +38,16 @@ describe('Locale home page', () => {
     });
     render(jsx);
     expect(screen.getByText('Next.js · TypeScript')).toBeInTheDocument();
+  });
+
+  it('renders the primary call-to-action', async () => {
+    const jsx = await LocalePage({
+      params: Promise.resolve({ locale: 'en' }),
+    });
+    render(jsx);
+    expect(
+      screen.getByRole('button', { name: 'Get started' }),
+    ).toBeInTheDocument();
   });
 
   it('generateMetadata returns the translated title and description', async () => {

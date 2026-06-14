@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { Hero } from '@/components/blocks';
+import { Container } from '@/components/layouts';
+import { Button } from '@/components/ui';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
@@ -32,8 +35,20 @@ export default async function LocalePage({
 
   return (
     <main className={styles.main}>
-      <h1 className={styles.title}>{dict.home.title}</h1>
-      <p className={styles.subtitle}>{dict.home.subtitle}</p>
+      <Container size="prose">
+        <Hero
+          align="center"
+          eyebrow={dict.home.eyebrow}
+          title={dict.home.title}
+          subtitle={dict.home.subtitle}
+          actions={
+            <>
+              <Button variant="primary">{dict.home.ctaPrimary}</Button>
+              <Button variant="secondary">{dict.home.ctaSecondary}</Button>
+            </>
+          }
+        />
+      </Container>
     </main>
   );
 }
