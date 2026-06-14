@@ -1,0 +1,26 @@
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target-min);
+  padding-inline: var(--space-2);
+  font-weight: var(--weight-medium);
+  color: var(--muted);
+  border-radius: var(--radius-sm);
+  transition:
+    color var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.link:hover {
+  color: var(--foreground);
+  background: var(--color-hover-surface);
+}
+
+.active {
+  color: var(--foreground);
+}
+
+.link:focus-visible {
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--color-focus-ring-offset);
+}

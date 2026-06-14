@@ -1,0 +1,31 @@
+.header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-sticky);
+  background: var(--background);
+  border-block-end: 1px solid var(--card-border);
+}
+
+.bar {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  min-block-size: var(--touch-target-min);
+  padding-block: var(--space-3);
+}
+
+.brand {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+}
+
+/* Push the nav (inline links on desktop, hamburger on mobile) and the actions
+   to the trailing edge. */
+.nav {
+  margin-inline-start: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+}
