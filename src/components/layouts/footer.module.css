@@ -1,6 +1,58 @@
 .footer {
-  padding-block: var(--section-py);
+  /* Asymmetric: generous top to detach from page content, snug bottom so the
+     copyright line doesn't float above a deep void at the page edge. */
+  padding-block: var(--section-py) var(--space-8);
   border-block-start: 1px solid var(--card-border);
+}
+
+/* Brand leads a multi-column row. Mobile-first: 1 column, then link columns,
+   then a single desktop row with a wider brand track. */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-8);
+}
+
+/* Tablet: link columns 2-up; the brand block spans the full width above them. */
+@media (width >= 768px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .withBrand .brandCol {
+    grid-column: 1 / -1;
+  }
+}
+
+/* Desktop: everything on one row — wider brand track + equal link tracks. */
+@media (width >= 1024px) {
+  .cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .cols-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .withBrand.cols-3 {
+    grid-template-columns: 1.6fr 1fr 1fr;
+  }
+
+  .withBrand.cols-4 {
+    grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  }
+
+  .withBrand.cols-5 {
+    grid-template-columns: 1.6fr repeat(4, 1fr);
+  }
+
+  .withBrand .brandCol {
+    grid-column: auto;
+  }
 }
 
 .brand {
@@ -9,7 +61,7 @@
 }
 
 .tagline {
-  max-inline-size: 40ch;
+  max-inline-size: 32ch;
   margin-block-start: var(--space-2);
   color: var(--muted);
 }
