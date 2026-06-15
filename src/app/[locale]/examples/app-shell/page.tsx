@@ -1,14 +1,20 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import { FeatureGrid } from '@/components/blocks';
-import { Container, Footer, Header, NavLink } from '@/components/layouts';
-import { ThemeToggle } from '@/components/ui';
+import { Cluster, Container, Footer, NavLink } from '@/components/layouts';
+import { Badge, ThemeToggle } from '@/components/ui';
+import {
+  HomeIcon,
+  InfoIcon,
+  PersonIcon,
+  SettingsIcon,
+} from '@/components/ui/icon';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 
 import styles from './app-shell.module.css';
+import { SettingsForm } from './settings-form';
 
 export async function generateMetadata({
   params,
@@ -32,38 +38,45 @@ export default async function AppShellPreset({
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
   const dict = await getDictionary(locale as Locale);
+  const t = dict.examples.appShell;
 
-  const navLinks = [
-    { href: `/${locale}`, label: dict.nav.home },
-    { href: `/${locale}/contact`, label: dict.nav.contact },
-  ];
-
-  const sidebarLinks = [
-    { href: `/${locale}/examples/app-shell`, label: dict.nav.home },
-    { href: `/${locale}/examples/marketing`, label: dict.nav.features },
-    { href: `/${locale}/contact`, label: dict.nav.contact },
+  const navItems = [
+    { label: t.nav.overview, href: '#overview', Icon: HomeIcon },
+    { label: t.nav.profile, href: '#profile', Icon: PersonIcon },
+    // Active item points at this page; the rest are wireframe stubs.
+    {
+      label: t.nav.settings,
+      href: `/${locale}/examples/app-shell`,
+      Icon: SettingsIcon,
+    },
+    { label: t.nav.help, href: '#help', Icon: InfoIcon },
   ];
 
   return (
     <>
-      <Header
-        brand={<NavLink href={`/${locale}`}>Acme</NavLink>}
-        links={navLinks}
-        actions={<ThemeToggle />}
-        navLabel={dict.nav.label}
-        menuLabel={dict.nav.openMenu}
-        closeLabel={dict.nav.closeMenu}
-      />
+      <header className={styles.topbar}>
+        <Container>
+          <div className={styles.topbarInner}>
+            <NavLink href={`/${locale}`} className={styles.brand}>
+              Acme
+            </NavLink>
+            <div className={styles.topbarActions}>
+              <ThemeToggle />
+            </div>
+          </div>
+        </Container>
+      </header>
 
       <Container>
         <div className={styles.shell}>
-          <aside>
-            <nav aria-label={dict.examples.appShellName}>
-              <ul className={styles.sidebarList}>
-                {sidebarLinks.map(link => (
-                  <li key={link.href}>
-                    <NavLink href={link.href} className={styles.sidebarLink}>
-                      {link.label}
+          <aside className={styles.sidebar}>
+            <nav aria-label={t.navLabel}>
+              <ul className={styles.navList}>
+                {navItems.map(item => (
+                  <li key={item.label}>
+                    <NavLink href={item.href} className={styles.navLink}>
+                      <item.Icon size={18} />
+                      <span>{item.label}</span>
                     </NavLink>
                   </li>
                 ))}
@@ -72,10 +85,15 @@ export default async function AppShellPreset({
           </aside>
 
           <main className={styles.content}>
-            <h1>{dict.examples.appShellName}</h1>
-            <p className={styles.intro}>{dict.examples.appShellDesc}</p>
-            <h2 className={styles.sectionHeading}>{dict.features.heading}</h2>
-            <FeatureGrid features={dict.features.items} cols={2} />
+            <div className={styles.pageHeader}>
+              <Cluster gap={2}>
+                <h1 className={styles.title}>{t.title}</h1>
+                <Badge variant="primary">{t.badge}</Badge>
+              </Cluster>
+              <p className={styles.subtitle}>{t.subtitle}</p>
+            </div>
+
+            <SettingsForm labels={t} />
           </main>
         </div>
       </Container>

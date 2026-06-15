@@ -73,16 +73,11 @@ test.describe('app-shell preset landmarks', () => {
     await expect(page.getByRole('contentinfo')).toHaveCount(1);
   });
 
-  test('has two navigations with distinct accessible names', async ({
-    page,
-  }) => {
+  test('exposes a labelled sidebar navigation', async ({ page }) => {
     await page.goto('/en/examples/app-shell');
-    // Multiple nav landmarks must be individually labelled (WCAG ARIA11).
+    // The sidebar is the primary nav; it must carry an accessible name.
     await expect(
-      page.getByRole('navigation', { name: 'Main navigation' }),
-    ).toBeVisible();
-    await expect(
-      page.getByRole('navigation', { name: 'App shell' }),
+      page.getByRole('navigation', { name: 'Account' }),
     ).toBeVisible();
   });
 });

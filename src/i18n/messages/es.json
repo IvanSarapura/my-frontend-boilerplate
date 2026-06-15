@@ -83,7 +83,28 @@
     "marketingName": "Marketing",
     "marketingDesc": "Navbar sticky, hero, rejilla de features, banda CTA y footer.",
     "appShellName": "App shell",
-    "appShellDesc": "Header, barra lateral y región de contenido — base para dashboards."
+    "appShellDesc": "Header, barra lateral y región de contenido — base para dashboards.",
+    "appShell": {
+      "navLabel": "Cuenta",
+      "nav": {
+        "overview": "Resumen",
+        "profile": "Perfil",
+        "settings": "Ajustes",
+        "help": "Ayuda"
+      },
+      "title": "Ajustes",
+      "badge": "Pro",
+      "subtitle": "Gestiona los datos y preferencias de tu cuenta.",
+      "profileTitle": "Perfil",
+      "nameLabel": "Nombre visible",
+      "nameValue": "Ada Lovelace",
+      "emailLabel": "Correo electrónico",
+      "emailValue": "ada@example.com",
+      "prefsTitle": "Preferencias",
+      "notif1": "Notificaciones por correo",
+      "notif2": "Resumen semanal",
+      "saveAction": "Guardar cambios"
+    }
   },
   "posts": {
     "title": "Publicaciones",

@@ -12,26 +12,29 @@ vi.mock('next/navigation', () => ({
 
 vi.mock('@/i18n/dictionaries', () => ({
   getDictionary: vi.fn().mockResolvedValue({
-    nav: {
-      label: 'Main navigation',
-      home: 'Home',
-      features: 'Features',
-      pricing: 'Pricing',
-      contact: 'Contact',
-      openMenu: 'Open menu',
-      closeMenu: 'Close menu',
-    },
     examples: {
       appShellName: 'App shell',
-      appShellDesc: 'A base for dashboards.',
-    },
-    features: {
-      heading: 'Everything you need',
-      items: [
-        { title: 'Fast', description: 'a' },
-        { title: 'Accessible', description: 'b' },
-        { title: 'Zero deps', description: 'c' },
-      ],
+      appShell: {
+        navLabel: 'Account',
+        nav: {
+          overview: 'Overview',
+          profile: 'Profile',
+          settings: 'Settings',
+          help: 'Help',
+        },
+        title: 'Settings',
+        badge: 'Pro',
+        subtitle: 'Manage your account.',
+        profileTitle: 'Profile',
+        nameLabel: 'Display name',
+        nameValue: 'Ada Lovelace',
+        emailLabel: 'Email',
+        emailValue: 'ada@example.com',
+        prefsTitle: 'Preferences',
+        notif1: 'Email notifications',
+        notif2: 'Weekly digest',
+        saveAction: 'Save changes',
+      },
     },
     footer: { rights: 'All rights reserved.' },
   }),
@@ -44,22 +47,29 @@ function renderPage(locale = 'en') {
 }
 
 describe('App-shell preset page', () => {
-  it('renders header, sidebar nav and main content', async () => {
+  it('renders the topbar, sidebar nav and settings heading', async () => {
     await renderPage();
     expect(screen.getByRole('banner')).toBeInTheDocument();
     expect(screen.getByRole('contentinfo')).toBeInTheDocument();
     expect(
-      screen.getByRole('navigation', { name: 'App shell' }),
+      screen.getByRole('navigation', { name: 'Account' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'App shell',
+      'Settings',
     );
   });
 
-  it('introduces the feature grid with an h2 (no heading-order gap)', async () => {
+  it('renders the settings cards (valid h1→h2 order) and controls', async () => {
     await renderPage();
     expect(
-      screen.getByRole('heading', { level: 2, name: 'Everything you need' }),
+      screen.getByRole('heading', { level: 2, name: 'Profile' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Preferences' }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText('Display name')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Save changes' }),
     ).toBeInTheDocument();
   });
 

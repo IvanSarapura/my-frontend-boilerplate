@@ -83,7 +83,28 @@
     "marketingName": "Marketing",
     "marketingDesc": "Sticky navbar, hero, feature grid, CTA band and footer.",
     "appShellName": "App shell",
-    "appShellDesc": "Header, sidebar and content region — a base for dashboards."
+    "appShellDesc": "Header, sidebar and content region — a base for dashboards.",
+    "appShell": {
+      "navLabel": "Account",
+      "nav": {
+        "overview": "Overview",
+        "profile": "Profile",
+        "settings": "Settings",
+        "help": "Help"
+      },
+      "title": "Settings",
+      "badge": "Pro",
+      "subtitle": "Manage your account details and preferences.",
+      "profileTitle": "Profile",
+      "nameLabel": "Display name",
+      "nameValue": "Ada Lovelace",
+      "emailLabel": "Email",
+      "emailValue": "ada@example.com",
+      "prefsTitle": "Preferences",
+      "notif1": "Email notifications",
+      "notif2": "Weekly digest",
+      "saveAction": "Save changes"
+    }
   },
   "posts": {
     "title": "Posts",
