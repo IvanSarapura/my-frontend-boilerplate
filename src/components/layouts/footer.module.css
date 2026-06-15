@@ -99,6 +99,7 @@
 
 .legal {
   padding-block-start: var(--space-6);
+  margin-block-start: var(--space-8);
   font-size: var(--font-caption);
   color: var(--muted);
   border-block-start: 1px solid var(--card-border);

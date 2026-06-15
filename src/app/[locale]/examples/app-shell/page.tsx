@@ -98,7 +98,10 @@ export default async function AppShellPreset({
         </div>
       </Container>
 
-      <Footer brand="Acme" legal={`© Acme · ${dict.footer.rights}`} />
+      <Footer
+        brand="Acme"
+        legal={`© ${new Date().getFullYear()} Acme · ${dict.footer.rights}`}
+      />
     </>
   );
 }

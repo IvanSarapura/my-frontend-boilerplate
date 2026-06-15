@@ -117,7 +117,7 @@ export default async function MarketingPreset({
         brand="Acme"
         tagline={dict.footer.tagline}
         columns={footerColumns}
-        legal={`© Acme · ${dict.footer.rights}`}
+        legal={`© ${new Date().getFullYear()} Acme · ${dict.footer.rights}`}
       />
     </>
   );
