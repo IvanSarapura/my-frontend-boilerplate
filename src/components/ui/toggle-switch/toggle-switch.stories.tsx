@@ -1,7 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import { MoonIcon } from '@/components/ui/icon';
-
 import { ToggleSwitch } from './toggle-switch';
 
 const meta = {
@@ -104,10 +102,4 @@ export const NoLabel: Story = {
     size: 'md',
     'aria-label': 'Toggle feature',
   },
-};
-
-/** A decorative icon can ride inside the sliding thumb (used by `ThemeSwitch`). */
-export const WithThumbIcon: Story = {
-  args: { label: 'Dark mode', variant: 'rounded', size: 'lg' },
-  render: args => <ToggleSwitch {...args} icon={<MoonIcon />} />,
 };
