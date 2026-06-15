@@ -43,6 +43,16 @@
   outline-offset: var(--color-focus-ring-offset);
 }
 
+/* Bare toggle — drop the button chrome so the hamburger reads as a plain icon
+   (congruent with an adjacent ThemeSwitch). Hit area + focus ring stay. */
+.bare {
+  border-radius: 0;
+}
+
+.bare:hover {
+  background: none;
+}
+
 /* Mobile: full-screen backdrop, hidden until open. */
 .overlay {
   position: fixed;

@@ -24,6 +24,9 @@ interface MobileNavProps {
   closeLabel?: string;
   /** Scales the hamburger/close target + icon. `lg` pairs with `<Header size="lg">`. */
   size?: MobileNavSize;
+  /** Strip the hamburger's button chrome → a plain icon (keeps tap target +
+   * focus ring). Useful next to a `ThemeSwitch` for equal-height controls. */
+  bareToggle?: boolean;
   className?: string;
 }
 
@@ -41,6 +44,7 @@ export function MobileNav({
   menuLabel = 'Open menu',
   closeLabel = 'Close menu',
   size = 'md',
+  bareToggle = false,
   className,
 }: MobileNavProps) {
   const [open, toggle, setOpen] = useToggle(false);
@@ -70,7 +74,7 @@ export function MobileNav({
     <nav aria-label={label} className={cx(styles.nav, styles[size], className)}>
       <button
         type="button"
-        className={styles.toggle}
+        className={cx(styles.toggle, bareToggle && styles.bare)}
         aria-label={menuLabel}
         aria-expanded={open}
         aria-controls={menuId}

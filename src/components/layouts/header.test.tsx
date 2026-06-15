@@ -51,4 +51,11 @@ describe('Header', () => {
     render(<Header brand="Acme" size="lg" />);
     expect(screen.getByRole('banner')).toHaveClass('header', 'lg');
   });
+
+  it('forwards bareToggle to the hamburger button', () => {
+    render(<Header brand="Acme" bareToggle menuLabel="Open menu" />);
+    expect(screen.getByRole('button', { name: 'Open menu' })).toHaveClass(
+      'bare',
+    );
+  });
 });

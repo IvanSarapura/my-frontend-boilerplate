@@ -33,6 +33,18 @@ describe('MobileNav', () => {
     expect(screen.getByRole('link', { name: 'Beta' })).toBeInTheDocument();
   });
 
+  it('renders a bare hamburger (no button chrome) but keeps it operable', () => {
+    render(
+      <MobileNav label="Main" bareToggle>
+        <a href="#a">Alpha</a>
+      </MobileNav>,
+    );
+    const toggle = screen.getByRole('button', { name: 'Open menu' });
+    expect(toggle).toHaveClass('toggle', 'bare');
+    fireEvent.click(toggle);
+    expect(screen.getByRole('dialog', { name: 'Main' })).toBeInTheDocument();
+  });
+
   it('scales up the hamburger and icon in the lg size', () => {
     render(
       <MobileNav label="Main" size="lg">

@@ -25,6 +25,8 @@ interface HeaderProps {
   closeLabel?: string;
   /** `lg` scales the bar, wordmark and hamburger up; `md` is the default. */
   size?: 'md' | 'lg';
+  /** Render the hamburger as a bare icon (no button box) — see `MobileNav`. */
+  bareToggle?: boolean;
   className?: string;
 }
 
@@ -38,6 +40,7 @@ export function Header({
   menuLabel,
   closeLabel,
   size = 'md',
+  bareToggle = false,
   className,
 }: HeaderProps) {
   return (
@@ -48,6 +51,7 @@ export function Header({
           <MobileNav
             className={cx(styles.nav)}
             size={size}
+            bareToggle={bareToggle}
             {...(navLabel !== undefined && { label: navLabel })}
             {...(menuLabel !== undefined && { menuLabel })}
             {...(closeLabel !== undefined && { closeLabel })}

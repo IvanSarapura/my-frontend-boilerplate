@@ -19,6 +19,7 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   argTypes: {
     size: { control: { type: 'inline-radio' }, options: ['md', 'lg'] },
+    bareToggle: { control: 'boolean' },
   },
   decorators: [
     Story => (
@@ -57,6 +58,18 @@ export const MobileBig: Story = {
   args: {
     ...Default.args,
     size: 'lg',
+    actions: <ThemeSwitch size="md" hideLabel />,
+  },
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+};
+
+/** v2 of MobileBig — the hamburger is a bare icon (no button box), so its 28px
+ *  SVG matches the 28px ThemeSwitch beside it. */
+export const MobileBigBareMenu: Story = {
+  args: {
+    ...Default.args,
+    size: 'lg',
+    bareToggle: true,
     actions: <ThemeSwitch size="md" hideLabel />,
   },
   parameters: { viewport: { defaultViewport: 'mobile1' } },
