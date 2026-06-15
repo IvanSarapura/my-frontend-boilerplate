@@ -28,6 +28,7 @@ export { Skeleton } from './skeleton';
 export { Spinner } from './spinner';
 export { Tabs, TabsContent, TabsList, TabsTrigger } from './tabs';
 export { Textarea } from './textarea';
+export { ThemeSwitch } from './theme-switch';
 export { ThemeToggle } from './theme-toggle';
 export { Toaster } from './toaster';
 export { ToggleSwitch } from './toggle-switch';
