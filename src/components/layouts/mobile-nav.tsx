@@ -11,6 +11,8 @@ import { cx } from '@/lib/utils';
 
 import styles from './mobile-nav.module.css';
 
+type MobileNavSize = 'md' | 'lg';
+
 interface MobileNavProps {
   /** Links/content: shown inline on desktop, inside the drawer on mobile. */
   children: React.ReactNode;
@@ -20,8 +22,13 @@ interface MobileNavProps {
   menuLabel?: string;
   /** Accessible name for the in-drawer close button. */
   closeLabel?: string;
+  /** Scales the hamburger/close target + icon. `lg` pairs with `<Header size="lg">`. */
+  size?: MobileNavSize;
   className?: string;
 }
+
+/** Menu/close icon px paired to each size so the glyph scales with the target. */
+const ICON_SIZE: Record<MobileNavSize, number> = { md: 24, lg: 28 };
 
 /**
  * Responsive navigation: an inline bar from `md` up, and a hamburger-driven
@@ -33,6 +40,7 @@ export function MobileNav({
   label = 'Main navigation',
   menuLabel = 'Open menu',
   closeLabel = 'Close menu',
+  size = 'md',
   className,
 }: MobileNavProps) {
   const [open, toggle, setOpen] = useToggle(false);
@@ -59,7 +67,7 @@ export function MobileNav({
     : {};
 
   return (
-    <nav aria-label={label} className={cx(styles.nav, className)}>
+    <nav aria-label={label} className={cx(styles.nav, styles[size], className)}>
       <button
         type="button"
         className={styles.toggle}
@@ -69,7 +77,7 @@ export function MobileNav({
         aria-haspopup="dialog"
         onClick={toggle}
       >
-        <MenuIcon size={24} />
+        <MenuIcon size={ICON_SIZE[size]} />
       </button>
 
       <div
@@ -85,7 +93,7 @@ export function MobileNav({
               aria-label={closeLabel}
               onClick={close}
             >
-              <CloseIcon size={24} />
+              <CloseIcon size={ICON_SIZE[size]} />
             </button>
           )}
           {children}

@@ -87,6 +87,14 @@
   outline-offset: var(--color-focus-ring-offset);
 }
 
+/* Larger variant — pairs with <Header size="lg">. Bumps the hamburger/close
+   target to the 48px Material size (icon px scales via ICON_SIZE in the TSX). */
+.lg .toggle,
+.lg .close {
+  min-inline-size: var(--space-12);
+  min-block-size: var(--space-12);
+}
+
 /* The page gutter grows to 24px at sm; track it so the close button stays
    aligned with the hamburger. */
 @media (width >= 640px) {

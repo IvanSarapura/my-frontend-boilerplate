@@ -23,6 +23,8 @@ interface HeaderProps {
   navLabel?: string;
   menuLabel?: string;
   closeLabel?: string;
+  /** `lg` scales the bar, wordmark and hamburger up; `md` is the default. */
+  size?: 'md' | 'lg';
   className?: string;
 }
 
@@ -35,15 +37,17 @@ export function Header({
   navLabel,
   menuLabel,
   closeLabel,
+  size = 'md',
   className,
 }: HeaderProps) {
   return (
-    <header className={cx(styles.header, className)}>
+    <header className={cx(styles.header, styles[size], className)}>
       <Container>
         <div className={styles.bar}>
           <div className={styles.brand}>{brand}</div>
           <MobileNav
             className={cx(styles.nav)}
+            size={size}
             {...(navLabel !== undefined && { label: navLabel })}
             {...(menuLabel !== undefined && { menuLabel })}
             {...(closeLabel !== undefined && { closeLabel })}

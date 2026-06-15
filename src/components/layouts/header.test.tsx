@@ -46,4 +46,9 @@ describe('Header', () => {
       screen.getByRole('button', { name: 'Open menu' }),
     ).toBeInTheDocument();
   });
+
+  it('applies the lg size class to the banner', () => {
+    render(<Header brand="Acme" size="lg" />);
+    expect(screen.getByRole('banner')).toHaveClass('header', 'lg');
+  });
 });

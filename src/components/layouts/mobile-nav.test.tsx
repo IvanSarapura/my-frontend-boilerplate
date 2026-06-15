@@ -33,6 +33,20 @@ describe('MobileNav', () => {
     expect(screen.getByRole('link', { name: 'Beta' })).toBeInTheDocument();
   });
 
+  it('scales up the hamburger and icon in the lg size', () => {
+    render(
+      <MobileNav label="Main" size="lg">
+        <a href="#a">Alpha</a>
+      </MobileNav>,
+    );
+    expect(screen.getByRole('navigation', { name: 'Main' })).toHaveClass('lg');
+    // ICON_SIZE.lg drives the menu glyph dimensions (24 → 28).
+    const icon = screen
+      .getByRole('button', { name: 'Open menu' })
+      .querySelector('svg');
+    expect(icon).toHaveAttribute('width', '28');
+  });
+
   it('opens the drawer when the hamburger is clicked', () => {
     setup();
     fireEvent.click(screen.getByRole('button', { name: 'Open menu' }));

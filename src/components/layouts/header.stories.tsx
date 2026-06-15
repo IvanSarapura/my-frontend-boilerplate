@@ -16,6 +16,9 @@ const meta = {
   component: Header,
   tags: ['autodocs'],
   parameters: { layout: 'fullscreen' },
+  argTypes: {
+    size: { control: { type: 'inline-radio' }, options: ['md', 'lg'] },
+  },
   decorators: [
     Story => (
       <ThemeProvider>
@@ -44,5 +47,11 @@ export const Default: Story = {
 
 export const Mobile: Story = {
   args: Default.args,
+  parameters: { viewport: { defaultViewport: 'mobile1' } },
+};
+
+/** Larger mobile navbar — a taller bar, bigger wordmark and a 48px hamburger. */
+export const MobileBig: Story = {
+  args: { ...Default.args, size: 'lg' },
   parameters: { viewport: { defaultViewport: 'mobile1' } },
 };

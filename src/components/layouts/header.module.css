@@ -25,6 +25,17 @@
   align-items: center;
 }
 
+/* Larger variant — a taller bar and bigger wordmark. The hamburger scales via
+   MobileNav's own `lg` size (forwarded by Header). */
+.lg .bar {
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+}
+
+.lg .brand {
+  font-size: var(--text-xl);
+}
+
 /* Mobile: the hamburger stays at the trailing edge with the actions (e.g. the
    theme toggle) to its left. On desktop the inline links lead and the actions
    trail (DOM order), so no reorder is needed there. */
