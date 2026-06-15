@@ -452,7 +452,7 @@ export default function Page() {
   return (
     <main>
       <Section>
-        <Container size="wide">
+        <Container>
           <Hero eyebrow="…" title="…" subtitle="…" actions={/* Buttons */} />
         </Container>
       </Section>

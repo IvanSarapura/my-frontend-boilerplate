@@ -80,7 +80,7 @@ export default async function MarketingPreset({
 
       <main>
         <Section>
-          <Container size="wide">
+          <Container>
             <Hero
               eyebrow={dict.hero.eyebrow}
               title={dict.hero.title}
