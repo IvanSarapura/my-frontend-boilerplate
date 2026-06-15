@@ -59,4 +59,11 @@ describe('ToggleSwitch', () => {
     render(<ToggleSwitch label="Theme" name="theme" />);
     expect(screen.getByLabelText('Theme')).toHaveAttribute('id', 'theme');
   });
+
+  it('renders a decorative icon inside the thumb when provided', () => {
+    render(
+      <ToggleSwitch label="Theme" icon={<svg data-testid="thumb-icon" />} />,
+    );
+    expect(screen.getByTestId('thumb-icon')).toBeInTheDocument();
+  });
 });

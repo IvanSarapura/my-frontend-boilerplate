@@ -1,4 +1,4 @@
-import { type InputHTMLAttributes, useId } from 'react';
+import { type InputHTMLAttributes, type ReactNode, useId } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -15,6 +15,8 @@ type ToggleSwitchProps = Omit<
   size?: ToggleSwitchSize;
   label?: string;
   labelPosition?: 'left' | 'right';
+  /** Optional decorative content rendered inside the sliding thumb. */
+  icon?: ReactNode;
 };
 
 export function ToggleSwitch({
@@ -22,6 +24,7 @@ export function ToggleSwitch({
   size = 'md',
   label,
   labelPosition = 'right',
+  icon,
   className,
   id,
   ...props
@@ -43,10 +46,9 @@ export function ToggleSwitch({
           className={styles.input}
           {...props}
         />
-        <span
-          className={cx(styles.slider, styles[variant])}
-          aria-hidden="true"
-        />
+        <span className={cx(styles.slider, styles[variant])} aria-hidden="true">
+          <span className={styles.thumb}>{icon}</span>
+        </span>
       </label>
       {label && labelPosition === 'right' && (
         <label htmlFor={switchId} className={styles.labelText}>

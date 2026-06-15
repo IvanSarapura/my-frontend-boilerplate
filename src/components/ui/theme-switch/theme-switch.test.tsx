@@ -96,4 +96,18 @@ describe('ThemeSwitch', () => {
       screen.getByRole('checkbox', { name: 'Tema oscuro' }),
     ).toBeInTheDocument();
   });
+
+  it('renders no thumb icon by default', () => {
+    const { container } = renderSwitch();
+    expect(container.querySelector('svg')).toBeNull();
+  });
+
+  it('renders a sun/moon icon inside the thumb when icons is enabled', () => {
+    const { container } = render(
+      <ThemeProvider>
+        <ThemeSwitch icons />
+      </ThemeProvider>,
+    );
+    expect(container.querySelector('svg')).toBeInTheDocument();
+  });
 });

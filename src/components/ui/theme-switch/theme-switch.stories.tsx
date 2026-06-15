@@ -29,14 +29,21 @@ const meta = {
       control: { type: 'inline-radio' },
       options: ['left', 'right'],
     },
+    icons: { control: 'boolean' },
   },
 } satisfies Meta<typeof ThemeSwitch>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+/** Plain switch (no thumb glyph). */
 export const Default: Story = {
   args: { label: 'Dark mode', size: 'md', labelPosition: 'right' },
+};
+
+/** Sun (light) / moon (dark) glyph inside the thumb. */
+export const WithIcons: Story = {
+  args: { label: 'Dark mode', size: 'md', labelPosition: 'right', icons: true },
 };
 
 export const LabelLeft: Story = {

@@ -56,16 +56,25 @@
     box-shadow 0.15s ease;
 }
 
-.slider::before {
+/* Thumb — a real element so it can hold a decorative icon (theme switch). */
+.thumb {
   position: absolute;
-  content: '';
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--color-on-accent);
   box-shadow: 0 1px 4px rgb(0 0 0 / 0.25);
   transition: transform var(--transition-base);
 }
 
+.thumb svg {
+  inline-size: 65%;
+  block-size: 65%;
+  color: var(--accent);
+}
+
 /* sm thumb: 16×16 with 3px inset */
-.sm .slider::before {
+.sm .thumb {
   bottom: 3px;
   left: 3px;
   width: 16px;
@@ -73,7 +82,7 @@
 }
 
 /* md thumb: 20×20 with 4px inset */
-.md .slider::before {
+.md .thumb {
   bottom: 4px;
   left: 4px;
   width: 20px;
@@ -81,11 +90,20 @@
 }
 
 /* lg thumb: 28×28 with 4px inset */
-.lg .slider::before {
+.lg .thumb {
   bottom: 4px;
   left: 4px;
   width: 28px;
   height: 28px;
+}
+
+/* Thumb shape per variant (kept above the higher-specificity checked rules). */
+.rounded .thumb {
+  border-radius: 50%;
+}
+
+.rectangular .thumb {
+  border-radius: calc(var(--radius-sm) - 1px);
 }
 
 .input:checked ~ .slider {
@@ -93,15 +111,15 @@
 }
 
 /* Checked: slide thumb to end — translateX = track - thumb - (inset * 2) */
-.sm .input:checked ~ .slider::before {
+.sm .input:checked ~ .slider .thumb {
   transform: translateX(18px); /* 40 - 16 - 6 */
 }
 
-.md .input:checked ~ .slider::before {
+.md .input:checked ~ .slider .thumb {
   transform: translateX(24px); /* 52 - 20 - 8 */
 }
 
-.lg .input:checked ~ .slider::before {
+.lg .input:checked ~ .slider .thumb {
   transform: translateX(28px); /* 64 - 28 - 8 */
 }
 
@@ -124,15 +142,7 @@
   border-radius: var(--radius-full);
 }
 
-.rounded::before {
-  border-radius: 50%;
-}
-
 /* Variant: rectangular */
 .rectangular {
   border-radius: var(--radius-sm);
-}
-
-.rectangular::before {
-  border-radius: calc(var(--radius-sm) - 1px);
 }
