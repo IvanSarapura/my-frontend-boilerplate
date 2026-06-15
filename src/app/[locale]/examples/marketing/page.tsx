@@ -16,6 +16,10 @@ import { getDictionary } from '@/i18n/dictionaries';
 
 import styles from './marketing.module.css';
 
+// Captured at build, not per request — keeps the page statically prerenderable
+// under Cache Components. Refreshes on each rebuild/deploy.
+const copyrightYear = new Date().getFullYear();
+
 export async function generateMetadata({
   params,
 }: {
@@ -117,7 +121,7 @@ export default async function MarketingPreset({
         brand="Acme"
         tagline={dict.footer.tagline}
         columns={footerColumns}
-        legal={`© ${new Date().getFullYear()} Acme · ${dict.footer.rights}`}
+        legal={`© ${copyrightYear} Acme · ${dict.footer.rights}`}
       />
     </>
   );

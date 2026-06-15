@@ -16,6 +16,10 @@ import { getDictionary } from '@/i18n/dictionaries';
 import styles from './app-shell.module.css';
 import { SettingsForm } from './settings-form';
 
+// Captured at build, not per request — keeps the page statically prerenderable
+// under Cache Components. Refreshes on each rebuild/deploy.
+const copyrightYear = new Date().getFullYear();
+
 export async function generateMetadata({
   params,
 }: {
@@ -100,7 +104,7 @@ export default async function AppShellPreset({
 
       <Footer
         brand="Acme"
-        legal={`© ${new Date().getFullYear()} Acme · ${dict.footer.rights}`}
+        legal={`© ${copyrightYear} Acme · ${dict.footer.rights}`}
       />
     </>
   );
