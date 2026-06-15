@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import ExamplesPage from './page';
+import ExamplesPage, { generateMetadata } from './page';
 
 vi.mock('next/navigation', () => ({ notFound: vi.fn() }));
 
@@ -41,5 +41,13 @@ describe('Examples index page', () => {
     const { notFound } = await import('next/navigation');
     await ExamplesPage({ params: Promise.resolve({ locale: 'fr' }) });
     expect(notFound).toHaveBeenCalled();
+  });
+
+  it('generateMetadata returns the translated title and marks the page noindex', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en' }),
+    });
+    expect(meta.title).toBe('Wireframe presets');
+    expect(meta.robots).toEqual({ index: false, follow: false });
   });
 });

@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ThemeProvider } from '@/components/providers/theme-provider';
 
-import MarketingPreset from './page';
+import MarketingPreset, { generateMetadata } from './page';
 
 vi.mock('next/navigation', () => ({
   notFound: vi.fn(),
@@ -46,6 +46,7 @@ vi.mock('@/i18n/dictionaries', () => ({
       terms: 'Terms',
       rights: 'All rights reserved.',
     },
+    examples: { marketingName: 'Marketing' },
   }),
 }));
 
@@ -71,5 +72,19 @@ describe('Marketing preset page', () => {
       screen.getByRole('heading', { name: 'Everything you need' }),
     ).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Fast' })).toBeInTheDocument();
+  });
+
+  it('generateMetadata returns the translated title and marks the page noindex', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en' }),
+    });
+    expect(meta.title).toBe('Marketing');
+    expect(meta.robots).toEqual({ index: false, follow: false });
+  });
+
+  it('calls notFound for an unknown locale', async () => {
+    const { notFound } = await import('next/navigation');
+    await MarketingPreset({ params: Promise.resolve({ locale: 'fr' }) });
+    expect(notFound).toHaveBeenCalled();
   });
 });

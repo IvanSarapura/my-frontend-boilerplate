@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { ThemeProvider } from '@/components/providers/theme-provider';
 
-import AppShellPreset from './page';
+import AppShellPreset, { generateMetadata } from './page';
 
 vi.mock('next/navigation', () => ({
   notFound: vi.fn(),
@@ -79,5 +79,19 @@ describe('App-shell preset page', () => {
       .getAllByRole('link')
       .find(el => el.getAttribute('href') === '/en/examples/app-shell');
     expect(active).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('generateMetadata returns the translated title and marks the page noindex', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en' }),
+    });
+    expect(meta.title).toBe('App shell');
+    expect(meta.robots).toEqual({ index: false, follow: false });
+  });
+
+  it('calls notFound for an unknown locale', async () => {
+    const { notFound } = await import('next/navigation');
+    await AppShellPreset({ params: Promise.resolve({ locale: 'fr' }) });
+    expect(notFound).toHaveBeenCalled();
   });
 });

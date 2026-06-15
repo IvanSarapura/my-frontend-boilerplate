@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
-import MinimalPreset from './page';
+import MinimalPreset, { generateMetadata } from './page';
 
 vi.mock('next/navigation', () => ({ notFound: vi.fn() }));
 
@@ -39,5 +39,19 @@ describe('Minimal preset page', () => {
     expect(
       screen.getByRole('heading', { level: 2, name: 'Production ready' }),
     ).toBeInTheDocument();
+  });
+
+  it('generateMetadata returns the translated title and marks the page noindex', async () => {
+    const meta = await generateMetadata({
+      params: Promise.resolve({ locale: 'en' }),
+    });
+    expect(meta.title).toBe('Minimal');
+    expect(meta.robots).toEqual({ index: false, follow: false });
+  });
+
+  it('calls notFound for an unknown locale', async () => {
+    const { notFound } = await import('next/navigation');
+    await MinimalPreset({ params: Promise.resolve({ locale: 'fr' }) });
+    expect(notFound).toHaveBeenCalled();
   });
 });
