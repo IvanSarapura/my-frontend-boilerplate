@@ -51,9 +51,11 @@
   gap: var(--space-2);
   width: var(--drawer-width);
   height: 100%;
-  padding: var(--space-6);
-  padding-block-start: max(var(--space-6), var(--safe-top));
-  padding-inline-end: max(var(--space-6), var(--safe-right));
+
+  /* Top + trailing insets mirror the header bar (--space-3 top, the page gutter
+     trailing) so the close button lands over the hamburger that opened it. */
+  padding-block: max(var(--space-3), var(--safe-top)) var(--space-6);
+  padding-inline: var(--space-4) max(var(--space-4), var(--safe-right));
   overflow-y: auto;
   background: var(--background);
   border-inline-start: 1px solid var(--card-border);
@@ -83,6 +85,14 @@
 .close:focus-visible {
   outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
   outline-offset: var(--color-focus-ring-offset);
+}
+
+/* The page gutter grows to 24px at sm; track it so the close button stays
+   aligned with the hamburger. */
+@media (width >= 640px) {
+  .menu {
+    padding-inline: var(--space-6) max(var(--space-6), var(--safe-right));
+  }
 }
 
 /* Desktop: hamburger gone, links flow inline. */
