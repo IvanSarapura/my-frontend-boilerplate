@@ -33,7 +33,7 @@
 }
 
 .lg .brand {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
 }
 
 /* Mobile: the hamburger stays at the trailing edge with the actions (e.g. the
