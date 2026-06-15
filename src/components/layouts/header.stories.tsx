@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
 import { ThemeProvider } from '@/components/providers/theme-provider';
+import { ThemeSwitch } from '@/components/ui/theme-switch';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 
 import { Header } from './header';
@@ -50,8 +51,13 @@ export const Mobile: Story = {
   parameters: { viewport: { defaultViewport: 'mobile1' } },
 };
 
-/** Larger mobile navbar — a taller bar, bigger wordmark and a 48px hamburger. */
+/** Larger mobile navbar — taller bar, bigger wordmark, 48px hamburger, and the
+ *  ThemeSwitch (plain light/dark switch) in place of the ThemeToggle. */
 export const MobileBig: Story = {
-  args: { ...Default.args, size: 'lg' },
+  args: {
+    ...Default.args,
+    size: 'lg',
+    actions: <ThemeSwitch size="md" hideLabel />,
+  },
   parameters: { viewport: { defaultViewport: 'mobile1' } },
 };

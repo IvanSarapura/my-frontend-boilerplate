@@ -97,6 +97,18 @@ describe('ThemeSwitch', () => {
     ).toBeInTheDocument();
   });
 
+  it('hides the visible label text but keeps the accessible name when hideLabel is set', () => {
+    render(
+      <ThemeProvider>
+        <ThemeSwitch hideLabel />
+      </ThemeProvider>,
+    );
+    expect(
+      screen.getByRole('checkbox', { name: 'Dark mode' }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText('Dark mode')).not.toBeInTheDocument();
+  });
+
   it('renders no thumb icon by default', () => {
     const { container } = renderSwitch();
     expect(container.querySelector('svg')).toBeNull();

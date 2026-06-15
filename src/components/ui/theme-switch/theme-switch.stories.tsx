@@ -30,6 +30,7 @@ const meta = {
       options: ['left', 'right'],
     },
     icons: { control: 'boolean' },
+    hideLabel: { control: 'boolean' },
   },
 } satisfies Meta<typeof ThemeSwitch>;
 
@@ -48,6 +49,12 @@ export const WithIcons: Story = {
 
 export const LabelLeft: Story = {
   args: { label: 'Dark mode', size: 'md', labelPosition: 'left' },
+};
+
+/** Label hidden visually but kept as the accessible name — for compact spots
+ *  like a header bar (the switch reads as icon-only). */
+export const NoLabel: Story = {
+  args: { label: 'Dark mode', size: 'md', hideLabel: true },
 };
 
 export const InToolbar: Story = {

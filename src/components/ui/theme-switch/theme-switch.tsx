@@ -13,6 +13,9 @@ interface ThemeSwitchProps {
   labelPosition?: 'left' | 'right';
   /** Show a sun/moon glyph inside the thumb (off by default → plain switch). */
   icons?: boolean;
+  /** Hide the visible label, keeping it as the accessible name (`aria-label`).
+   * For compact spots like a header bar. */
+  hideLabel?: boolean;
   className?: string;
 }
 
@@ -28,6 +31,7 @@ export function ThemeSwitch({
   size = 'md',
   labelPosition = 'right',
   icons = false,
+  hideLabel = false,
   className,
 }: ThemeSwitchProps) {
   const { resolvedTheme, setTheme } = useTheme();
@@ -35,13 +39,15 @@ export function ThemeSwitch({
 
   return (
     <ToggleSwitch
-      label={label}
       size={size}
       labelPosition={labelPosition}
       className={className}
       checked={isDark}
       icon={icons ? isDark ? <MoonIcon /> : <SunIcon /> : undefined}
       onChange={e => setTheme(e.target.checked ? 'dark' : 'light')}
+      // Hidden label stays the accessible name via aria-label (ToggleSwitch
+      // forwards it to the input), matching the icon-only ThemeToggle pattern.
+      {...(hideLabel ? { 'aria-label': label } : { label })}
     />
   );
 }
