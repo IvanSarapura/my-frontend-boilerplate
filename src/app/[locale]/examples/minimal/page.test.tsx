@@ -11,6 +11,10 @@ vi.mock('@/i18n/dictionaries', () => ({
       eyebrow: 'Production-ready',
       title: 'Build faster',
       subtitle: 'A solid starting point.',
+      highlights: [
+        { title: 'Developer experience', description: 'Tight feedback loop.' },
+        { title: 'Production ready', description: 'Ship with confidence.' },
+      ],
     },
     examples: { minimalName: 'Minimal' },
   }),
@@ -25,5 +29,15 @@ describe('Minimal preset page', () => {
     expect(screen.getByText('A solid starting point.')).toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
+  });
+
+  it('renders a two-column highlights section below the hero', async () => {
+    render(await MinimalPreset({ params: Promise.resolve({ locale: 'en' }) }));
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Developer experience' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Production ready' }),
+    ).toBeInTheDocument();
   });
 });

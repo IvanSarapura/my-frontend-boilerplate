@@ -2,12 +2,10 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { Hero } from '@/components/blocks';
-import { Container } from '@/components/layouts';
+import { Container, Grid, Section, Stack } from '@/components/layouts';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
-
-import styles from './minimal.module.css';
 
 export async function generateMetadata({
   params,
@@ -33,15 +31,30 @@ export default async function MinimalPreset({
   const dict = await getDictionary(locale as Locale);
 
   return (
-    <main className={styles.main}>
-      <Container size="prose">
-        <Hero
-          align="center"
-          eyebrow={dict.home.eyebrow}
-          title={dict.home.title}
-          subtitle={dict.home.subtitle}
-        />
-      </Container>
+    <main>
+      <Section>
+        <Container size="prose">
+          <Hero
+            align="center"
+            eyebrow={dict.home.eyebrow}
+            title={dict.home.title}
+            subtitle={dict.home.subtitle}
+          />
+        </Container>
+      </Section>
+
+      <Section surface="muted">
+        <Container>
+          <Grid cols={2}>
+            {dict.home.highlights.map(highlight => (
+              <Stack key={highlight.title} gap={2}>
+                <h2>{highlight.title}</h2>
+                <p>{highlight.description}</p>
+              </Stack>
+            ))}
+          </Grid>
+        </Container>
+      </Section>
     </main>
   );
 }

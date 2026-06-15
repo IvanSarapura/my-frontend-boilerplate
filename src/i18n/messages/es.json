@@ -15,7 +15,17 @@
     "subtitle": "Next.js · TypeScript · Vitest · Prettier · ESLint",
     "eyebrow": "Listo para producción",
     "ctaPrimary": "Comenzar",
-    "ctaSecondary": "Ver en GitHub"
+    "ctaSecondary": "Ver en GitHub",
+    "highlights": [
+      {
+        "title": "Experiencia de desarrollo",
+        "description": "TypeScript estricto, Vitest, Storybook y linting forzado por Git hooks mantienen el ciclo de feedback ágil — clona, instala y empieza a construir, no a configurar."
+      },
+      {
+        "title": "Listo para producción",
+        "description": "CI/CD endurecido, accesibilidad WCAG AA, i18n en/es, metadatos SEO y cabeceras de seguridad ya vienen integrados, para desplegar con confianza desde el primer día."
+      }
+    ]
   },
   "nav": {
     "label": "Navegación principal",
