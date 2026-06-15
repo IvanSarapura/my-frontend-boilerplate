@@ -15,17 +15,25 @@
 }
 
 .brand {
+  margin-inline-end: auto;
   font-size: var(--text-lg);
   font-weight: var(--weight-bold);
-}
-
-/* Push the nav (inline links on desktop, hamburger on mobile) and the actions
-   to the trailing edge. */
-.nav {
-  margin-inline-start: auto;
 }
 
 .actions {
   display: flex;
   align-items: center;
+}
+
+/* Mobile: the hamburger stays at the trailing edge with the actions (e.g. the
+   theme toggle) to its left. On desktop the inline links lead and the actions
+   trail (DOM order), so no reorder is needed there. */
+@media (width < 768px) {
+  .actions {
+    order: 1;
+  }
+
+  .nav {
+    order: 2;
+  }
 }
