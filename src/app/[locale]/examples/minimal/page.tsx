@@ -3,7 +3,6 @@ import { notFound } from 'next/navigation';
 
 import { Hero } from '@/components/blocks';
 import { Container } from '@/components/layouts';
-import { Button } from '@/components/ui';
 import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
@@ -41,12 +40,6 @@ export default async function MinimalPreset({
           eyebrow={dict.home.eyebrow}
           title={dict.home.title}
           subtitle={dict.home.subtitle}
-          actions={
-            <>
-              <Button variant="primary">{dict.home.ctaPrimary}</Button>
-              <Button variant="secondary">{dict.home.ctaSecondary}</Button>
-            </>
-          }
         />
       </Container>
     </main>

@@ -11,21 +11,19 @@ vi.mock('@/i18n/dictionaries', () => ({
       eyebrow: 'Production-ready',
       title: 'Build faster',
       subtitle: 'A solid starting point.',
-      ctaPrimary: 'Get started',
-      ctaSecondary: 'View on GitHub',
     },
     examples: { minimalName: 'Minimal' },
   }),
 }));
 
 describe('Minimal preset page', () => {
-  it('renders a centered hero with the home copy', async () => {
+  it('renders a centered hero with the home copy and no CTAs', async () => {
     render(await MinimalPreset({ params: Promise.resolve({ locale: 'en' }) }));
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Build faster',
     );
-    expect(
-      screen.getByRole('button', { name: 'Get started' }),
-    ).toBeInTheDocument();
+    expect(screen.getByText('A solid starting point.')).toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 });
