@@ -45,7 +45,7 @@ export default async function MinimalPreset({
 
       <Section surface="muted">
         <Container>
-          <Grid cols={2}>
+          <Grid cols={2} gap={8}>
             {dict.home.highlights.map(highlight => (
               <Stack key={highlight.title} gap={2}>
                 <h2>{highlight.title}</h2>
