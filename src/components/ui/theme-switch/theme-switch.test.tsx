@@ -109,6 +109,15 @@ describe('ThemeSwitch', () => {
     expect(screen.queryByText('Dark mode')).not.toBeInTheDocument();
   });
 
+  it('forwards the outlined variant to the underlying track', () => {
+    const { container } = render(
+      <ThemeProvider>
+        <ThemeSwitch variant="outlined" />
+      </ThemeProvider>,
+    );
+    expect(container.querySelector('.outlined')).toBeInTheDocument();
+  });
+
   it('renders no thumb icon by default', () => {
     const { container } = renderSwitch();
     expect(container.querySelector('svg')).toBeNull();

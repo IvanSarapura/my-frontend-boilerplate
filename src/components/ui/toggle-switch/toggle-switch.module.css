@@ -103,6 +103,11 @@
   border-radius: 50%;
 }
 
+/* Outlined thumb follows the theme foreground (visible on the transparent track). */
+.outlined .thumb {
+  background-color: var(--foreground);
+}
+
 .rectangular .thumb {
   border-radius: calc(var(--radius-sm) - 1px);
 }
@@ -149,16 +154,22 @@
   border-radius: var(--radius-sm);
 }
 
-/* Variant: outlined — rounded pill with a 1px white ring around the track,
-   drawn as an inset shadow so it adds no box and never shifts the thumb. Uses
-   the thumb's white (--color-on-accent) so ring + thumb read as one family. */
+/* Variant: outlined — transparent track with a 1px ring + thumb in --foreground,
+   so it inverts with the theme (dark on light, light on dark) and stays visible
+   on any background. Inset ring = no box, so the thumb travel is unchanged. */
 .outlined {
-  box-shadow: inset 0 0 0 1px var(--color-on-accent);
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1px var(--foreground);
+}
+
+/* Stay transparent when on (beats the generic accent fill on :checked). */
+.input:checked ~ .outlined {
+  background-color: transparent;
 }
 
 .input:focus-visible ~ .outlined {
   box-shadow:
-    inset 0 0 0 1px var(--color-on-accent),
+    inset 0 0 0 1px var(--foreground),
     0 0 0 2px var(--background),
     0 0 0 4px var(--color-focus-ring);
 }

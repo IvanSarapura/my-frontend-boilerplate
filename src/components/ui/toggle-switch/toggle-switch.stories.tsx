@@ -43,7 +43,7 @@ export const Rectangular: Story = {
   },
 };
 
-/** Pill track with a 1px white ring (matches the thumb). */
+/** Transparent track with a 1px ring + thumb in --foreground (theme-adaptive). */
 export const Outlined: Story = {
   args: {
     label: 'Outlined',

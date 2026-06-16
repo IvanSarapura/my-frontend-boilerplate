@@ -10,6 +10,8 @@ interface ThemeSwitchProps {
   /** Visible label / accessible name for the switch. */
   label?: string;
   size?: ThemeSwitchSize;
+  /** `outlined` = transparent track + theme-adaptive ring/thumb (`--foreground`). */
+  variant?: 'rounded' | 'outlined';
   labelPosition?: 'left' | 'right';
   /** Show a sun/moon glyph inside the thumb (off by default → plain switch). */
   icons?: boolean;
@@ -29,6 +31,7 @@ interface ThemeSwitchProps {
 export function ThemeSwitch({
   label = 'Dark mode',
   size = 'md',
+  variant = 'rounded',
   labelPosition = 'right',
   icons = false,
   hideLabel = false,
@@ -39,6 +42,7 @@ export function ThemeSwitch({
 
   return (
     <ToggleSwitch
+      variant={variant}
       size={size}
       labelPosition={labelPosition}
       className={className}

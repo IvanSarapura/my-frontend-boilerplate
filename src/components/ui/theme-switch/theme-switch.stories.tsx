@@ -25,6 +25,10 @@ const meta = {
       control: { type: 'select' },
       options: ['sm', 'md', 'lg'],
     },
+    variant: {
+      control: { type: 'inline-radio' },
+      options: ['rounded', 'outlined'],
+    },
     labelPosition: {
       control: { type: 'inline-radio' },
       options: ['left', 'right'],
@@ -40,6 +44,11 @@ type Story = StoryObj<typeof meta>;
 /** Plain switch (no thumb glyph). */
 export const Default: Story = {
   args: { label: 'Dark mode', size: 'md', labelPosition: 'right' },
+};
+
+/** Transparent, theme-adaptive outline (ring + thumb follow --foreground). */
+export const Outlined: Story = {
+  args: { label: 'Dark mode', size: 'md', variant: 'outlined' },
 };
 
 /** Sun (light) / moon (dark) glyph inside the thumb. */
