@@ -27,7 +27,7 @@ const meta = {
     },
     variant: {
       control: { type: 'inline-radio' },
-      options: ['rounded', 'outlined'],
+      options: ['rounded', 'outlined', 'outlined-max'],
     },
     labelPosition: {
       control: { type: 'inline-radio' },
@@ -49,6 +49,11 @@ export const Default: Story = {
 /** Transparent, theme-adaptive outline (ring + thumb follow --foreground). */
 export const Outlined: Story = {
   args: { label: 'Dark mode', size: 'md', variant: 'outlined' },
+};
+
+/** Theme-adaptive outline with a thicker 1.5px ring. */
+export const OutlinedMax: Story = {
+  args: { label: 'Dark mode', size: 'md', variant: 'outlined-max' },
 };
 
 /** Sun (light) / moon (dark) glyph inside the thumb. */

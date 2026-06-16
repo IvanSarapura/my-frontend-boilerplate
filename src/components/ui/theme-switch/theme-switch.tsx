@@ -10,8 +10,9 @@ interface ThemeSwitchProps {
   /** Visible label / accessible name for the switch. */
   label?: string;
   size?: ThemeSwitchSize;
-  /** `outlined` = transparent track + theme-adaptive ring/thumb (`--foreground`). */
-  variant?: 'rounded' | 'outlined';
+  /** `outlined` = transparent track + theme-adaptive ring/thumb (`--foreground`);
+   * `outlined-max` is the same with a thicker 1.5px ring. */
+  variant?: 'rounded' | 'outlined' | 'outlined-max';
   labelPosition?: 'left' | 'right';
   /** Show a sun/moon glyph inside the thumb (off by default → plain switch). */
   icons?: boolean;

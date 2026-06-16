@@ -67,6 +67,13 @@ describe('ToggleSwitch', () => {
     expect(container.querySelector('.outlined')).toBeInTheDocument();
   });
 
+  it('applies the outlined-max variant class to the track', () => {
+    const { container } = render(
+      <ToggleSwitch aria-label="Toggle" variant="outlined-max" />,
+    );
+    expect(container.querySelector('.outlined-max')).toBeInTheDocument();
+  });
+
   it('renders a decorative icon inside the thumb when provided', () => {
     render(
       <ToggleSwitch label="Theme" icon={<svg data-testid="thumb-icon" />} />,

@@ -9,7 +9,7 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['rounded', 'rectangular', 'outlined'],
+      options: ['rounded', 'rectangular', 'outlined', 'outlined-max'],
     },
     size: {
       control: { type: 'select' },
@@ -48,6 +48,15 @@ export const Outlined: Story = {
   args: {
     label: 'Outlined',
     variant: 'outlined',
+    size: 'md',
+  },
+};
+
+/** Like Outlined but with a thicker 1.5px ring. */
+export const OutlinedMax: Story = {
+  args: {
+    label: 'Outlined max',
+    variant: 'outlined-max',
     size: 'md',
   },
 };

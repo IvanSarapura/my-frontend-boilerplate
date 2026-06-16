@@ -99,12 +99,14 @@
 
 /* Thumb shape per variant (kept above the higher-specificity checked rules). */
 .rounded .thumb,
-.outlined .thumb {
+.outlined .thumb,
+.outlined-max .thumb {
   border-radius: 50%;
 }
 
 /* Outlined thumb follows the theme foreground (visible on the transparent track). */
-.outlined .thumb {
+.outlined .thumb,
+.outlined-max .thumb {
   background-color: var(--foreground);
 }
 
@@ -145,7 +147,8 @@
 
 /* Variant: rounded (pill track + circular thumb) */
 .rounded,
-.outlined {
+.outlined,
+.outlined-max {
   border-radius: var(--radius-full);
 }
 
@@ -162,14 +165,28 @@
   box-shadow: inset 0 0 0 1px var(--foreground);
 }
 
+/* Variant: outlined-max — same as outlined with a thicker 1.5px ring. */
+.outlined-max {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 1.5px var(--foreground);
+}
+
 /* Stay transparent when on (beats the generic accent fill on :checked). */
-.input:checked ~ .outlined {
+.input:checked ~ .outlined,
+.input:checked ~ .outlined-max {
   background-color: transparent;
 }
 
 .input:focus-visible ~ .outlined {
   box-shadow:
     inset 0 0 0 1px var(--foreground),
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--color-focus-ring);
+}
+
+.input:focus-visible ~ .outlined-max {
+  box-shadow:
+    inset 0 0 0 1.5px var(--foreground),
     0 0 0 2px var(--background),
     0 0 0 4px var(--color-focus-ring);
 }

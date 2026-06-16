@@ -4,7 +4,11 @@ import { cx } from '@/lib/utils';
 
 import styles from './toggle-switch.module.css';
 
-type ToggleSwitchVariant = 'rounded' | 'rectangular' | 'outlined';
+type ToggleSwitchVariant =
+  | 'rounded'
+  | 'rectangular'
+  | 'outlined'
+  | 'outlined-max';
 type ToggleSwitchSize = 'sm' | 'md' | 'lg';
 
 type ToggleSwitchProps = Omit<

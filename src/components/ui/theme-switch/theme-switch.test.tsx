@@ -118,6 +118,15 @@ describe('ThemeSwitch', () => {
     expect(container.querySelector('.outlined')).toBeInTheDocument();
   });
 
+  it('forwards the outlined-max variant to the underlying track', () => {
+    const { container } = render(
+      <ThemeProvider>
+        <ThemeSwitch variant="outlined-max" />
+      </ThemeProvider>,
+    );
+    expect(container.querySelector('.outlined-max')).toBeInTheDocument();
+  });
+
   it('renders no thumb icon by default', () => {
     const { container } = renderSwitch();
     expect(container.querySelector('svg')).toBeNull();
