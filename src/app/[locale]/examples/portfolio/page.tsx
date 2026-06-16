@@ -76,7 +76,7 @@ export default async function PortfolioPreset({
       <Header
         brand={<NavLink href={`/${locale}`}>Acme</NavLink>}
         links={navLinks}
-        actions={<ThemeSwitch variant="outlined" size="md" hideLabel />}
+        actions={<ThemeSwitch variant="outlined-max" size="md" hideLabel />}
         navLabel={dict.nav.label}
         menuLabel={dict.nav.openMenu}
         closeLabel={dict.nav.closeMenu}
