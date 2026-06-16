@@ -64,13 +64,13 @@ export const MobileBig: Story = {
 };
 
 /** v2 of MobileBig — the hamburger is a bare icon (no button box), so its 28px
- *  SVG matches the 28px ThemeSwitch beside it. */
+ *  SVG matches the 28px outlined ThemeSwitch beside it. */
 export const MobileBigBareMenu: Story = {
   args: {
     ...Default.args,
     size: 'lg',
     bareToggle: true,
-    actions: <ThemeSwitch size="md" hideLabel />,
+    actions: <ThemeSwitch variant="outlined" size="md" hideLabel />,
   },
   parameters: { viewport: { defaultViewport: 'mobile1' } },
 };
