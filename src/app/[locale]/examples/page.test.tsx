@@ -15,6 +15,8 @@ vi.mock('@/i18n/dictionaries', () => ({
       minimalDesc: 'Centered hero.',
       marketingName: 'Marketing',
       marketingDesc: 'Full landing.',
+      portfolioName: 'Portfolio',
+      portfolioDesc: 'Marketing layout, bare menu.',
       appShellName: 'App shell',
       appShellDesc: 'Dashboard base.',
     },
@@ -30,6 +32,10 @@ describe('Examples index page', () => {
     expect(screen.getByRole('link', { name: /Minimal/ })).toHaveAttribute(
       'href',
       '/en/examples/minimal',
+    );
+    expect(screen.getByRole('link', { name: /Portfolio/ })).toHaveAttribute(
+      'href',
+      '/en/examples/portfolio',
     );
     expect(screen.getByRole('link', { name: /App shell/ })).toHaveAttribute(
       'href',

@@ -76,12 +76,14 @@
   },
   "examples": {
     "title": "Wireframe presets",
-    "intro": "Three professional starting points. Copy the one you want into your route and delete the examples/ folder.",
+    "intro": "Four professional starting points. Copy the one you want into your route and delete the examples/ folder.",
     "view": "View preset",
     "minimalName": "Minimal",
     "minimalDesc": "Centered hero, no chrome — coming-soon pages or single-screen apps.",
     "marketingName": "Marketing",
     "marketingDesc": "Sticky navbar, hero, feature grid, CTA band and footer.",
+    "portfolioName": "Portfolio",
+    "portfolioDesc": "Marketing layout with a bare hamburger menu and an outlined, theme-adaptive switch.",
     "appShellName": "App shell",
     "appShellDesc": "Header, sidebar and content region — a base for dashboards.",
     "appShell": {

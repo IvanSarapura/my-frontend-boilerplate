@@ -45,6 +45,11 @@ export default async function ExamplesPage({
       description: dict.examples.marketingDesc,
     },
     {
+      href: `/${locale}/examples/portfolio`,
+      name: dict.examples.portfolioName,
+      description: dict.examples.portfolioDesc,
+    },
+    {
       href: `/${locale}/examples/app-shell`,
       name: dict.examples.appShellName,
       description: dict.examples.appShellDesc,

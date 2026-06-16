@@ -76,12 +76,14 @@
   },
   "examples": {
     "title": "Plantillas wireframe",
-    "intro": "Tres puntos de partida profesionales. Copia el que quieras a tu ruta y borra la carpeta examples/.",
+    "intro": "Cuatro puntos de partida profesionales. Copia el que quieras a tu ruta y borra la carpeta examples/.",
     "view": "Ver plantilla",
     "minimalName": "Minimal",
     "minimalDesc": "Hero centrado, sin cromo — páginas coming-soon o apps de una pantalla.",
     "marketingName": "Marketing",
     "marketingDesc": "Navbar sticky, hero, rejilla de features, banda CTA y footer.",
+    "portfolioName": "Portfolio",
+    "portfolioDesc": "Diseño marketing con menú hamburguesa sin marco y un switch outlined que se adapta al theme.",
     "appShellName": "App shell",
     "appShellDesc": "Header, barra lateral y región de contenido — base para dashboards.",
     "appShell": {
