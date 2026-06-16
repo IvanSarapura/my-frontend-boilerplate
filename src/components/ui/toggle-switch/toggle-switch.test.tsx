@@ -60,6 +60,13 @@ describe('ToggleSwitch', () => {
     expect(screen.getByLabelText('Theme')).toHaveAttribute('id', 'theme');
   });
 
+  it('applies the outlined variant class to the track', () => {
+    const { container } = render(
+      <ToggleSwitch aria-label="Toggle" variant="outlined" />,
+    );
+    expect(container.querySelector('.outlined')).toBeInTheDocument();
+  });
+
   it('renders a decorative icon inside the thumb when provided', () => {
     render(
       <ToggleSwitch label="Theme" icon={<svg data-testid="thumb-icon" />} />,

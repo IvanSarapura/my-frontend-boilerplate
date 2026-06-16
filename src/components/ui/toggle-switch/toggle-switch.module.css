@@ -98,7 +98,8 @@
 }
 
 /* Thumb shape per variant (kept above the higher-specificity checked rules). */
-.rounded .thumb {
+.rounded .thumb,
+.outlined .thumb {
   border-radius: 50%;
 }
 
@@ -138,11 +139,26 @@
 }
 
 /* Variant: rounded (pill track + circular thumb) */
-.rounded {
+.rounded,
+.outlined {
   border-radius: var(--radius-full);
 }
 
 /* Variant: rectangular */
 .rectangular {
   border-radius: var(--radius-sm);
+}
+
+/* Variant: outlined — rounded pill with a 1px white ring around the track,
+   drawn as an inset shadow so it adds no box and never shifts the thumb. Uses
+   the thumb's white (--color-on-accent) so ring + thumb read as one family. */
+.outlined {
+  box-shadow: inset 0 0 0 1px var(--color-on-accent);
+}
+
+.input:focus-visible ~ .outlined {
+  box-shadow:
+    inset 0 0 0 1px var(--color-on-accent),
+    0 0 0 2px var(--background),
+    0 0 0 4px var(--color-focus-ring);
 }

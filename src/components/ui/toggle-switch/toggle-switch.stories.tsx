@@ -9,7 +9,7 @@ const meta = {
   argTypes: {
     variant: {
       control: { type: 'select' },
-      options: ['rounded', 'rectangular'],
+      options: ['rounded', 'rectangular', 'outlined'],
     },
     size: {
       control: { type: 'select' },
@@ -39,6 +39,15 @@ export const Rectangular: Story = {
   args: {
     label: 'Dark mode',
     variant: 'rectangular',
+    size: 'md',
+  },
+};
+
+/** Pill track with a 1px white ring (matches the thumb). */
+export const Outlined: Story = {
+  args: {
+    label: 'Outlined',
+    variant: 'outlined',
     size: 'md',
   },
 };
