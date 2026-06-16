@@ -36,6 +36,7 @@ import { ChevronUpIcon } from './icons/chevron-up';
 import { CircleCheckIcon } from './icons/circle-check';
 import { CircleRemoveIcon } from './icons/circle-remove';
 import { CloseIcon } from './icons/close';
+import { CloseAltIcon } from './icons/close-alt';
 import { CompressIcon } from './icons/compress';
 import { CopyIcon } from './icons/copy';
 import { CreditCardIcon } from './icons/credit-card';
@@ -91,6 +92,7 @@ import { MailIcon } from './icons/mail';
 import { MaleIcon } from './icons/male';
 import { MapIcon } from './icons/map';
 import { MenuIcon } from './icons/menu';
+import { MenuAltIcon } from './icons/menu-alt';
 import { MenuBackIcon } from './icons/menu-back';
 import { MinusIcon } from './icons/minus';
 import { MonitorIcon } from './icons/monitor';
@@ -215,6 +217,7 @@ export const ICON_CATALOG: readonly IconCatalogEntry[] = [
   { name: 'circle-check', Component: CircleCheckIcon },
   { name: 'circle-remove', Component: CircleRemoveIcon },
   { name: 'close', Component: CloseIcon },
+  { name: 'close-alt', Component: CloseAltIcon },
   { name: 'compress', Component: CompressIcon },
   { name: 'copy', Component: CopyIcon },
   { name: 'credit-card', Component: CreditCardIcon },
@@ -270,6 +273,7 @@ export const ICON_CATALOG: readonly IconCatalogEntry[] = [
   { name: 'male', Component: MaleIcon },
   { name: 'map', Component: MapIcon },
   { name: 'menu', Component: MenuIcon },
+  { name: 'menu-alt', Component: MenuAltIcon },
   { name: 'menu-back', Component: MenuBackIcon },
   { name: 'minus', Component: MinusIcon },
   { name: 'monitor', Component: MonitorIcon },

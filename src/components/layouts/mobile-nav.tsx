@@ -2,7 +2,12 @@
 
 import { useEffect, useId, useRef } from 'react';
 
-import { CloseIcon, MenuIcon } from '@/components/ui/icon';
+import {
+  CloseAltIcon,
+  CloseIcon,
+  MenuAltIcon,
+  MenuIcon,
+} from '@/components/ui/icon';
 import { useBreakpoint } from '@/hooks/use-media-query';
 import { useModalBehavior } from '@/hooks/use-modal-behavior';
 import { useSwipe } from '@/hooks/use-swipe';
@@ -33,11 +38,10 @@ interface MobileNavProps {
 /** Menu/close icon px paired to each size so the glyph scales with the target. */
 const ICON_SIZE: Record<MobileNavSize, number> = { md: 24, lg: 28 };
 
-// Exception to the ICON_SIZE control-pairing: the bare hamburger is sized for
-// OPTICAL parity with an adjacent ~28px ThemeSwitch, not its own button.
-// MenuIcon's bars fill ~50% of the box, so 48px → ~24px visible lines — a touch
-// shorter than the switch for balance, and it keeps the bar from growing.
-const BARE_MENU_ICON = 42;
+// Bare menu uses the edge-to-edge alt glyph (MenuAltIcon inks ~75% of its box vs
+// MenuIcon's ~50%), so 28px → ~21px visible lines — sized for optical parity with
+// an adjacent ~28px ThemeSwitch, decoupled from the ICON_SIZE control-pairing.
+const BARE_MENU_ICON = 28;
 
 /**
  * Responsive navigation: an inline bar from `md` up, and a hamburger-driven
@@ -76,6 +80,10 @@ export function MobileNav({
     ? ({ role: 'dialog', 'aria-modal': true, 'aria-label': label } as const)
     : {};
 
+  // The bare treatment pairs with the edge-to-edge line glyphs.
+  const MenuGlyph = bareToggle ? MenuAltIcon : MenuIcon;
+  const CloseGlyph = bareToggle ? CloseAltIcon : CloseIcon;
+
   return (
     <nav aria-label={label} className={cx(styles.nav, styles[size], className)}>
       <button
@@ -87,7 +95,7 @@ export function MobileNav({
         aria-haspopup="dialog"
         onClick={toggle}
       >
-        <MenuIcon size={bareToggle ? BARE_MENU_ICON : ICON_SIZE[size]} />
+        <MenuGlyph size={bareToggle ? BARE_MENU_ICON : ICON_SIZE[size]} />
       </button>
 
       <div
@@ -103,7 +111,7 @@ export function MobileNav({
               aria-label={closeLabel}
               onClick={close}
             >
-              <CloseIcon size={ICON_SIZE[size]} />
+              <CloseGlyph size={ICON_SIZE[size]} />
             </button>
           )}
           {children}

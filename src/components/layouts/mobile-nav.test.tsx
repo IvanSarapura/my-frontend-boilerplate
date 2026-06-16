@@ -41,8 +41,8 @@ describe('MobileNav', () => {
     );
     const toggle = screen.getByRole('button', { name: 'Open menu' });
     expect(toggle).toHaveClass('toggle', 'bare');
-    // Enlarged glyph for optical parity with an adjacent ThemeSwitch.
-    expect(toggle.querySelector('svg')).toHaveAttribute('width', '42');
+    // Edge-to-edge alt glyph sized for parity with an adjacent ThemeSwitch.
+    expect(toggle.querySelector('svg')).toHaveAttribute('width', '28');
     fireEvent.click(toggle);
     expect(screen.getByRole('dialog', { name: 'Main' })).toBeInTheDocument();
   });
