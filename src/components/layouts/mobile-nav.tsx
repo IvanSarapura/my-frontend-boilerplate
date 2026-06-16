@@ -33,6 +33,12 @@ interface MobileNavProps {
 /** Menu/close icon px paired to each size so the glyph scales with the target. */
 const ICON_SIZE: Record<MobileNavSize, number> = { md: 24, lg: 28 };
 
+// Exception to the ICON_SIZE control-pairing: the bare hamburger is sized for
+// OPTICAL parity with an adjacent ~28px ThemeSwitch, not its own button.
+// MenuIcon's bars fill ~50% of the box, so 48px → ~24px visible lines — a touch
+// shorter than the switch for balance, and it keeps the bar from growing.
+const BARE_MENU_ICON = 42;
+
 /**
  * Responsive navigation: an inline bar from `md` up, and a hamburger-driven
  * off-canvas drawer below it. Single DOM tree — CSS decides the presentation,
@@ -81,7 +87,7 @@ export function MobileNav({
         aria-haspopup="dialog"
         onClick={toggle}
       >
-        <MenuIcon size={ICON_SIZE[size]} />
+        <MenuIcon size={bareToggle ? BARE_MENU_ICON : ICON_SIZE[size]} />
       </button>
 
       <div
