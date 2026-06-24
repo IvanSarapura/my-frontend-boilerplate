@@ -21,6 +21,7 @@
 
 /* Hamburger — visible only below `md`. */
 .toggle {
+  composes: ring from '../ui/focus.module.css';
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -36,11 +37,6 @@
 
 .toggle:hover {
   background: var(--card-bg);
-}
-
-.toggle:focus-visible {
-  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
-  outline-offset: var(--color-focus-ring-offset);
 }
 
 /* Bare toggle — drop the button chrome so the hamburger reads as a plain icon
@@ -92,6 +88,7 @@
 }
 
 .close {
+  composes: ring from '../ui/focus.module.css';
   display: inline-flex;
   align-items: center;
   align-self: flex-end;
@@ -108,11 +105,6 @@
 
 .close:hover {
   color: var(--foreground);
-}
-
-.close:focus-visible {
-  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
-  outline-offset: var(--color-focus-ring-offset);
 }
 
 /* The page gutter grows to 24px at sm; track it so the close button stays

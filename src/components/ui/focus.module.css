@@ -1,0 +1,10 @@
+/*
+ * Shared focus-ring mixin for CSS-Module components. `composes: ring from
+ * './focus.module.css'` reuses the single token-driven ring (--color-focus-ring-*)
+ * instead of copy-pasting the :focus-visible block per component. The global
+ * `.focus-ring` utility in globals.css covers non-module/arbitrary elements.
+ */
+.ring:focus-visible {
+  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
+  outline-offset: var(--color-focus-ring-offset);
+}

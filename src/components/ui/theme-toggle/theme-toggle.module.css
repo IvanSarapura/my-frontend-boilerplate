@@ -1,4 +1,5 @@
 .toggle {
+  composes: ring from '../focus.module.css';
   display: inline-flex;
   flex-shrink: 0;
   align-items: center;
@@ -34,11 +35,6 @@
 .toggle:disabled {
   cursor: not-allowed;
   opacity: var(--opacity-disabled);
-}
-
-.toggle:focus-visible {
-  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
-  outline-offset: var(--color-focus-ring-offset);
 }
 
 .toggle:hover:not(:disabled) {

@@ -81,6 +81,7 @@
 }
 
 .link {
+  composes: ring from '../ui/focus.module.css';
   display: inline-flex;
   align-items: center;
   min-block-size: var(--touch-target-min);
@@ -90,11 +91,6 @@
 
 .link:hover {
   color: var(--foreground);
-}
-
-.link:focus-visible {
-  outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
-  outline-offset: var(--color-focus-ring-offset);
 }
 
 .legal {

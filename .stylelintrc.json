@@ -3,7 +3,8 @@
   "plugins": ["stylelint-order"],
   "rules": {
     "alpha-value-notation": "number",
-    "selector-class-pattern": null
+    "selector-class-pattern": null,
+    "property-no-unknown": [true, { "ignoreProperties": ["composes"] }]
   },
   "overrides": [
     {
