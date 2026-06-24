@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 
 import { Container, Grid, Stack } from '@/components/layouts';
 import { Card } from '@/components/ui';
-import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 
@@ -16,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
   return {
     title: dict.examples.title,
     // Reference wireframes — keep them out of search.
@@ -32,7 +31,7 @@ export default async function ExamplesPage({
   const { locale } = await params;
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
   const presets = [
     {
       href: `/${locale}/examples/minimal`,

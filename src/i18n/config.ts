@@ -8,7 +8,5 @@ export const locales: Locale[] = ['en', 'es'];
 
 export type Messages = typeof en;
 
-export async function getMessages(locale: Locale): Promise<Messages> {
-  const messages = await import(`./messages/${locale}.json`);
-  return messages.default as Messages;
-}
+export const isLocale = (value: string): value is Locale =>
+  (locales as readonly string[]).includes(value);

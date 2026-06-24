@@ -2,7 +2,12 @@ import 'server-only';
 
 import { cache } from 'react';
 
-import type { Locale, Messages } from '@/i18n/config';
+import {
+  defaultLocale,
+  isLocale,
+  type Locale,
+  type Messages,
+} from '@/i18n/config';
 
 const load = async (
   loader: () => Promise<{ default: unknown }>,
@@ -13,6 +18,9 @@ const loaders: Record<Locale, () => Promise<Messages>> = {
   es: () => load(() => import('@/i18n/messages/es.json')),
 };
 
+// Self-defending: an unknown locale falls back to the default instead of
+// throwing (a 500). Callers can pass a raw route string without casting.
 export const getDictionary = cache(
-  async (locale: Locale): Promise<Messages> => loaders[locale](),
+  async (locale: string): Promise<Messages> =>
+    loaders[isLocale(locale) ? locale : defaultLocale](),
 );

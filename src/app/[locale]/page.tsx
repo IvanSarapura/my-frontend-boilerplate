@@ -4,7 +4,6 @@ import { notFound } from 'next/navigation';
 import { Hero } from '@/components/blocks';
 import { Container } from '@/components/layouts';
 import { Button, ButtonLink } from '@/components/ui';
-import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 
@@ -16,7 +15,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
   return {
     title: dict.home.title,
     description: dict.home.subtitle,
@@ -31,7 +30,7 @@ export default async function LocalePage({
   const { locale } = await params;
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
 
   return (
     <main className={styles.main}>

@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { PostList } from '@/features/posts';
-import type { Locale } from '@/i18n/config';
 import { locales } from '@/i18n/config';
 import { getDictionary } from '@/i18n/dictionaries';
 
@@ -14,7 +13,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
   return {
     title: `${dict.posts.title} (Mock)`,
     // Demo route: keep out of the index but let crawlers follow its links.
@@ -30,7 +29,7 @@ export default async function MockPostsPage({
   const { locale } = await params;
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
 
   const mockPosts = [
     {

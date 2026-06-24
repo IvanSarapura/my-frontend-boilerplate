@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { defaultLocale, getMessages, locales } from './config';
+import { defaultLocale, isLocale, locales } from './config';
 
 describe('i18n config', () => {
   it('has expected locales', () => {
@@ -12,20 +12,9 @@ describe('i18n config', () => {
     expect(locales).toContain(defaultLocale);
   });
 
-  it('loads English messages', async () => {
-    const messages = await getMessages('en');
-    expect(messages).toBeDefined();
-    expect(Object.keys(messages).length).toBeGreaterThan(0);
-  });
-
-  it('loads Spanish messages', async () => {
-    const messages = await getMessages('es');
-    expect(messages).toBeDefined();
-    expect(Object.keys(messages).length).toBeGreaterThan(0);
-  });
-
-  it('throws for unsupported locale', async () => {
-    // @ts-expect-error testing invalid locale
-    await expect(getMessages('fr')).rejects.toThrow();
+  it('narrows known locales and rejects unknown ones', () => {
+    expect(isLocale('en')).toBe(true);
+    expect(isLocale('es')).toBe(true);
+    expect(isLocale('fr')).toBe(false);
   });
 });

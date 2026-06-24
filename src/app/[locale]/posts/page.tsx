@@ -16,7 +16,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
   return {
     title: dict.posts.title,
     description: dict.posts.description,
@@ -32,10 +32,7 @@ export default async function PostsPage({
   const { locale } = await params;
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
-  const [dict, posts] = await Promise.all([
-    getDictionary(locale as Locale),
-    getPosts(),
-  ]);
+  const [dict, posts] = await Promise.all([getDictionary(locale), getPosts()]);
 
   return (
     <main className={styles.main}>
@@ -46,7 +43,9 @@ export default async function PostsPage({
           posts={posts}
           getHref={post => `/${locale}/posts/${post.id}`}
         />
-        <PostComments posts={posts} />
+        <PostComments
+          posts={posts.map(post => ({ id: post.id, title: post.title }))}
+        />
       </Container>
     </main>
   );

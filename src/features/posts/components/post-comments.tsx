@@ -10,8 +10,12 @@ import { getComments } from '../api/comments.service';
 import type { Post } from '../types';
 import styles from './post-comments.module.css';
 
+// Only the fields the <Select> needs — avoids re-serializing post bodies into
+// the RSC payload just to render the dropdown options.
+type PostOption = Pick<Post, 'id' | 'title'>;
+
 type PostCommentsProps = {
-  posts: Post[];
+  posts: PostOption[];
 };
 
 export function PostComments({ posts }: PostCommentsProps) {
@@ -21,6 +25,9 @@ export function PostComments({ posts }: PostCommentsProps) {
 
   const postId = Number(selectedPostId);
 
+  // This is the intentional client-side fetching demo, so getComments stays a
+  // plain browser fetch (no `'use cache'`). Caching lives where it belongs for
+  // this layer: React Query keeps each post's comments fresh for staleTime.
   const {
     data: comments,
     isLoading,
@@ -29,6 +36,7 @@ export function PostComments({ posts }: PostCommentsProps) {
     queryKey: ['comments', postId],
     queryFn: () => getComments(postId),
     enabled: !!postId,
+    staleTime: 60_000,
   });
 
   const options = posts.map(post => ({

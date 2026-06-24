@@ -16,7 +16,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
   return {
     title: dict.contact.title,
     description: dict.contact.subtitle,
@@ -32,7 +32,7 @@ export default async function ContactPage({
   const { locale } = await params;
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
-  const dict = await getDictionary(locale as Locale);
+  const dict = await getDictionary(locale);
 
   return (
     <main className={styles.main}>
