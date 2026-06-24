@@ -19,7 +19,7 @@ export function Input({
   ...props
 }: InputProps) {
   const generatedId = useId();
-  const inputId = id ?? props.name ?? generatedId;
+  const inputId = id ?? generatedId;
 
   return (
     <div className={styles.field}>

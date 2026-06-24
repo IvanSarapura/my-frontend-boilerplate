@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useRef } from 'react';
+import { useCallback, useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 
 import { CloseIcon } from '@/components/ui/icon';
@@ -24,6 +24,12 @@ type ModalProps = {
   className?: string;
   /** Accessible name for the close button. Pass a localized string. */
   closeLabel?: string;
+  /**
+   * Accessible name for the dialog. In compound mode (`title` omitted), provide
+   * either a `<ModalHeader>` (preferred) or this `ariaLabel`; otherwise the
+   * dialog has no accessible name (dev-warned).
+   */
+  ariaLabel?: string;
 };
 
 export function Modal({
@@ -34,24 +40,45 @@ export function Modal({
   footer,
   className,
   closeLabel = 'Close dialog',
+  ariaLabel,
 }: ModalProps) {
   const overlayRef = useRef<HTMLDivElement>(null);
+  const headerMountedRef = useRef(false);
   const titleId = useId();
 
   useModalBehavior(open, onClose, overlayRef);
 
-  if (!open) return null;
+  const registerHeader = useCallback(() => {
+    headerMountedRef.current = true;
+    return () => {
+      headerMountedRef.current = false;
+    };
+  }, []);
 
   const isCompound = title === undefined;
 
+  // Dev guardrail: a compound modal with neither a <ModalHeader> nor `ariaLabel`
+  // leaves `aria-labelledby` dangling → no accessible name.
+  useEffect(() => {
+    if (process.env.NODE_ENV === 'production') return;
+    if (open && isCompound && !ariaLabel && !headerMountedRef.current) {
+      console.warn(
+        'Modal: compound modal has no accessible name. Render a <ModalHeader> or pass `ariaLabel`.',
+      );
+    }
+  }, [open, isCompound, ariaLabel]);
+
+  if (!open) return null;
+
   return createPortal(
-    <ModalContext.Provider value={{ titleId }}>
+    <ModalContext.Provider value={{ titleId, registerHeader }}>
       <div
         ref={overlayRef}
         className={styles.overlay}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={titleId}
+        aria-labelledby={ariaLabel ? undefined : titleId}
+        aria-label={ariaLabel}
       >
         <div
           className={cx(

@@ -107,8 +107,11 @@ export default async function LocaleLayout({
         <ThemeProvider>
           <ToastProvider>
             <QueryProvider>
-              {/* div wraps children so pages can keep their own <main> without nesting */}
-              <div id="main-content">{children}</div>
+              {/* div wraps children so pages can keep their own <main> without nesting;
+                  tabIndex=-1 lets the skip link move focus into the region (WCAG 2.4.1) */}
+              <div id="main-content" tabIndex={-1}>
+                {children}
+              </div>
               <Toaster />
             </QueryProvider>
           </ToastProvider>

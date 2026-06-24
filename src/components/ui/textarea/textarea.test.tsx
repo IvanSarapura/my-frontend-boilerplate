@@ -46,9 +46,22 @@ describe('Textarea', () => {
     expect(screen.getByRole('textbox')).toBeDisabled();
   });
 
-  it('falls back to name as id when id is not provided', () => {
+  it('forwards the name attribute to the textarea', () => {
     render(<Textarea label="Notes" name="notes" />);
     expect(screen.getByLabelText('Notes')).toHaveAttribute('name', 'notes');
+  });
+
+  it('gives each textarea sharing a name a unique id', () => {
+    render(
+      <>
+        <Textarea label="One" name="dup" />
+        <Textarea label="Two" name="dup" />
+      </>,
+    );
+    const a = screen.getByLabelText('One');
+    const b = screen.getByLabelText('Two');
+    expect(a.id).toBeTruthy();
+    expect(a.id).not.toBe(b.id);
   });
 
   it('aria-describedby points to error id when error is present', () => {

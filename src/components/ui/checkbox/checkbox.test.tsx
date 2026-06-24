@@ -64,9 +64,17 @@ describe('Checkbox', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('Error text');
   });
 
-  it('uses name as fallback id when id is omitted', () => {
-    render(<Checkbox label="Theme" name="theme" />);
-    expect(screen.getByLabelText('Theme')).toHaveAttribute('id', 'theme');
+  it('gives each checkbox sharing a name a unique id', () => {
+    render(
+      <>
+        <Checkbox label="One" name="opt" />
+        <Checkbox label="Two" name="opt" />
+      </>,
+    );
+    const a = screen.getByLabelText('One');
+    const b = screen.getByLabelText('Two');
+    expect(a.id).toBeTruthy();
+    expect(a.id).not.toBe(b.id);
   });
 
   it('forwards arbitrary HTML attributes to the underlying input', () => {

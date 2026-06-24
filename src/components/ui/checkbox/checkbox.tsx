@@ -21,7 +21,7 @@ export function Checkbox({
   ...props
 }: CheckboxProps) {
   const generatedId = useId();
-  const inputId = id ?? props.name ?? generatedId;
+  const inputId = id ?? generatedId;
   const describedBy = error
     ? `${inputId}-error`
     : helper

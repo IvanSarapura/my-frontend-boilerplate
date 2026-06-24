@@ -32,4 +32,17 @@ describe('Input', () => {
       'password',
     );
   });
+
+  it('gives each input sharing a name a unique id', () => {
+    render(
+      <>
+        <Input label="One" name="dup" />
+        <Input label="Two" name="dup" />
+      </>,
+    );
+    const a = screen.getByLabelText('One');
+    const b = screen.getByLabelText('Two');
+    expect(a.id).toBeTruthy();
+    expect(a.id).not.toBe(b.id);
+  });
 });

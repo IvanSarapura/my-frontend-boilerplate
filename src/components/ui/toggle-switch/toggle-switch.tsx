@@ -34,7 +34,7 @@ export function ToggleSwitch({
   ...props
 }: ToggleSwitchProps) {
   const generatedId = useId();
-  const switchId = id ?? props.name ?? generatedId;
+  const switchId = id ?? generatedId;
 
   return (
     <div className={cx(styles.wrapper, className)}>

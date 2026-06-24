@@ -186,6 +186,45 @@ describe('Modal', () => {
     expect(document.activeElement).toBe(opener);
   });
 
+  describe('accessible name (compound mode)', () => {
+    it('names the dialog via ariaLabel and drops aria-labelledby', () => {
+      render(
+        <Modal open onClose={vi.fn()} ariaLabel="Settings">
+          <ModalBody>body</ModalBody>
+        </Modal>,
+      );
+      const dialog = screen.getByRole('dialog');
+      expect(dialog).toHaveAccessibleName('Settings');
+      expect(dialog).not.toHaveAttribute('aria-labelledby');
+    });
+
+    it('names the dialog via ModalHeader without warning', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      render(
+        <Modal open onClose={vi.fn()}>
+          <ModalHeader>Profile</ModalHeader>
+          <ModalBody>body</ModalBody>
+        </Modal>,
+      );
+      expect(screen.getByRole('dialog')).toHaveAccessibleName('Profile');
+      expect(warn).not.toHaveBeenCalled();
+      warn.mockRestore();
+    });
+
+    it('warns in dev when compound modal has no header and no ariaLabel', () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      render(
+        <Modal open onClose={vi.fn()}>
+          <ModalBody>body</ModalBody>
+        </Modal>,
+      );
+      expect(warn).toHaveBeenCalledWith(
+        expect.stringContaining('no accessible name'),
+      );
+      warn.mockRestore();
+    });
+  });
+
   describe('body scroll lock', () => {
     afterEach(() => {
       document.body.style.overflow = '';

@@ -19,7 +19,7 @@ export function Textarea({
   ...props
 }: TextareaProps) {
   const generatedId = useId();
-  const textareaId = id ?? props.name ?? generatedId;
+  const textareaId = id ?? generatedId;
 
   return (
     <div className={styles.field}>

@@ -1,6 +1,6 @@
 'use client';
 
-import type { ChangeEvent, InputHTMLAttributes } from 'react';
+import { type ChangeEvent, type InputHTMLAttributes, useId } from 'react';
 
 import { cx } from '@/lib/utils';
 
@@ -32,7 +32,8 @@ export function Radio({
   const checked = ctx ? ctx.value === value : undefined;
   const invalid = ctx?.invalid ?? false;
 
-  const inputId = id ?? `${name ?? 'radio'}-${value}`;
+  const generatedId = useId();
+  const inputId = id ?? generatedId;
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (ctx) ctx.onChange(value);
@@ -42,7 +43,7 @@ export function Radio({
   return (
     <label
       htmlFor={inputId}
-      className={cx(styles.row, disabled && styles.disabled)}
+      className={cx(styles.row, disabled && styles.disabled, className)}
     >
       <input
         id={inputId}
@@ -56,7 +57,7 @@ export function Radio({
         {...props}
       />
       <span
-        className={cx(styles.box, invalid && styles.boxError, className)}
+        className={cx(styles.box, invalid && styles.boxError)}
         aria-hidden="true"
       >
         <span className={styles.dot} />

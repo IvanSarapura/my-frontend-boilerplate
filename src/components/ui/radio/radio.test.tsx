@@ -124,9 +124,25 @@ describe('Radio + RadioGroup', () => {
     expect(radio).toBeChecked();
   });
 
-  it('derives a fallback id from the value when no id or name is given', () => {
-    render(<Radio value="a" label="A" />);
-    expect(screen.getByRole('radio')).toHaveAttribute('id', 'radio-a');
+  it('gives each standalone radio a unique generated id', () => {
+    render(
+      <>
+        <Radio name="dup" value="a" label="A" />
+        <Radio name="dup" value="a" label="B" />
+      </>,
+    );
+    const a = screen.getByLabelText('A');
+    const b = screen.getByLabelText('B');
+    expect(a.id).toBeTruthy();
+    expect(a.id).not.toBe(b.id);
+  });
+
+  it('applies className to the label root, not the inner box', () => {
+    const { container } = render(
+      <Radio name="x" value="a" label="A" className="custom" />,
+    );
+    expect(container.querySelector('label')).toHaveClass('custom');
+    expect(container.querySelector('.box')).not.toHaveClass('custom');
   });
 
   it('omits aria-labelledby when no label is provided', () => {

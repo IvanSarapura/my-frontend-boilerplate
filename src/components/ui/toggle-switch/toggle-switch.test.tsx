@@ -55,9 +55,17 @@ describe('ToggleSwitch', () => {
     ).toBeTruthy();
   });
 
-  it('uses name as fallback id when id is not provided', () => {
-    render(<ToggleSwitch label="Theme" name="theme" />);
-    expect(screen.getByLabelText('Theme')).toHaveAttribute('id', 'theme');
+  it('gives each switch sharing a name a unique id', () => {
+    render(
+      <>
+        <ToggleSwitch label="One" name="opt" />
+        <ToggleSwitch label="Two" name="opt" />
+      </>,
+    );
+    const a = screen.getByLabelText('One');
+    const b = screen.getByLabelText('Two');
+    expect(a.id).toBeTruthy();
+    expect(a.id).not.toBe(b.id);
   });
 
   it('applies the outlined variant class to the track', () => {
