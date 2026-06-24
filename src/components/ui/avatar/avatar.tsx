@@ -52,6 +52,8 @@ export function Avatar({
             src={src}
             alt=""
             className={styles.image}
+            loading="lazy"
+            decoding="async"
             onError={() => setHasError(true)}
           />
         ) : (

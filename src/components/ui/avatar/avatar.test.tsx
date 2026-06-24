@@ -14,10 +14,10 @@ describe('Avatar', () => {
     );
     const img = screen.getByRole('img', { name: 'Ada Lovelace' });
     expect(img).toBeInTheDocument();
-    expect(img.querySelector('img')).toHaveAttribute(
-      'src',
-      'https://example.com/a.png',
-    );
+    const inner = img.querySelector('img');
+    expect(inner).toHaveAttribute('src', 'https://example.com/a.png');
+    expect(inner).toHaveAttribute('loading', 'lazy');
+    expect(inner).toHaveAttribute('decoding', 'async');
   });
 
   it('falls back to initials when no src is provided', () => {
