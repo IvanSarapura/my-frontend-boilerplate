@@ -65,7 +65,7 @@ const eslintConfig = defineConfig([
   },
   {
     // Production code must import individual icons (CloseIcon, ChevronDownIcon, …),
-    // never the dev-only catalog (which pulls all 171 into the bundle).
+    // never the dev-only catalog (which pulls all 173 into the bundle).
     files: ['src/**/*.{ts,tsx}'],
     ignores: [
       'src/components/ui/icon/icons.test.tsx',

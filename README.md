@@ -97,7 +97,7 @@ Key principles:
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Next.js 16 App Router**         | Server Components by default, React 19, React Compiler                                                                                                                                      |
 | **Domain-Driven Architecture**    | `src/features/` keeps business logic organized and scalable                                                                                                                                 |
-| **Custom Design System**          | 22 primitive UI components + 171 tree-shakeable icon components, all CSS Modules                                                                                                            |
+| **Custom Design System**          | 22 primitive UI components + 173 tree-shakeable icon components, all CSS Modules                                                                                                            |
 | **Tri-State Theming**             | Light / dark / system with SSR-safe `ThemeProvider` + anti-FOUC                                                                                                                             |
 | **Vendor-Agnostic Observability** | `reportError` hook wired into error boundaries; bring your own SDK                                                                                                                          |
 | **Type-Safe API Client**          | Generic `fetch` wrapper with optional Zod runtime validation                                                                                                                                |
@@ -259,7 +259,7 @@ my-frontend-boilerplate/
 │   │   │   ├── card/
 │   │   │   ├── checkbox/
 │   │   │   ├── dropdown/            #   @floating-ui compound: Trigger + Content + Item + Separator
-│   │   │   ├── icon/                #   171 tree-shakeable icon components (named ESM exports) + IconBase wrapper. Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants
+│   │   │   ├── icon/                #   173 tree-shakeable icon components (named ESM exports) + IconBase wrapper. Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants
 │   │   │   ├── input/
 │   │   │   ├── modal/
 │   │   │   ├── pagination/          #   accessible nav with ellipsis collapsing
@@ -366,7 +366,7 @@ Each component lives in its own subdirectory (`button/button.tsx`, `button/butto
 | `Card`                 | Container with variants                                                                                                                                                                                                                                                                                             |
 | `Checkbox`             | Form field with label / error / helper                                                                                                                                                                                                                                                                              |
 | `Dropdown`             | Compound menu powered by `@floating-ui/react`                                                                                                                                                                                                                                                                       |
-| `IconBase` + 171 icons | Named ESM exports — only the icons you import ship to the bundle. `IconBase` is the shared SVG wrapper; per-icon components (`<CloseIcon />`, `<ChevronDownIcon />`, …) live in `icons/*.tsx`. Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants like `thumb-up` ↻180° = `thumb-down` |
+| `IconBase` + 173 icons | Named ESM exports — only the icons you import ship to the bundle. `IconBase` is the shared SVG wrapper; per-icon components (`<CloseIcon />`, `<ChevronDownIcon />`, …) live in `icons/*.tsx`. Feather-stroke + Material-fill, outline/filled pairs, rotation-derived variants like `thumb-up` ↻180° = `thumb-down` |
 | `Input`                | Text input with label, error, helper                                                                                                                                                                                                                                                                                |
 | `Modal`                | Focus-trapped dialog (portal)                                                                                                                                                                                                                                                                                       |
 | `Pagination`           | Accessible nav with MUI-style ellipsis collapsing                                                                                                                                                                                                                                                                   |
@@ -385,9 +385,16 @@ Each component lives in its own subdirectory (`button/button.tsx`, `button/butto
 >
 > **Floating-ui animation constraint:** floating-ui positions elements via an inline `transform: translate(x, y)`. CSS `@keyframes` declarations override inline styles for the same property during the animation. Never use `transform: translateY()` in entry/exit animations for floating-ui components — use the independent CSS `translate` property instead (`translate: 0 -4px`), which composes on top of the positioning transform without interfering.
 
+**Available affordances (preserved by design).** As a boilerplate, some tokens and utilities ship unused so you can adopt them while adapting the template — they're options, not dead code:
+
+- **`.focus-ring`** — a global utility in `globals.css` that applies the standard token-driven focus ring (`--color-focus-ring-*`) to any element. The same ring is shared across component modules via `composes: ring from '…/focus.module.css'`, so the focus style has a single source of truth.
+- **`--color-disabled-fg`** — a disabled text-color token alongside the widely-used `--color-disabled-bg`. The default disabled pattern dims controls via `opacity: var(--opacity-disabled)`; apply this token instead if you prefer dimming by color.
+
 ### Typography
 
-The typography system is a three-layer scale in `src/app/globals.css`: raw size primitives (`--text-xs` … `--text-6xl`), semantic tokens (`--font-display-*`, `--font-heading-*`, `--font-body-*`, `--font-caption`) that bundle size + line-height + weight + letter-spacing, and base styles on `h1..h6 / p / small` that consume those tokens. Components should reach for the semantic tokens (`var(--font-heading-2)`) rather than raw sizes, so changes to the scale propagate consistently.
+The typography system is a three-layer scale in `src/app/globals.css`: raw size primitives (`--text-xs` … `--text-6xl`), semantic tokens (`--font-display-*`, `--font-heading-*`, `--font-body-*`, `--font-caption`) that bundle size + line-height + weight + letter-spacing, and base styles on `h1..h6 / p / small` that consume those tokens.
+
+Both the primitive and semantic layers are **intentionally available** as component-level APIs — pick whichever fits your product: reach for raw primitives (`var(--text-sm)`) when you want direct size control, or semantic tokens (`var(--font-heading-2)`) when you want size + line-height + weight + tracking bundled by intent. A token with no current consumer (e.g. `--font-display-1`, `--font-body-sm`) is an available option, not dead code.
 
 **Fonts: Geist + Geist Mono via a dual-runtime architecture.**
 
@@ -1045,7 +1052,7 @@ ESLint and Stylelint run with `--cache` in the pre-commit hook. The first commit
 
 ### Pre-commit Node heap
 
-`.husky/pre-commit` exports `NODE_OPTIONS='--max-old-space-size=4096'` before invoking `lint-staged`. This raises V8's heap ceiling so eslint/prettier/stylelint can process large staged sets without being killed by the OS (`SIGKILL`). Combined with `eslint-plugin-react-compiler`'s type-aware analysis on the React tree, the default ~2 GB heap can be insufficient on WSL2 / Linux for repos with many JSX files (the icon system alone is 171 modules). Raise the limit further (e.g. `6144`) only if the symptom returns; do not bypass it by skipping the hook.
+`.husky/pre-commit` exports `NODE_OPTIONS='--max-old-space-size=4096'` before invoking `lint-staged`. This raises V8's heap ceiling so eslint/prettier/stylelint can process large staged sets without being killed by the OS (`SIGKILL`). Combined with `eslint-plugin-react-compiler`'s type-aware analysis on the React tree, the default ~2 GB heap can be insufficient on WSL2 / Linux for repos with many JSX files (the icon system alone is 173 modules). Raise the limit further (e.g. `6144`) only if the symptom returns; do not bypass it by skipping the hook.
 
 > **Why exported in the hook, not inline in `lint-staged`?** `lint-staged` does **not** run commands through a shell, so an env-var prefix like `NODE_OPTIONS=... eslint --fix` is interpreted as a binary name and fails with `ENOENT`. Exporting the variable in the hook makes it available to every child process (eslint, prettier, stylelint) without depending on shell-quoting.
 
