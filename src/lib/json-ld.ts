@@ -4,16 +4,19 @@ type JsonLdWebSite = {
   name: string;
   url: string;
   description: string;
+  inLanguage: string;
 };
 
 export function generateWebsiteJsonLd({
   name,
   url,
   description,
+  inLanguage,
 }: {
   name: string;
   url: string;
   description: string;
+  inLanguage: string;
 }): JsonLdWebSite {
   return {
     '@context': 'https://schema.org',
@@ -21,6 +24,7 @@ export function generateWebsiteJsonLd({
     name,
     url,
     description,
+    inLanguage,
   };
 }
 

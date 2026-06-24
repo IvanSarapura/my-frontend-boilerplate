@@ -13,15 +13,17 @@ describe('generateWebsiteJsonLd', () => {
     expect(
       generateWebsiteJsonLd({
         name: 'Test',
-        url: 'https://test.example.com',
+        url: 'https://test.example.com/en',
         description: 'A test site',
+        inLanguage: 'en',
       }),
     ).toEqual({
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'Test',
-      url: 'https://test.example.com',
+      url: 'https://test.example.com/en',
       description: 'A test site',
+      inLanguage: 'en',
     });
   });
 });
@@ -156,6 +158,7 @@ describe('serializeJsonLd', () => {
         name: '</script><img src=x onerror=alert(1)>',
         url: 'https://example.com',
         description: 'a & b',
+        inLanguage: 'en',
       }),
     );
 
@@ -171,6 +174,7 @@ describe('serializeJsonLd', () => {
       name: 'A & B </script>',
       url: 'https://example.com',
       description: 'desc',
+      inLanguage: 'en',
     });
     expect(JSON.parse(serializeJsonLd(data))).toEqual(data);
   });

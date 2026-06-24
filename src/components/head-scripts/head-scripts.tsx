@@ -14,6 +14,7 @@ type HeadScriptsProps = {
   appName: string;
   appUrl: string;
   description: string;
+  locale: string;
 };
 
 // Renders nonce-bound inline scripts in <head>: theme init + JSON-LD.
@@ -23,14 +24,18 @@ export async function HeadScripts({
   appName,
   appUrl,
   description,
+  locale,
 }: HeadScriptsProps) {
   const nonce = (await headers()).get('x-nonce') ?? undefined;
 
   const websiteJsonLd = generateWebsiteJsonLd({
     name: appName,
-    url: appUrl,
+    // Localized so /en and /es emit distinct WebSite nodes (hreflang signal).
+    url: `${appUrl}/${locale}`,
     description,
+    inLanguage: locale,
   });
+  // Organization is the language-neutral entity — keep its canonical (bare) url.
   const organizationJsonLd = generateOrganizationJsonLd({
     name: appName,
     url: appUrl,

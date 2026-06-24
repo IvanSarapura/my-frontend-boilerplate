@@ -14,6 +14,7 @@ const TEST_PROPS = {
   appName: 'Test App',
   appUrl: 'https://test.example.com',
   description: 'Test description',
+  locale: 'en',
 };
 
 function getScripts(container: HTMLElement): HTMLScriptElement[] {
@@ -75,8 +76,10 @@ describe('HeadScripts', () => {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'Test App',
-      url: 'https://test.example.com',
+      // Localized: appUrl + the active locale, plus inLanguage.
+      url: 'https://test.example.com/en',
       description: 'Test description',
+      inLanguage: 'en',
     });
   });
 

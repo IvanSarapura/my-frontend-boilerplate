@@ -97,6 +97,7 @@ export default async function LocaleLayout({
             appName={env.NEXT_PUBLIC_APP_NAME}
             appUrl={env.NEXT_PUBLIC_APP_URL}
             description={APP_DESCRIPTION}
+            locale={locale}
           />
         </Suspense>
       </head>
