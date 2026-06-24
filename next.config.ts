@@ -35,6 +35,12 @@ const nextConfig: NextConfig = {
   // behind a proxy/CDN, prefer `compress: false` and let the proxy compress.
   compress: true,
 
+  // Tree-shake the @/components/ui barrel so a server route importing one
+  // primitive doesn't pull sibling client modules (+ @floating-ui) into its bundle.
+  experimental: {
+    optimizePackageImports: ['@/components/ui'],
+  },
+
   // Empty allowlist blocks all external image hosts by default. Add hosts as
   // narrowly as possible. See CONTRIBUTING → Images and Static Assets.
   images: {
