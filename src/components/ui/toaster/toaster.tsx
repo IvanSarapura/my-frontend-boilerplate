@@ -1,6 +1,12 @@
 'use client';
 
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from 'react';
 import { createPortal } from 'react-dom';
 
 import {
@@ -58,10 +64,35 @@ function ToastItem({
   const [leaving, setLeaving] = useState(false);
   const VariantIcon = VARIANT_ICONS[variant];
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLeaving(true), TOAST_FADE_START_MS);
-    return () => clearTimeout(timer);
+  // Pausable auto-dismiss: clear the timer on hover/focus and resume with the
+  // time left on leave/blur, so a reader can keep a toast up (WCAG 2.2.1).
+  const remainingRef = useRef(TOAST_FADE_START_MS);
+  const startRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearTimer = useCallback(() => {
+    if (timerRef.current !== null) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
   }, []);
+
+  const resume = useCallback(() => {
+    clearTimer();
+    startRef.current = Date.now();
+    timerRef.current = setTimeout(() => setLeaving(true), remainingRef.current);
+  }, [clearTimer]);
+
+  const pause = useCallback(() => {
+    if (timerRef.current === null) return;
+    clearTimer();
+    remainingRef.current -= Date.now() - startRef.current;
+  }, [clearTimer]);
+
+  useEffect(() => {
+    resume();
+    return clearTimer;
+  }, [resume, clearTimer]);
 
   useEffect(() => {
     if (!leaving) return;
@@ -72,6 +103,13 @@ function ToastItem({
   return (
     <div
       className={cx(styles.toast, styles[variant], leaving && styles.leaving)}
+      // error toasts get an assertive live region; the rest stay polite via the
+      // container's aria-live="polite".
+      {...(variant === 'error' ? { role: 'alert' } : {})}
+      onMouseEnter={pause}
+      onMouseLeave={resume}
+      onFocus={pause}
+      onBlur={resume}
     >
       <div className={styles.iconWrapper}>
         <VariantIcon size={20} />

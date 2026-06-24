@@ -138,6 +138,44 @@ describe('Toaster', () => {
     expect(document.body.querySelector('.warning')).toBeInTheDocument();
   });
 
+  it('exposes error toasts via an assertive alert role', () => {
+    render(
+      <TestHarness>
+        <TriggerButton title="Boom" variant="error" />
+      </TestHarness>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Add Toast' }));
+    expect(screen.getByRole('alert')).toHaveTextContent('Boom');
+  });
+
+  it('pauses the auto-dismiss timer while hovered and resumes on leave', () => {
+    vi.useFakeTimers();
+    render(
+      <TestHarness>
+        <TriggerButton title="Stay" />
+      </TestHarness>,
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Add Toast' }));
+    const toast = screen.getByText('Stay').closest('.toast') as HTMLElement;
+
+    // mouseOver/mouseOut are what React translates into onMouseEnter/onMouseLeave.
+    fireEvent.mouseOver(toast);
+    act(() => {
+      vi.advanceTimersByTime(TOAST_DURATION_MS * 3);
+    });
+    expect(screen.getByText('Stay')).toBeInTheDocument();
+
+    fireEvent.mouseOut(toast, { relatedTarget: document.body });
+    act(() => {
+      vi.advanceTimersByTime(TOAST_DURATION_MS);
+    });
+    act(() => {
+      vi.runAllTimers();
+    });
+    expect(screen.queryByText('Stay')).not.toBeInTheDocument();
+    vi.useRealTimers();
+  });
+
   it('auto-removes toast after TOAST_DURATION_MS', () => {
     vi.useFakeTimers();
     render(
