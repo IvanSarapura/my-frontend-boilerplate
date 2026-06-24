@@ -158,6 +158,22 @@ describe('Accordion', () => {
     expect(region.getAttribute('aria-labelledby')).toBe(one.id);
   });
 
+  it('marks a collapsed panel inert and an open panel interactive', () => {
+    render(<ThreeItems defaultValue="one" />);
+    const open = document.getElementById(
+      screen
+        .getByRole('button', { name: /item one/i })
+        .getAttribute('aria-controls') ?? '',
+    );
+    const closed = document.getElementById(
+      screen
+        .getByRole('button', { name: /item two/i })
+        .getAttribute('aria-controls') ?? '',
+    );
+    expect(open).not.toHaveAttribute('inert');
+    expect(closed).toHaveAttribute('inert');
+  });
+
   it('throws when sub-component is rendered outside <Accordion>', () => {
     const spy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
     expect(() =>
