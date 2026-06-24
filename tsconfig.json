@@ -16,6 +16,8 @@
     "baseUrl": ".",
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
     "verbatimModuleSyntax": true,
     "checkJs": true,
     "plugins": [
