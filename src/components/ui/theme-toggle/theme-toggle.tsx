@@ -16,7 +16,7 @@ import styles from './theme-toggle.module.css';
 
 type ThemeToggleSize = 'sm' | 'md' | 'lg';
 
-type ThemeToggleProps = Omit<
+export type ThemeToggleProps = Omit<
   ButtonHTMLAttributes<HTMLButtonElement>,
   'children' | 'aria-label'
 > & {

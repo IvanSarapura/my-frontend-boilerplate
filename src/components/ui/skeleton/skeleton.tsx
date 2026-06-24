@@ -6,7 +6,7 @@ import styles from './skeleton.module.css';
 
 type SkeletonVariant = 'text' | 'circle' | 'rect';
 
-type SkeletonProps = {
+export type SkeletonProps = {
   variant?: SkeletonVariant | undefined;
   width?: number | string | undefined;
   height?: number | string | undefined;

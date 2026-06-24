@@ -6,7 +6,7 @@ import { ToggleSwitch } from '@/components/ui/toggle-switch';
 
 type ThemeSwitchSize = 'sm' | 'md' | 'lg';
 
-interface ThemeSwitchProps {
+export interface ThemeSwitchProps {
   /** Visible label / accessible name for the switch. */
   label?: string;
   size?: ThemeSwitchSize;

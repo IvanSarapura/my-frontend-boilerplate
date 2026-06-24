@@ -11,7 +11,7 @@ type ToggleSwitchVariant =
   | 'outlined-max';
 type ToggleSwitchSize = 'sm' | 'md' | 'lg';
 
-type ToggleSwitchProps = Omit<
+export type ToggleSwitchProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'type' | 'size'
 > & {

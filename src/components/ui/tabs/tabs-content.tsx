@@ -5,7 +5,7 @@ import { cx } from '@/lib/utils';
 import { useTabsContext } from './context';
 import styles from './tabs.module.css';
 
-type TabsContentProps = {
+export type TabsContentProps = {
   value: string;
   className?: string | undefined;
   children: React.ReactNode;

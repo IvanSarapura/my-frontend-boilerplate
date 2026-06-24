@@ -5,7 +5,10 @@ import { cx } from '@/lib/utils';
 
 import styles from './checkbox.module.css';
 
-type CheckboxProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'type'> & {
+export type CheckboxProps = Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  'type'
+> & {
   label?: string | undefined;
   error?: string | undefined;
   helper?: string | undefined;

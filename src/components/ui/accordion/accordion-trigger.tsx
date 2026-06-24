@@ -6,7 +6,7 @@ import { cx } from '@/lib/utils';
 import styles from './accordion.module.css';
 import { useAccordionContext, useAccordionItemContext } from './context';
 
-type AccordionTriggerProps = {
+export type AccordionTriggerProps = {
   className?: string | undefined;
   children: React.ReactNode;
 };

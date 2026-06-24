@@ -7,7 +7,7 @@ import { cx } from '@/lib/utils';
 import { useModalContext } from './context';
 import styles from './modal.module.css';
 
-type ModalHeaderProps = {
+export type ModalHeaderProps = {
   children: ReactNode;
   className?: string;
 };

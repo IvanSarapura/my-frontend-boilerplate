@@ -7,7 +7,7 @@ import { cx } from '@/lib/utils';
 import { RadioContext } from './context';
 import styles from './radio.module.css';
 
-type RadioGroupProps = {
+export type RadioGroupProps = {
   name: string;
   label?: string | undefined;
   value?: string | undefined;

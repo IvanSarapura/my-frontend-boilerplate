@@ -10,7 +10,7 @@ import { cx } from '@/lib/utils';
 import { ModalContext } from './context';
 import styles from './modal.module.css';
 
-type ModalProps = {
+export type ModalProps = {
   open: boolean;
   onClose: () => void;
   /**

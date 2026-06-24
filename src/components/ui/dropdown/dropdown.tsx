@@ -18,7 +18,7 @@ import { useRef, useState } from 'react';
 
 import { DropdownContext } from './context';
 
-type DropdownProps = {
+export type DropdownProps = {
   children: React.ReactNode;
   open?: boolean | undefined;
   defaultOpen?: boolean | undefined;
@@ -61,6 +61,10 @@ export function Dropdown({
     activeIndex,
     onNavigate: setActiveIndex,
     loop: true,
+    // Skip disabled items: each DropdownItem renders aria-disabled and registers
+    // in listRef, so we read the state straight from the DOM node.
+    disabledIndices: index =>
+      listRef.current[index]?.getAttribute('aria-disabled') === 'true',
   });
 
   const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions(

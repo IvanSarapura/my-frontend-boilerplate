@@ -2,10 +2,11 @@
 
 These pages are **example starting points**, not part of the shipped app:
 
-- **`/[locale]/examples`** — index listing the three presets.
+- **`/[locale]/examples`** — index listing the four presets.
 - **`minimal/`** — centered hero, no chrome (coming-soon / single-screen apps).
 - **`marketing/`** — sticky navbar + hero + feature grid + CTA band + footer.
 - **`app-shell/`** — header + sidebar + content region (dashboard base).
+- **`portfolio/`** — bare-menu header + outlined-max ThemeSwitch (showcase personal).
 
 They are excluded from `sitemap.ts` and carry `robots: { index: false }`, so they
 never reach search engines.

@@ -21,7 +21,7 @@ type MultipleProps = {
   onValueChange?: ((value: string[]) => void) | undefined;
 };
 
-type AccordionProps = (SingleProps | MultipleProps) & {
+export type AccordionProps = (SingleProps | MultipleProps) & {
   className?: string | undefined;
   children: React.ReactNode;
 };

@@ -2,7 +2,7 @@ import { cx } from '@/lib/utils';
 
 import styles from './dropdown.module.css';
 
-type DropdownSeparatorProps = {
+export type DropdownSeparatorProps = {
   className?: string | undefined;
 };
 

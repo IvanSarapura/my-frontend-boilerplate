@@ -21,7 +21,7 @@ import { cx } from '@/lib/utils';
 
 import styles from './tooltip.module.css';
 
-type TooltipProps = {
+export type TooltipProps = {
   content: React.ReactNode;
   children: React.ReactElement;
   placement?: Placement | undefined;

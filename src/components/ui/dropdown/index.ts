@@ -1,5 +1,10 @@
+export type { DropdownProps } from './dropdown';
 export { Dropdown } from './dropdown';
+export type { DropdownContentProps } from './dropdown-content';
 export { DropdownContent } from './dropdown-content';
+export type { DropdownItemProps } from './dropdown-item';
 export { DropdownItem } from './dropdown-item';
+export type { DropdownSeparatorProps } from './dropdown-separator';
 export { DropdownSeparator } from './dropdown-separator';
+export type { DropdownTriggerProps } from './dropdown-trigger';
 export { DropdownTrigger } from './dropdown-trigger';

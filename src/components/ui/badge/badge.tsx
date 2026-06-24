@@ -4,7 +4,7 @@ import styles from './badge.module.css';
 
 type BadgeVariant = 'default' | 'primary' | 'success' | 'warning' | 'error';
 
-type BadgeProps = {
+export type BadgeProps = {
   children: React.ReactNode;
   variant?: BadgeVariant;
   className?: string;

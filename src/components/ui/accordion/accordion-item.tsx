@@ -7,7 +7,7 @@ import { cx } from '@/lib/utils';
 import styles from './accordion.module.css';
 import { AccordionItemContext, useAccordionContext } from './context';
 
-type AccordionItemProps = {
+export type AccordionItemProps = {
   value: string;
   disabled?: boolean | undefined;
   className?: string | undefined;

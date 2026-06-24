@@ -4,7 +4,7 @@ import { cx } from '@/lib/utils';
 
 import styles from './input.module.css';
 
-type InputProps = InputHTMLAttributes<HTMLInputElement> & {
+export type InputProps = InputHTMLAttributes<HTMLInputElement> & {
   label?: string | undefined;
   error?: string | undefined;
   helper?: string | undefined;

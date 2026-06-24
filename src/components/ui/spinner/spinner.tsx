@@ -5,7 +5,7 @@ import styles from './spinner.module.css';
 type SpinnerSize = 'sm' | 'md' | 'lg';
 type SpinnerVariant = 'default' | 'muted' | 'white';
 
-type SpinnerProps = {
+export type SpinnerProps = {
   size?: SpinnerSize;
   variant?: SpinnerVariant;
   /** Accessible label announced by screen readers. Defaults to "Loading". */

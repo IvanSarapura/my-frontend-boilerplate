@@ -26,7 +26,7 @@ const DEFAULT_LABELS: Required<PaginationLabels> = {
   page: (page: number) => `Page ${page}`,
 };
 
-type PaginationProps = {
+export type PaginationProps = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;

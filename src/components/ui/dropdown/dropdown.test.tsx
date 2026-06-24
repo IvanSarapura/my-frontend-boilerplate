@@ -112,6 +112,18 @@ describe('Dropdown', () => {
     expect(document.activeElement).toBe(items[1]);
   });
 
+  it('ArrowDown skips a disabled item', async () => {
+    const user = userEvent.setup();
+    render(<BasicDropdown disabledSecond />);
+    await user.click(screen.getByRole('button', { name: /open/i }));
+    const items = screen.getAllByRole('menuitem');
+    await user.keyboard('{ArrowDown}');
+    expect(document.activeElement).toBe(items[0]);
+    await user.keyboard('{ArrowDown}');
+    // item[1] is disabled → focus lands on item[2], not item[1].
+    expect(document.activeElement).toBe(items[2]);
+  });
+
   it('renders DropdownSeparator with role="separator"', async () => {
     const user = userEvent.setup();
     render(

@@ -7,7 +7,7 @@ import { cx } from '@/lib/utils';
 import { TabsContext } from './context';
 import styles from './tabs.module.css';
 
-type TabsProps = {
+export type TabsProps = {
   value?: string | undefined;
   defaultValue?: string | undefined;
   onValueChange?: ((value: string) => void) | undefined;

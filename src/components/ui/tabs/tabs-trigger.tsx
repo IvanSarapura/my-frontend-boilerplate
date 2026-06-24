@@ -5,7 +5,7 @@ import { cx } from '@/lib/utils';
 import { useTabsContext } from './context';
 import styles from './tabs.module.css';
 
-type TabsTriggerProps = {
+export type TabsTriggerProps = {
   value: string;
   disabled?: boolean | undefined;
   className?: string | undefined;

@@ -13,6 +13,7 @@
 
 .pageButton,
 .navButton {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -35,6 +36,21 @@
 .navButton {
   padding: 0;
   color: var(--muted);
+}
+
+/* Extend the tap target to 44px (var(--touch-target-min)) vertically without
+   resizing the glyph. Vertical only: a horizontal row has ~36px pitch, so a
+   full-width 44px target would overlap neighbors. Horizontal stays at the
+   visual width (>= WCAG 2.5.8 AA 24px); raise the list gap for a roomier pager. */
+.pageButton::after,
+.navButton::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  height: var(--touch-target-min);
+  content: '';
+  translate: -50% -50%;
 }
 
 .pageButton:disabled,

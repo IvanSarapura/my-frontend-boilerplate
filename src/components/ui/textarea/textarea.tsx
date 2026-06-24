@@ -4,7 +4,7 @@ import { cx } from '@/lib/utils';
 
 import styles from './textarea.module.css';
 
-type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
+export type TextareaProps = TextareaHTMLAttributes<HTMLTextAreaElement> & {
   label?: string | undefined;
   error?: string | undefined;
   helper?: string | undefined;

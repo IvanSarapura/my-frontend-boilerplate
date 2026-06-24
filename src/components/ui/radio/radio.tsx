@@ -7,7 +7,7 @@ import { cx } from '@/lib/utils';
 import { useRadioContext } from './context';
 import styles from './radio.module.css';
 
-type RadioProps = Omit<
+export type RadioProps = Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'type' | 'value' | 'checked'
 > & {

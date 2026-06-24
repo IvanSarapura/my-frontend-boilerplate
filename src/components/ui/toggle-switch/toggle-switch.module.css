@@ -34,16 +34,20 @@
   height: 36px;
 }
 
-/* Hidden native checkbox — full-size overlay keeps it interactive */
+/* Hidden native checkbox — overlay keeps it interactive. Centered and grown to
+   a 44px min touch target (var(--touch-target-min)) without enlarging the track. */
 .input {
   position: absolute;
-  inset: 0;
+  inset: 50%;
   z-index: 1;
   width: 100%;
+  min-width: var(--touch-target-min);
   height: 100%;
+  min-height: var(--touch-target-min);
   margin: 0;
   cursor: pointer;
   opacity: 0;
+  translate: -50% -50%;
 }
 
 .slider {

@@ -11,7 +11,7 @@ type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
 type AvatarShape = 'circle' | 'square';
 type AvatarStatus = 'online' | 'offline' | 'away' | 'busy';
 
-type AvatarProps = {
+export type AvatarProps = {
   src?: string | undefined;
   alt: string;
   name?: string | undefined;

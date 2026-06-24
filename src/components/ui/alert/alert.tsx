@@ -13,7 +13,7 @@ import styles from './alert.module.css';
 
 type AlertVariant = 'info' | 'success' | 'warning' | 'error';
 
-type AlertProps = {
+export type AlertProps = {
   variant?: AlertVariant | undefined;
   title?: string | undefined;
   children?: React.ReactNode | undefined;

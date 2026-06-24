@@ -8,7 +8,7 @@ import { cx } from '@/lib/utils';
 import { useDropdownContext } from './context';
 import styles from './dropdown.module.css';
 
-type DropdownItemProps = {
+export type DropdownItemProps = {
   children: React.ReactNode;
   onSelect?: (() => void) | undefined;
   disabled?: boolean | undefined;

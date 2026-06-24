@@ -6,7 +6,7 @@ import styles from './card.module.css';
 
 type CardVariant = 'default' | 'outlined' | 'interactive';
 
-type CardProps = HTMLAttributes<HTMLDivElement> & {
+export type CardProps = HTMLAttributes<HTMLDivElement> & {
   variant?: CardVariant;
 };
 

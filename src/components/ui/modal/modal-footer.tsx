@@ -4,7 +4,7 @@ import { cx } from '@/lib/utils';
 
 import styles from './modal.module.css';
 
-type ModalFooterProps = {
+export type ModalFooterProps = {
   children: ReactNode;
   className?: string;
 };

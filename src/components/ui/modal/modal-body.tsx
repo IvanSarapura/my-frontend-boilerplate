@@ -4,7 +4,7 @@ import { cx } from '@/lib/utils';
 
 import styles from './modal.module.css';
 
-type ModalBodyProps = {
+export type ModalBodyProps = {
   children: ReactNode;
   className?: string;
 };

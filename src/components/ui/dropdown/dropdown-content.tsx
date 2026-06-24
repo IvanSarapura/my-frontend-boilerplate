@@ -12,7 +12,7 @@ import { cx } from '@/lib/utils';
 import { useDropdownContext } from './context';
 import styles from './dropdown.module.css';
 
-type DropdownContentProps = {
+export type DropdownContentProps = {
   children: React.ReactNode;
   className?: string | undefined;
 };

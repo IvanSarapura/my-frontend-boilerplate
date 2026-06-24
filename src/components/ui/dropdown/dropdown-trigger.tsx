@@ -7,7 +7,7 @@ import { cx } from '@/lib/utils';
 import { useDropdownContext } from './context';
 import styles from './dropdown.module.css';
 
-type DropdownTriggerProps = {
+export type DropdownTriggerProps = {
   children: React.ReactNode;
   className?: string | undefined;
 };

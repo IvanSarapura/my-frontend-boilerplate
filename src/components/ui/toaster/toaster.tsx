@@ -92,7 +92,7 @@ function ToastItem({
   );
 }
 
-type ToasterProps = {
+export type ToasterProps = {
   /** Accessible name for the toast region. Pass a localized string. */
   regionLabel?: string;
   /** Accessible name for each toast's dismiss button. Pass a localized string. */
