@@ -57,6 +57,7 @@
 - [Storybook — Visual Documentation](#storybook--visual-documentation)
 - [Optional Integrations](#optional-integrations)
   - [TanStack Query Devtools](#tanstack-query-devtools)
+  - [Analytics](#analytics)
   - [Error Tracking (Sentry / Rollbar / Bugsnag / …)](#error-tracking-sentry--rollbar--bugsnag--)
   - [Authentication](#authentication)
   - [Transactional Email](#transactional-email)
@@ -655,6 +656,7 @@ npm run storybook:build  # Static build for deployment
 - **Design tokens:** Storybook imports `globals.css` so components render with the exact same tokens as the app
 - **Same typography as the app:** `.storybook/preview-head.html` loads Geist + Geist Mono into the preview iframe (Storybook's Vite pipeline does not run the Next.js SWC plugin, so `next/font` is inert here — see the [Typography](#typography) section for the full architecture)
 - **Chromatic ready:** `@chromatic-com/storybook` is installed for visual regression testing and UI review
+- **Onboarding guide:** `@storybook/addon-onboarding` ships an interactive walkthrough for writing your first stories. It's a learning aid, not a runtime dependency — once you're comfortable, remove it from the `addons` array in `.storybook/main.ts` and from `devDependencies`
 
 ### Why `:6006`?
 
@@ -684,6 +686,28 @@ export function QueryProvider({ children }) {
   );
 }
 ```
+
+### Analytics
+
+No analytics provider ships by default (no vendor lock-in, no script on every page). `.env.local.example` includes a commented `NEXT_PUBLIC_ANALYTICS_ID` placeholder so the wiring is one step away — it is **not** read anywhere until you opt in. To enable a script-tag provider (Plausible, Fathom, GA, …), uncomment the var and load it with `next/script` (nonce-bound to satisfy the CSP in `src/proxy.ts`):
+
+```tsx
+// src/app/[locale]/layout.tsx — inside <head>
+import Script from 'next/script';
+
+const analyticsId = process.env.NEXT_PUBLIC_ANALYTICS_ID;
+{
+  analyticsId && (
+    <Script
+      src="https://plausible.io/js/script.js"
+      data-domain={analyticsId}
+      strategy="afterInteractive"
+    />
+  );
+}
+```
+
+Remember to add the provider's origin to the CSP `connect-src`/`script-src` allowlist in `src/proxy.ts`. For Vercel's first-party analytics, install `@vercel/analytics` and render `<Analytics />` instead — no env var needed.
 
 ### Error Tracking (Sentry / Rollbar / Bugsnag / …)
 
@@ -990,6 +1014,14 @@ Visiting `/` triggers `src/proxy.ts`, which reads the `Accept-Language` request 
 1. Add it to `locales` in `src/i18n/config.ts`
 2. Create `src/i18n/messages/<locale>.json`
 3. Add a loader entry in `src/i18n/dictionaries.ts`
+
+### No interpolation / pluralization layer (by design)
+
+Dictionaries are **flat string maps** looked up by direct access (`dict.common.notFound`) — there is no `{token}` interpolation, ICU syntax, or pluralization. Dynamic values are composed in TSX with template literals (e.g. the footer copyright: `` `© ${year} ${brand} · ${dict.footer.rights}` ``). If you need interpolation, add a tiny helper (`format(template, vars)` that replaces `{name}` placeholders) or adopt a library like `intl-messageformat` for full ICU/plural support.
+
+### Localized 404 vs. error boundaries
+
+`src/app/[locale]/not-found.tsx` is a Server Component that **is** localized: Next.js gives `not-found` no `params`, so it reads the `NEXT_LOCALE` cookie (set by `proxy.ts`) via `cookies()` and feeds it to `getDictionary`. The error boundaries `src/app/[locale]/error.tsx` and `src/app/global-error.tsx` stay in English **on purpose** — they are Client Components, and `NEXT_LOCALE` is `httpOnly` (unreadable from client JS) while `getDictionary` is `server-only`, so they genuinely cannot localize without an extra round-trip. Keep their copy short and language-neutral, or wire your own client-side locale source if you need them translated.
 
 ---
 
