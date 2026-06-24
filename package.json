@@ -44,7 +44,8 @@
   },
   "overrides": {
     "postcss": ">=8.5.10",
-    "esbuild": "0.28.1"
+    "esbuild": "0.28.1",
+    "undici": "^7.28.0"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.1.2",
