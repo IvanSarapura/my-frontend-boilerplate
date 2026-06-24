@@ -1,6 +1,21 @@
 'use client';
 
-import { useEffect, useEffectEvent, useId, useRef, useState } from 'react';
+import {
+  autoUpdate,
+  flip,
+  FloatingPortal,
+  offset,
+  shift,
+  size,
+  useClick,
+  useDismiss,
+  useFloating,
+  useInteractions,
+  useListNavigation,
+  useRole,
+  useTypeahead,
+} from '@floating-ui/react';
+import { type KeyboardEvent, useId, useRef, useState } from 'react';
 
 import { ChevronDownIcon } from '@/components/ui/icon';
 import { cx } from '@/lib/utils';
@@ -34,82 +49,92 @@ export function Select({
   className,
 }: SelectProps) {
   const [open, setOpen] = useState(false);
-  const [focusedIndex, setFocusedIndex] = useState(-1);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const listboxRef = useRef<HTMLUListElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
   const baseId = useId();
   const errorId = `${baseId}-error`;
   const labelId = label ? `${baseId}-label` : undefined;
   const triggerId = `${baseId}-trigger`;
+  const valueId = `${baseId}-value`;
   const listboxId = `${baseId}-listbox`;
   const optionId = (index: number) => `${baseId}-option-${index}`;
-  const selectedLabel = options.find(o => o.value === value)?.label;
 
-  const close = () => {
-    // Return focus to the trigger only when it's still inside the widget
-    // (Escape / selection); on an outside click the focus already moved away.
-    if (wrapperRef.current?.contains(document.activeElement)) {
-      triggerRef.current?.focus();
+  const selectedIndex = options.findIndex(o => o.value === value);
+  const selectedLabel =
+    selectedIndex >= 0 ? options[selectedIndex]?.label : undefined;
+
+  const listRef = useRef<(HTMLElement | null)[]>([]);
+  const labelsRef = useRef<(string | null)[]>(options.map(o => o.label));
+
+  const { refs, floatingStyles, context } = useFloating({
+    open,
+    onOpenChange: setOpen,
+    placement: 'bottom-start',
+    whileElementsMounted: autoUpdate,
+    middleware: [
+      offset(4),
+      flip({ padding: 8 }),
+      shift({ padding: 8 }),
+      size({
+        apply({ rects, elements }) {
+          // Match the menu width to the trigger.
+          elements.floating.style.width = `${rects.reference.width}px`;
+        },
+        padding: 8,
+      }),
+    ],
+  });
+
+  const select = (index: number) => {
+    const option = options[index];
+    if (option) {
+      onChange(option.value);
+      setOpen(false);
     }
-    setOpen(false);
-    setFocusedIndex(-1);
   };
 
-  const onOutsideClick = useEffectEvent((e: MouseEvent) => {
-    if (!wrapperRef.current?.contains(e.target as Node)) close();
+  const click = useClick(context);
+  const dismiss = useDismiss(context);
+  const role = useRole(context, { role: 'listbox' });
+  const listNav = useListNavigation(context, {
+    listRef,
+    activeIndex,
+    selectedIndex: selectedIndex >= 0 ? selectedIndex : null,
+    onNavigate: setActiveIndex,
+    loop: true,
+    virtual: true,
+  });
+  const typeahead = useTypeahead(context, {
+    listRef: labelsRef,
+    activeIndex,
+    selectedIndex: selectedIndex >= 0 ? selectedIndex : null,
+    onMatch: setActiveIndex,
   });
 
-  useEffect(() => {
-    if (!open) return;
-    const handleClick = (e: MouseEvent) => onOutsideClick(e);
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
-  }, [open]);
+  const { getReferenceProps, getFloatingProps, getItemProps } = useInteractions(
+    [click, dismiss, role, listNav, typeahead],
+  );
 
-  const onKeyDown = useEffectEvent((e: KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      close();
-      return;
+  const onTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (
+      open &&
+      activeIndex !== null &&
+      (event.key === 'Enter' || event.key === ' ')
+    ) {
+      event.preventDefault();
+      select(activeIndex);
     }
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setFocusedIndex(i => Math.min(i + 1, options.length - 1));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setFocusedIndex(i => Math.max(i - 1, 0));
-    } else if (e.key === 'Enter' && focusedIndex >= 0) {
-      e.preventDefault();
-      const option = options[focusedIndex];
-      if (option) {
-        onChange(option.value);
-        close();
-      }
-    }
-  });
-
-  useEffect(() => {
-    if (!open) return;
-    const listener = (e: KeyboardEvent) => onKeyDown(e);
-    document.addEventListener('keydown', listener);
-    return () => document.removeEventListener('keydown', listener);
-  }, [open]);
-
-  // Focus the listbox on open so its `aria-activedescendant` is announced as
-  // the user arrows through options.
-  useEffect(() => {
-    if (open) listboxRef.current?.focus();
-  }, [open]);
+  };
 
   return (
-    <div className={cx(styles.wrapper, className)} ref={wrapperRef}>
+    <div className={cx(styles.wrapper, className)}>
       {label && (
         <span id={labelId} className={styles.label}>
           {label}
         </span>
       )}
       <button
-        ref={triggerRef}
+        ref={refs.setReference}
         id={triggerId}
         type="button"
         className={cx(
@@ -117,52 +142,55 @@ export function Select({
           open && styles.open,
           error && styles.error,
         )}
-        onClick={() => !disabled && setOpen(v => !v)}
         disabled={disabled}
         aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-controls={open ? listboxId : undefined}
+        // Combobox name = optional visible label + the current value/placeholder.
+        aria-labelledby={cx(labelId, valueId)}
         aria-describedby={error ? errorId : undefined}
+        {...getReferenceProps({ onKeyDown: onTriggerKeyDown })}
       >
-        <span className={!selectedLabel ? styles.placeholder : undefined}>
+        <span
+          id={valueId}
+          className={!selectedLabel ? styles.placeholder : undefined}
+        >
           {selectedLabel ?? placeholder}
         </span>
         <ChevronDownIcon className={styles.chevron} />
       </button>
       {open && (
-        <ul
-          ref={listboxRef}
-          id={listboxId}
-          className={styles.menu}
-          role="listbox"
-          tabIndex={-1}
-          aria-labelledby={labelId ?? triggerId}
-          aria-activedescendant={
-            focusedIndex >= 0 ? optionId(focusedIndex) : undefined
-          }
-        >
-          {options.map((option, index) => (
-            <li
-              key={option.value}
-              id={optionId(index)}
-              className={cx(
-                styles.option,
-                value === option.value && styles.selected,
-                focusedIndex === index && styles.focused,
-              )}
-              role="option"
-              aria-selected={value === option.value}
-              tabIndex={-1}
-              onPointerDown={() => {
-                onChange(option.value);
-                close();
-              }}
-              onPointerEnter={() => setFocusedIndex(index)}
-            >
-              {option.label}
-            </li>
-          ))}
-        </ul>
+        <FloatingPortal>
+          <ul
+            // eslint-disable-next-line react-hooks/refs -- floating-ui callback ref, reads DOM node outside render
+            ref={refs.setFloating}
+            id={listboxId}
+            className={styles.menu}
+            style={floatingStyles}
+            aria-labelledby={labelId ?? triggerId}
+            {...getFloatingProps()}
+          >
+            {options.map((option, index) => (
+              <li
+                key={option.value}
+                ref={node => {
+                  listRef.current[index] = node;
+                }}
+                id={optionId(index)}
+                className={cx(
+                  styles.option,
+                  value === option.value && styles.selected,
+                  activeIndex === index && styles.focused,
+                )}
+                role="option"
+                aria-selected={value === option.value}
+                {...getItemProps({
+                  onClick: () => select(index),
+                })}
+              >
+                {option.label}
+              </li>
+            ))}
+          </ul>
+        </FloatingPortal>
       )}
       {error && (
         <span id={errorId} className={styles.errorText}>
