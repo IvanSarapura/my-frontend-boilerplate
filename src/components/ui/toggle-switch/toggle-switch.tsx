@@ -46,6 +46,7 @@ export function ToggleSwitch({
       <label className={cx(styles.switch, styles[size])}>
         <input
           type="checkbox"
+          role="switch"
           id={switchId}
           className={styles.input}
           {...props}

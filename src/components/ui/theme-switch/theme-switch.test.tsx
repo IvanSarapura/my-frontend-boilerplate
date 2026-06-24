@@ -47,37 +47,37 @@ describe('ThemeSwitch', () => {
     document.documentElement.removeAttribute('data-theme');
   });
 
-  it('renders a checkbox with the "Dark mode" accessible name', () => {
+  it('renders a switch with the "Dark mode" accessible name', () => {
     renderSwitch();
     expect(
-      screen.getByRole('checkbox', { name: 'Dark mode' }),
+      screen.getByRole('switch', { name: 'Dark mode' }),
     ).toBeInTheDocument();
   });
 
   it('reflects the stored theme as the checked state', () => {
     window.localStorage.setItem(THEME_STORAGE_KEY, 'dark');
     renderSwitch();
-    expect(screen.getByRole('checkbox')).toBeChecked();
+    expect(screen.getByRole('switch')).toBeChecked();
   });
 
   it('is unchecked in light mode', () => {
     window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
     renderSwitch();
-    expect(screen.getByRole('checkbox')).not.toBeChecked();
+    expect(screen.getByRole('switch')).not.toBeChecked();
   });
 
   it('resolves system to the OS preference (dark)', () => {
     installMatchMedia(true);
     window.localStorage.setItem(THEME_STORAGE_KEY, 'system');
     renderSwitch();
-    expect(screen.getByRole('checkbox')).toBeChecked();
+    expect(screen.getByRole('switch')).toBeChecked();
   });
 
   it('sets an explicit theme and data-theme attribute when toggled', async () => {
     window.localStorage.setItem(THEME_STORAGE_KEY, 'light');
     const user = userEvent.setup();
     renderSwitch();
-    const input = screen.getByRole('checkbox');
+    const input = screen.getByRole('switch');
 
     await user.click(input);
     expect(window.localStorage.getItem(THEME_STORAGE_KEY)).toBe('dark');
@@ -93,7 +93,7 @@ describe('ThemeSwitch', () => {
   it('supports a custom label', () => {
     renderSwitch('Tema oscuro');
     expect(
-      screen.getByRole('checkbox', { name: 'Tema oscuro' }),
+      screen.getByRole('switch', { name: 'Tema oscuro' }),
     ).toBeInTheDocument();
   });
 
@@ -104,7 +104,7 @@ describe('ThemeSwitch', () => {
       </ThemeProvider>,
     );
     expect(
-      screen.getByRole('checkbox', { name: 'Dark mode' }),
+      screen.getByRole('switch', { name: 'Dark mode' }),
     ).toBeInTheDocument();
     expect(screen.queryByText('Dark mode')).not.toBeInTheDocument();
   });

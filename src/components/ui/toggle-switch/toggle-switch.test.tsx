@@ -5,9 +5,9 @@ import { describe, expect, it } from 'vitest';
 import { ToggleSwitch } from './toggle-switch';
 
 describe('ToggleSwitch', () => {
-  it('renders a checkbox input', () => {
+  it('exposes the switch role to assistive tech', () => {
     render(<ToggleSwitch aria-label="Toggle" />);
-    expect(screen.getByRole('checkbox')).toBeInTheDocument();
+    expect(screen.getByRole('switch')).toBeInTheDocument();
   });
 
   it('renders label text and associates it with the input', () => {
@@ -18,7 +18,7 @@ describe('ToggleSwitch', () => {
   it('toggles checked state when clicked', async () => {
     const user = userEvent.setup();
     render(<ToggleSwitch label="Notifications" id="notif" />);
-    const input = screen.getByRole('checkbox');
+    const input = screen.getByRole('switch');
     expect(input).not.toBeChecked();
     await user.click(input);
     expect(input).toBeChecked();
@@ -26,19 +26,19 @@ describe('ToggleSwitch', () => {
 
   it('renders as checked when defaultChecked is set', () => {
     render(<ToggleSwitch label="Auto-save" id="autosave" defaultChecked />);
-    expect(screen.getByRole('checkbox')).toBeChecked();
+    expect(screen.getByRole('switch')).toBeChecked();
   });
 
   it('is not interactive when disabled', () => {
     render(<ToggleSwitch label="Sync" id="sync" disabled />);
-    expect(screen.getByRole('checkbox')).toBeDisabled();
+    expect(screen.getByRole('switch')).toBeDisabled();
   });
 
   it('forwards arbitrary HTML attributes to the underlying input', () => {
     render(
       <ToggleSwitch label="Feature" id="feature" data-tracking="ts-feature" />,
     );
-    expect(screen.getByRole('checkbox')).toHaveAttribute(
+    expect(screen.getByRole('switch')).toHaveAttribute(
       'data-tracking',
       'ts-feature',
     );
@@ -47,7 +47,7 @@ describe('ToggleSwitch', () => {
   it('renders the label before the switch when labelPosition is "left"', () => {
     render(<ToggleSwitch label="Dark mode" id="dm" labelPosition="left" />);
     const label = screen.getByText('Dark mode');
-    const input = screen.getByRole('checkbox');
+    const input = screen.getByRole('switch');
     expect(label).toBeInTheDocument();
     // DOCUMENT_POSITION_FOLLOWING (4) means input comes after the label.
     expect(
