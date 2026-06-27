@@ -8,6 +8,12 @@ import { expect, type Page, test } from '@playwright/test';
  * (contrast, name/role/value of widgets) is covered by `@storybook/addon-a11y`
  * over the primitives these pages compose; static a11y by `eslint-plugin-jsx-a11y`.
  * Deliberately no axe page-scan dependency.
+ *
+ * The ARIA-snapshot block below pins the *shape* of each page's accessibility
+ * tree (landmark order + heading skeleton) in one readable assertion, so a
+ * semantic regression the point-checks above would miss still trips a test.
+ * Snapshots stay structural: heading copy is matched with /.+/, only stable
+ * landmark/nav names are pinned literally.
  */
 
 /** Heading levels in document order (includes visually-hidden but DOM-present). */
@@ -79,5 +85,83 @@ test.describe('app-shell preset landmarks', () => {
     await expect(
       page.getByRole('navigation', { name: 'Account' }),
     ).toBeVisible();
+  });
+});
+
+test.describe('accessibility tree (ARIA snapshots)', () => {
+  test('/en matches its landmark/heading skeleton', async ({ page }) => {
+    await page.goto('/en');
+    await expect(page.locator('body')).toMatchAriaSnapshot(`
+      - main:
+        - heading /.+/ [level=1]
+    `);
+  });
+
+  test('/en/examples matches its landmark/heading skeleton', async ({
+    page,
+  }) => {
+    await page.goto('/en/examples');
+    await expect(page.locator('body')).toMatchAriaSnapshot(`
+      - main:
+        - heading /.+/ [level=1]
+        - link:
+          - heading /.+/ [level=2]
+        - link:
+          - heading /.+/ [level=2]
+        - link:
+          - heading /.+/ [level=2]
+        - link:
+          - heading /.+/ [level=2]
+    `);
+  });
+
+  test('/en/examples/minimal matches its landmark/heading skeleton', async ({
+    page,
+  }) => {
+    await page.goto('/en/examples/minimal');
+    await expect(page.locator('body')).toMatchAriaSnapshot(`
+      - main:
+        - heading /.+/ [level=1]
+        - heading /.+/ [level=2]
+        - heading /.+/ [level=2]
+    `);
+  });
+
+  test('/en/examples/marketing matches its landmark/heading skeleton', async ({
+    page,
+  }) => {
+    await page.goto('/en/examples/marketing');
+    await expect(page.locator('body')).toMatchAriaSnapshot(`
+      - banner:
+        - navigation "Main navigation"
+      - main:
+        - heading /.+/ [level=1]
+        - heading /.+/ [level=2]
+        - heading /.+/ [level=3]
+        - heading /.+/ [level=3]
+        - heading /.+/ [level=3]
+        - heading /.+/ [level=2]
+      - contentinfo:
+        - heading /.+/ [level=2]
+        - heading /.+/ [level=2]
+        - heading /.+/ [level=2]
+    `);
+  });
+
+  test('/en/examples/app-shell matches its landmark/heading skeleton', async ({
+    page,
+  }) => {
+    await page.goto('/en/examples/app-shell');
+    await expect(page.locator('body')).toMatchAriaSnapshot(`
+      - banner:
+        - link "Acme"
+      - complementary:
+        - navigation "Account"
+      - main:
+        - heading /.+/ [level=1]
+        - heading /.+/ [level=2]
+        - heading /.+/ [level=2]
+      - contentinfo
+    `);
   });
 });
