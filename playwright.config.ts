@@ -8,11 +8,16 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 4,
   reporter: [
     ['list'],
+    // Annotate failures inline on the PR diff (CI only).
+    ...(process.env.CI ? [['github'] as ['github']] : []),
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
   ],
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
+    // Capture evidence only when a test fails; the HTML report embeds both.
+    screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
   },
   projects: [
     {
