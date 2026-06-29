@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { env } from '@/lib/env';
 
@@ -11,6 +11,10 @@ function request(path: string, headers?: Record<string, string>): NextRequest {
     headers ? { headers } : undefined,
   );
 }
+
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
 
 describe('proxy — security headers', () => {
   it('sets a per-request nonce CSP with the hardening directives', () => {
@@ -41,6 +45,14 @@ describe('proxy — security headers', () => {
     const a = proxy(request('/en')).headers.get('x-nonce');
     const b = proxy(request('/en')).headers.get('x-nonce');
     expect(a).not.toBe(b);
+  });
+
+  it('relaxes the CSP in development (unsafe-eval / unsafe-inline)', () => {
+    vi.stubEnv('NODE_ENV', 'development');
+    const csp =
+      proxy(request('/en')).headers.get('Content-Security-Policy') ?? '';
+    expect(csp).toContain("'unsafe-eval'");
+    expect(csp).toContain("'unsafe-inline'");
   });
 });
 
@@ -76,6 +88,32 @@ describe('proxy — locale redirect', () => {
 
   it('falls back to the default locale for an unknown accept-language', () => {
     const res = proxy(request('/about', { 'accept-language': 'fr-FR' }));
+    expect(res.headers.get('location')).toBe('http://localhost:3000/en/about');
+  });
+
+  it('prefers a valid NEXT_LOCALE cookie over accept-language', () => {
+    const res = proxy(
+      // Cookie (es) differs from the header (en) to prove the cookie wins.
+      request('/about', {
+        cookie: 'NEXT_LOCALE=es',
+        'accept-language': 'en-US,en;q=0.9',
+      }),
+    );
+    expect(res.headers.get('location')).toBe('http://localhost:3000/es/about');
+  });
+
+  it('ignores an unsupported NEXT_LOCALE cookie and uses accept-language', () => {
+    const res = proxy(
+      request('/about', {
+        cookie: 'NEXT_LOCALE=zz',
+        'accept-language': 'es-ES,es;q=0.9',
+      }),
+    );
+    expect(res.headers.get('location')).toBe('http://localhost:3000/es/about');
+  });
+
+  it('falls back to the default locale with neither cookie nor accept-language', () => {
+    const res = proxy(request('/about'));
     expect(res.headers.get('location')).toBe('http://localhost:3000/en/about');
   });
 });
