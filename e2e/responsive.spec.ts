@@ -1,5 +1,8 @@
 import { expect, test } from '@playwright/test';
 
+import { gotoOk } from './helpers';
+import { ROUTES } from './routes';
+
 /**
  * Mobile-first invariants (RESPONSIVE.md §10.1). Across the canonical viewport
  * matrix, real pages must never scroll horizontally and their main heading must
@@ -14,22 +17,22 @@ const VIEWPORTS = [
   { name: 'Desktop Wide', width: 1280, height: 800 },
 ] as const;
 
-const PAGES = [
-  '/en',
-  '/en/contact',
-  '/en/posts',
-  '/en/examples/minimal',
-  '/en/examples/marketing',
-  '/en/examples/app-shell',
+const RESPONSIVE_PAGES = [
+  ROUTES.home,
+  ROUTES.contact,
+  ROUTES.posts,
+  ROUTES.minimal,
+  ROUTES.marketing,
+  ROUTES.appShell,
 ] as const;
 
 for (const vp of VIEWPORTS) {
   test.describe(`${vp.name} (${vp.width}px)`, () => {
     test.use({ viewport: { width: vp.width, height: vp.height } });
 
-    for (const path of PAGES) {
+    for (const path of RESPONSIVE_PAGES) {
       test(`${path} renders without horizontal overflow`, async ({ page }) => {
-        await page.goto(path);
+        await gotoOk(page, path);
 
         // Content is reachable and laid out.
         await expect(page.getByRole('heading', { level: 1 })).toBeVisible();

@@ -1,9 +1,11 @@
 import { expect, test } from '@playwright/test';
 
+import { ROUTES } from './routes';
+
 test('contact form: happy path on /en submits and shows success toast', async ({
   page,
 }) => {
-  await page.goto('/en/contact');
+  await page.goto(ROUTES.contact);
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Contact');
 
@@ -30,7 +32,7 @@ test('contact form: happy path on /en submits and shows success toast', async ({
 test('contact form: client-side validation blocks an empty submit', async ({
   page,
 }) => {
-  await page.goto('/en/contact');
+  await page.goto(ROUTES.contact);
 
   await page.getByRole('button', { name: /^submit$/i }).click();
 
@@ -55,7 +57,7 @@ test('contact form: client-side validation blocks an empty submit', async ({
 test('contact form: validation errors render in Spanish on /es', async ({
   page,
 }) => {
-  await page.goto('/es/contact');
+  await page.goto(ROUTES.contactEs);
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Contacto');
 

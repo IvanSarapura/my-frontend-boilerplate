@@ -1,5 +1,8 @@
 import { expect, type Page, test } from '@playwright/test';
 
+import { gotoOk } from './helpers';
+import { ROUTES } from './routes';
+
 /**
  * Page-level accessibility invariants for the wireframe presets (WIREFRAME.md §9).
  *
@@ -25,24 +28,24 @@ async function headingLevels(page: Page): Promise<number[]> {
   );
 }
 
-const PAGES = [
-  '/en',
-  '/en/examples',
-  '/en/examples/minimal',
-  '/en/examples/marketing',
-  '/en/examples/app-shell',
+const A11Y_PAGES = [
+  ROUTES.home,
+  ROUTES.examples,
+  ROUTES.minimal,
+  ROUTES.marketing,
+  ROUTES.appShell,
 ] as const;
 
-for (const path of PAGES) {
+for (const path of A11Y_PAGES) {
   test.describe(path, () => {
     test('has exactly one h1 and a single main landmark', async ({ page }) => {
-      await page.goto(path);
+      await gotoOk(page, path);
       await expect(page.getByRole('heading', { level: 1 })).toHaveCount(1);
       await expect(page.getByRole('main')).toHaveCount(1);
     });
 
     test('has no skipped heading levels', async ({ page }) => {
-      await page.goto(path);
+      await gotoOk(page, path);
       const levels = await headingLevels(page);
       expect(levels.length).toBeGreaterThan(0);
       // prev=0 forces the first heading to be h1; later ones may stay, rise any
@@ -55,7 +58,7 @@ for (const path of PAGES) {
     });
 
     test('exposes a reachable skip-link', async ({ page }) => {
-      await page.goto(path);
+      await gotoOk(page, path);
       // sr-only: present in the a11y tree but not visually rendered.
       await expect(
         page.getByRole('link', { name: /skip to main/i }),
@@ -64,9 +67,12 @@ for (const path of PAGES) {
   });
 }
 
+// These landmark blocks assert what the ARIA snapshots below cannot: exact
+// counts (no duplicate landmarks) and visibility. Keep both — they are
+// complementary, not redundant.
 test.describe('marketing preset landmarks', () => {
   test('renders banner, main and contentinfo', async ({ page }) => {
-    await page.goto('/en/examples/marketing');
+    await gotoOk(page, ROUTES.marketing);
     await expect(page.getByRole('banner')).toHaveCount(1);
     await expect(page.getByRole('contentinfo')).toHaveCount(1);
   });
@@ -74,13 +80,13 @@ test.describe('marketing preset landmarks', () => {
 
 test.describe('app-shell preset landmarks', () => {
   test('renders banner, main and contentinfo', async ({ page }) => {
-    await page.goto('/en/examples/app-shell');
+    await gotoOk(page, ROUTES.appShell);
     await expect(page.getByRole('banner')).toHaveCount(1);
     await expect(page.getByRole('contentinfo')).toHaveCount(1);
   });
 
   test('exposes a labelled sidebar navigation', async ({ page }) => {
-    await page.goto('/en/examples/app-shell');
+    await gotoOk(page, ROUTES.appShell);
     // The sidebar is the primary nav; it must carry an accessible name.
     await expect(
       page.getByRole('navigation', { name: 'Account' }),
@@ -88,9 +94,12 @@ test.describe('app-shell preset landmarks', () => {
   });
 });
 
+// Written out per-route (not looped): `--update-snapshots` only regenerates
+// literal inline templates at each call site, so the assertions cannot be
+// factored into a loop without breaking baseline tooling.
 test.describe('accessibility tree (ARIA snapshots)', () => {
   test('/en matches its landmark/heading skeleton', async ({ page }) => {
-    await page.goto('/en');
+    await gotoOk(page, ROUTES.home);
     await expect(page.locator('body')).toMatchAriaSnapshot(`
       - main:
         - heading /.+/ [level=1]
@@ -100,7 +109,7 @@ test.describe('accessibility tree (ARIA snapshots)', () => {
   test('/en/examples matches its landmark/heading skeleton', async ({
     page,
   }) => {
-    await page.goto('/en/examples');
+    await gotoOk(page, ROUTES.examples);
     await expect(page.locator('body')).toMatchAriaSnapshot(`
       - main:
         - heading /.+/ [level=1]
@@ -118,7 +127,7 @@ test.describe('accessibility tree (ARIA snapshots)', () => {
   test('/en/examples/minimal matches its landmark/heading skeleton', async ({
     page,
   }) => {
-    await page.goto('/en/examples/minimal');
+    await gotoOk(page, ROUTES.minimal);
     await expect(page.locator('body')).toMatchAriaSnapshot(`
       - main:
         - heading /.+/ [level=1]
@@ -130,7 +139,7 @@ test.describe('accessibility tree (ARIA snapshots)', () => {
   test('/en/examples/marketing matches its landmark/heading skeleton', async ({
     page,
   }) => {
-    await page.goto('/en/examples/marketing');
+    await gotoOk(page, ROUTES.marketing);
     await expect(page.locator('body')).toMatchAriaSnapshot(`
       - banner:
         - navigation "Main navigation"
@@ -151,7 +160,7 @@ test.describe('accessibility tree (ARIA snapshots)', () => {
   test('/en/examples/app-shell matches its landmark/heading skeleton', async ({
     page,
   }) => {
-    await page.goto('/en/examples/app-shell');
+    await gotoOk(page, ROUTES.appShell);
     await expect(page.locator('body')).toMatchAriaSnapshot(`
       - banner:
         - link "Acme"

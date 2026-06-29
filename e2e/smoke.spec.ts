@@ -1,5 +1,7 @@
 import { expect, test } from '@playwright/test';
 
+import { ROUTES } from './routes';
+
 test('health endpoint returns ok', async ({ request }) => {
   const response = await request.get('/api/health');
   expect(response.ok()).toBeTruthy();
@@ -14,7 +16,7 @@ test('unknown locale returns 404', async ({ page }) => {
 });
 
 test('page has no accessibility violations on skip-link', async ({ page }) => {
-  await page.goto('/en');
+  await page.goto(ROUTES.home);
   const skipLink = page.getByRole('link', { name: /skip to main/i });
   await expect(skipLink).toBeAttached();
 });

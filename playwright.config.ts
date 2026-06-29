@@ -1,4 +1,11 @@
-import { defineConfig, devices } from '@playwright/test';
+import {
+  defineConfig,
+  devices,
+  type ReporterDescription,
+} from '@playwright/test';
+
+// Annotate failures inline on the PR diff (CI only).
+const ciReporters: ReporterDescription[] = process.env.CI ? [['github']] : [];
 
 export default defineConfig({
   testDir: './e2e',
@@ -8,8 +15,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : 4,
   reporter: [
     ['list'],
-    // Annotate failures inline on the PR diff (CI only).
-    ...(process.env.CI ? [['github'] as ['github']] : []),
+    ...ciReporters,
     ['html', { open: 'never', outputFolder: 'playwright-report' }],
   ],
   use: {

@@ -637,7 +637,11 @@ MSW starts automatically in `vitest.setup.ts` before all tests.
 
 ### End-to-End Tests
 
-Playwright runs full browser tests against a **production build** in every environment — CI serves the prebuilt artifact, and locally the config runs `build && start` (reusing an already-running server if one is present). Five specs (`a11y`, `contact`, `home`, `responsive`, `smoke` — 63 tests) cover locale routing, i18n, the contact form, accessibility, the responsive-viewport matrix, and API health. Page-level accessibility goes beyond point checks: `a11y.spec.ts` pins each preset's **accessibility tree** (landmark order + heading skeleton) with `toMatchAriaSnapshot`, so a semantic regression trips a test even when the individual landmark/heading assertions still pass. The Playwright `webServer` injects test values for `NEXT_PUBLIC_*`, so the production-mode server is fully configured and its output stays clean. On failure, CI annotates the PR inline (`github` reporter) and the HTML report embeds a screenshot and video.
+Playwright runs full browser tests against a **production build** in every environment — CI serves the prebuilt artifact, and locally the config runs `build && start` (reusing an already-running server if one is present). The `webServer` injects test values for `NEXT_PUBLIC_*`, so the production-mode server is fully configured and its output stays clean. Specs share a single route source (`e2e/routes.ts`) so a route rename is one edit.
+
+Five specs (`a11y`, `contact`, `home`, `responsive`, `smoke` — 63 tests) cover locale routing, i18n, the contact form, accessibility, the responsive-viewport matrix, and API health. Page-level accessibility goes beyond point checks: `a11y.spec.ts` pins each preset's **accessibility tree** (landmark order + heading skeleton) with `toMatchAriaSnapshot`, so a semantic regression trips a test even when the individual landmark/heading assertions still pass.
+
+On failure, CI annotates the PR inline (`github` reporter) and the HTML report embeds a screenshot and video.
 
 ---
 
