@@ -15,9 +15,9 @@ import { getDictionary } from '@/i18n/dictionaries';
 
 import styles from './portfolio.module.css';
 
-// Captured at build, not per request — keeps the page statically prerenderable
-// under Cache Components. Refreshes on each rebuild/deploy.
-const copyrightYear = new Date().getFullYear();
+// Static year keeps the preset's footer in the prerendered shell; `new Date()`
+// is request-time data under Cache Components and would force a dynamic render.
+const copyrightYear = 2026;
 
 export async function generateMetadata({
   params,
