@@ -901,7 +901,7 @@ chore(deps): upgrade vitest to v4.1.5
 
 ## CI / CD
 
-GitHub Actions runs on **push and pull requests to `main` and `develop`**.
+GitHub Actions runs on **push and pull requests to `main`**.
 
 ### Pipeline
 
@@ -975,6 +975,15 @@ feature/my-change  ──▶  Pull Request  ──▶  main
 
 - **`main`** requires CI to pass before merging.
 - Force-pushes to `main` are disabled.
+
+Production safety without a `develop` branch comes from a chain, not an integration branch:
+
+1. **CI on every PR** — format, lint, typecheck, tests, coverage, build, Storybook a11y and E2E must all pass before anything reaches `main`.
+2. **Branch protection on `main`** (below) — merges require a PR with green checks.
+3. **Preview deployments per PR** (e.g. Vercel) — each PR gets an isolated production-like environment for real verification; the modern replacement for a shared `develop` staging, with no drift between what you tested and what you merge.
+4. **Merge ≠ deploy** — promoting `main` to production is a separate, controlled step (promote/rollback on your hosting platform).
+
+If your project needs Git Flow instead (e.g. versioned, scheduled releases), add `develop` back to the `branches` triggers in `.github/workflows/ci.yml` and mirror the branch protection.
 
 ### Branch Protection
 
