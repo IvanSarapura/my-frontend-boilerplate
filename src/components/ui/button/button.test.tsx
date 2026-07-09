@@ -30,6 +30,16 @@ describe('Button', () => {
     expect(screen.getByRole('button')).toHaveClass('lg');
   });
 
+  it('defaults to type="button" so it never submits a form implicitly', () => {
+    render(<Button>Open menu</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute('type', 'button');
+  });
+
+  it('respects an explicit type="submit"', () => {
+    render(<Button type="submit">Send</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
+  });
+
   it('forwards HTML button attributes', () => {
     render(
       <Button disabled aria-label="save">

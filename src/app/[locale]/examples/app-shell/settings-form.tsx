@@ -51,9 +51,7 @@ export function SettingsForm({ labels }: { labels: SettingsFormLabels }) {
       </Card>
 
       <Cluster className={styles.actions}>
-        <Button type="button" variant="primary">
-          {labels.saveAction}
-        </Button>
+        <Button variant="primary">{labels.saveAction}</Button>
       </Cluster>
     </Stack>
   );
