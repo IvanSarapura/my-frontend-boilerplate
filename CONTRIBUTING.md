@@ -497,7 +497,7 @@ ls -la .next/
 - [ ] Branch is up to date with `main` (`git pull origin main`)
 - [ ] All local quality checks pass:
   ```bash
-  npm run format:check && npm run lint && npm run typecheck && npm test && npm run build && npm run storybook:build
+  npm run format:check && npm run lint && npm run stylelint && npm run typecheck && npm test && npm run build && npm run storybook:build
   ```
 - [ ] Commit messages follow Conventional Commits
 - [ ] Changes are focused and atomic (one concern per PR)
@@ -510,7 +510,7 @@ This repository includes a **PR template** (`.github/pull_request_template.md`) 
 
 - **Summary** — what changed and why
 - **Changes** — a bullet list of the specific modifications
-- **Test Plan** — which checks you ran locally
+- **Quality gate / Conditional checks** — which checks you ran locally (the quality gate applies to every PR; conditional checks depend on what your change touches)
 
 Additionally:
 
