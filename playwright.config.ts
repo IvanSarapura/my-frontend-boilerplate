@@ -41,11 +41,12 @@ export default defineConfig({
     reuseExistingServer: !process.env.CI,
     // Allow the local production build to finish before the server is expected.
     timeout: 120_000,
-    // Test-only env to fully configure the production-mode server (silences the
-    // env guardrail in src/lib/env.ts, resolves metadataBase).
+    // Test-only env to fully configure the production-mode server (satisfies
+    // the strict production validation in src/lib/env.ts, resolves metadataBase).
     env: {
       NEXT_PUBLIC_APP_NAME: 'My App',
       NEXT_PUBLIC_APP_URL: 'http://localhost:3000', // must match `url` above
+      NEXT_PUBLIC_API_ORIGIN: 'https://jsonplaceholder.typicode.com',
     },
   },
 });

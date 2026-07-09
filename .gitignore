@@ -84,3 +84,5 @@ vitest.config.*.timestamp-*.mjs
 
 # ── Agents ──
 .agents/
+.claude/
+.codex/

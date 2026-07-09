@@ -1039,7 +1039,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 NEXT_PUBLIC_API_ORIGIN=https://jsonplaceholder.typicode.com
 ```
 
-Public variables (`NEXT_PUBLIC_*`) are validated with Zod (`src/lib/env.ts`) and ship with development defaults so a fresh clone runs zero-config — in production they **warn** (they do not throw) if unset, making the misconfiguration visible in the logs. Server-only secrets live in `src/lib/env.server.ts` (no defaults, guarded by `server-only`) and **throw** at startup if missing or malformed.
+Public variables (`NEXT_PUBLIC_*`) are validated with Zod (`src/lib/env.ts`). In `development` and `test` they ship with defaults so a fresh clone runs zero-config. In **production** all three are required — `next build` (and `next start`) **fails with an explicit error** if any is unset, so a misconfigured deploy can never ship localhost metadata, a wrong sitemap or a demo-API CSP silently. Server-only secrets live in `src/lib/env.server.ts` (no defaults, guarded by `server-only`) and also throw at startup if missing or malformed.
 
 `NEXT_PUBLIC_API_ORIGIN` is the origin of the demo posts/comments API. It feeds both the API services (`src/features/posts/api/`) and the CSP `connect-src` allowlist in `src/proxy.ts`, so swapping in a real API is a single env change — the CSP stays in sync by construction. The value is normalized to a bare origin (no path, no trailing slash) by the Zod schema.
 

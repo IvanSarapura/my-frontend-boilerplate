@@ -178,6 +178,12 @@ jobs:
 
       - name: Build
         run: npm run build
+        # A production build requires explicit public envs (src/lib/env.ts).
+        # APP_URL must match the Playwright baseURL — the e2e job serves this artifact.
+        env:
+          NEXT_PUBLIC_APP_NAME: My App
+          NEXT_PUBLIC_APP_URL: http://localhost:3000
+          NEXT_PUBLIC_API_ORIGIN: https://jsonplaceholder.typicode.com
 
       - name: Verify and package build output
         run: |
