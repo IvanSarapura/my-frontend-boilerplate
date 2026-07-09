@@ -144,8 +144,8 @@ Key principles:
 
 ### Prerequisites
 
-- **Node.js** `>=22.0.0`
-- **npm** `>=10.0.0` (enforced by `engine-strict` in `.npmrc`)
+- **Node.js** `>=22.0.0 <23`
+- **npm** `>=11 <12` (both ranges enforced by `engine-strict` in `.npmrc`)
 
 We recommend using [nvm](https://github.com/nvm-sh/nvm):
 
