@@ -89,7 +89,7 @@ npm run build
 
 ### Branching Model
 
-This project follows **GitHub Flow**:
+This project follows **GitHub Flow**. For the full workflow guide — why there is no `develop` branch, preview deployments, promote/rollback, feature flags and the research behind it all — see [`WORKFLOW.md`](./WORKFLOW.md).
 
 ```
 main (protected)

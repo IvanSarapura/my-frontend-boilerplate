@@ -72,6 +72,7 @@
   - [Artifact Strategy](#artifact-strategy)
 - [Dependency Management](#dependency-management)
 - [Branching Strategy](#branching-strategy)
+  - [Feature Workflow](#feature-workflow)
   - [Branch Protection](#branch-protection)
 - [Internationalisation](#internationalisation)
 - [Environment Variables](#environment-variables)
@@ -984,6 +985,27 @@ Production safety without a `develop` branch comes from a chain, not an integrat
 4. **Merge ≠ deploy** — promoting `main` to production is a separate, controlled step (promote/rollback on your hosting platform).
 
 If your project needs Git Flow instead (e.g. versioned, scheduled releases), add `develop` back to the `branches` triggers in `.github/workflows/ci.yml` and mirror the branch protection.
+
+### Feature Workflow
+
+> 📖 **Required reading:** [`WORKFLOW.md`](./WORKFLOW.md) explains every rule below in depth, with the industry research behind it (Driessen, DORA, Fowler, Google) — including preview deployments, promote/rollback and feature flags.
+
+The day-to-day contract for shipping any change:
+
+```
+main ──┬────────────────────────────────────▶ squash merge ──▶ deploy
+       │                                           ▲
+       └─▶ feat/my-change ──▶ PR ──▶ CI + review ──┘
+           (lives days, not weeks)    │
+                                      └─▶ preview deployment (isolated URL)
+```
+
+1. **Branch off an up-to-date `main`** with a Conventional-Commit prefix: `feat/…`, `fix/…`, `chore/…`, `docs/…`. Never commit to `main` directly.
+2. **Open the PR early** (draft is fine). CI runs on every push; if the repo is connected to a hosting platform, each push also gets an isolated preview URL to verify the real app.
+3. **Keep it small** — one self-contained change per PR (~100–400 lines as a heuristic). If the description needs the word "also", split it.
+4. **Squash merge + delete the branch.** `main` stays linear; every commit on it is deployable and revertible.
+5. **Big feature?** Don't grow a long branch — ship it as several small PRs behind a feature flag (kept off until launch). See [`WORKFLOW.md`](./WORKFLOW.md#big-features-without-long-branches).
+6. **Hotfix?** Same mechanics (`fix/…` → PR → CI → merge), no exceptions.
 
 ### Branch Protection
 
