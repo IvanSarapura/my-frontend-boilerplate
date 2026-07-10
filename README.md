@@ -76,6 +76,7 @@
   - [Branch Protection](#branch-protection)
 - [Internationalisation](#internationalisation)
 - [Environment Variables](#environment-variables)
+- [Before Production](#before-production)
 - [Important Notes](#important-notes)
 
 ---
@@ -1073,6 +1074,19 @@ NEXT_PUBLIC_API_ORIGIN=https://jsonplaceholder.typicode.com
 Public variables (`NEXT_PUBLIC_*`) are validated with Zod (`src/lib/env.ts`). In `development` and `test` they ship with defaults so a fresh clone runs zero-config. In **production** all three are required — `next build` (and `next start`) **fails with an explicit error** if any is unset, so a misconfigured deploy can never ship localhost metadata, a wrong sitemap or a demo-API CSP silently. Server-only secrets live in `src/lib/env.server.ts` (no defaults, guarded by `server-only`) and also throw at startup if missing or malformed.
 
 `NEXT_PUBLIC_API_ORIGIN` is the origin of the demo posts/comments API. It feeds both the API services (`src/features/posts/api/`) and the CSP `connect-src` allowlist in `src/proxy.ts`, so swapping in a real API is a single env change — the CSP stays in sync by construction. The value is normalized to a bare origin (no path, no trailing slash) by the Zod schema.
+
+---
+
+## Before Production
+
+Everything in this boilerplate runs out of the box for local development and demos. Before you deploy it as a real product, complete these adoption tasks — they replace the boilerplate's defaults with your own:
+
+- [ ] **Environment variables** — set `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_APP_URL` (your real domain), and `NEXT_PUBLIC_API_ORIGIN` (your real API, not the demo JSONPlaceholder). The production build fails fast if any is unset. → [Environment Variables](#environment-variables)
+- [ ] **Security reporting** — enable GitHub Private Vulnerability Reporting (Settings → Code security) and update the advisory link in [`SECURITY.md`](SECURITY.md) to point at your repository.
+- [ ] **Brand icons** — customize the generated icons in `src/app/icon.tsx` and `src/app/apple-icon.tsx`; they default to your app's initial on `#0070f3` (the `--accent` token). Update the manifest `theme_color` in `src/app/manifest.ts` if you change the brand color.
+- [ ] **Theme storage namespace** — rename the key in `src/components/providers/theme-storage-key.ts` (`my-frontend-boilerplate:theme:v1`) so it won't collide with a host app's `localStorage`.
+- [ ] **Transactional email** (if used) — replace `noreply@yourdomain.com` in the [Transactional Email](#transactional-email) recipe with your verified sender domain.
+- [ ] **Branch protection** — confirm the ruleset is enabled on `main`. → [Branch Protection](#branch-protection)
 
 ---
 
