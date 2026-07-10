@@ -23,6 +23,7 @@
 - [Development Workflow](#development-workflow)
   - [Branching Model](#branching-model)
   - [Making Changes](#making-changes)
+  - [Code Comments](#code-comments)
   - [Adding a New Feature](#adding-a-new-feature)
   - [Barrel Exports](#barrel-exports)
   - [Environment Variables](#environment-variables)
@@ -117,6 +118,17 @@ feature/your-feature-name
 3. **Write or update tests** for any new functionality.
 
 4. **Update documentation** (README, JSDoc comments, etc.) if your change affects the public API or usage.
+
+### Code Comments
+
+Comments explain **why**, not **what** — the code already shows what it does. Reach for one only when the reason isn't visible in the code; otherwise prefer a clearer name or structure.
+
+- **Do comment:** intent, external constraints (browser/spec/framework quirks), trade-offs, and non-obvious decisions or exceptions.
+- **Don't comment:** obvious code, or a line-by-line narration of the next statement.
+- **Fix, don't annotate:** if code needs a comment to be understood, first try renaming or restructuring so it explains itself.
+- **Justify every escape hatch:** any lint/coverage suppression (`eslint-disable`, `@ts-expect-error`, a coverage `ignore` pragma) or workaround must state its reason **and** the condition for removing it.
+
+Keep them terse, and link to the README for recipes instead of duplicating them inline.
 
 ### Adding a New Feature
 

@@ -1010,9 +1010,13 @@ main ──┬──────────────────────
 
 ### Branch Protection
 
-For production-grade use, configure GitHub's Classic Branch Protection on `main` to enforce the rules above at the repository level. Without this, the CI pipeline runs but cannot prevent a merge if checks fail.
+Branch protection lives in GitHub, not the repo, so **every derived repo must apply it** — without it the CI pipeline runs but cannot block a merge when checks fail. A versioned GitHub Ruleset is committed at [`.github/rulesets/main.json`](.github/rulesets/main.json) so the rules are reproducible; GitHub does not auto-apply it, so import it once per repo:
 
-**Settings → Branches → Add branch protection rule → Branch name pattern: `main`**
+- [ ] **Import the ruleset** — Settings → Rules → Rulesets → New ruleset → _Import a ruleset_ → select `.github/rulesets/main.json`. Or via CLI: `gh api --method POST repos/OWNER/REPO/rulesets --input .github/rulesets/main.json`
+- [ ] **Register the checks** — the `quality`, `coverage`, and `e2e` contexts only resolve after CI has run once on a PR branch, so open a PR first (see the first-time note below).
+- [ ] **Verify** — `gh api repos/OWNER/REPO/rulesets` lists `main-branch-protection` with `"enforcement": "active"`.
+
+The ruleset encodes exactly the rules in the table below (kept as the human-readable reference). To configure them by hand instead, use **Settings → Rules → Rulesets** (or the legacy **Branches → Add rule** for `main`):
 
 | Setting                               | Value                        | Why                                |
 | ------------------------------------- | ---------------------------- | ---------------------------------- |
