@@ -45,6 +45,7 @@ export default async function PostsPage({
         />
         <PostComments
           posts={posts.map(post => ({ id: post.id, title: post.title }))}
+          labels={dict.posts.comments}
         />
       </Container>
     </main>

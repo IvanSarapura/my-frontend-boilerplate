@@ -3,19 +3,25 @@ import { render, screen } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { describe, expect, it } from 'vitest';
 
+import type { Messages } from '@/i18n/config';
+import en from '@/i18n/messages/en.json';
+import es from '@/i18n/messages/es.json';
 import { mockPosts } from '@/mocks/handlers';
 import { server } from '@/mocks/node';
 
 import type { Post } from '../types';
 import { PostComments } from './post-comments';
 
-function renderWithQueryClient(posts: Post[]) {
+function renderWithQueryClient(
+  posts: Post[],
+  labels: Messages['posts']['comments'] = en.posts.comments,
+) {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   });
   return render(
     <QueryClientProvider client={queryClient}>
-      <PostComments posts={posts} />
+      <PostComments posts={posts} labels={labels} />
     </QueryClientProvider>,
   );
 }
@@ -67,6 +73,19 @@ describe('PostComments', () => {
 
     expect(
       await screen.findByText('Failed to load comments.'),
+    ).toBeInTheDocument();
+  });
+
+  it('renders all UI strings in Spanish when given the es labels', async () => {
+    // mockPosts[1] (id: 2) has no comments, so the empty state also renders.
+    renderWithQueryClient([mockPosts[1]!], es.posts.comments);
+
+    expect(
+      screen.getByRole('heading', { name: es.posts.comments.title }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(es.posts.comments.selectLabel)).toBeInTheDocument();
+    expect(
+      await screen.findByText(es.posts.comments.empty),
     ).toBeInTheDocument();
   });
 });

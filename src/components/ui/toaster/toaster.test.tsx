@@ -6,6 +6,7 @@ import {
   ToastProvider,
   useToast,
 } from '@/components/providers/toast-provider';
+import es from '@/i18n/messages/es.json';
 
 import { Toaster } from './toaster';
 
@@ -53,6 +54,26 @@ describe('Toaster', () => {
     );
     expect(
       screen.getByRole('region', { name: 'Notifications' }),
+    ).toBeInTheDocument();
+  });
+
+  it('uses localized region and dismiss labels when provided', () => {
+    render(
+      <ToastProvider>
+        <TriggerButton title="Hola" />
+        <Toaster
+          regionLabel={es.common.toastRegionLabel}
+          dismissLabel={es.common.toastDismissLabel}
+        />
+      </ToastProvider>,
+    );
+    expect(
+      screen.getByRole('region', { name: es.common.toastRegionLabel }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Add Toast' }));
+    expect(
+      screen.getByRole('button', { name: es.common.toastDismissLabel }),
     ).toBeInTheDocument();
   });
 

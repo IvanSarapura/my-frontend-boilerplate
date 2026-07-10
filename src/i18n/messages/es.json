@@ -8,7 +8,11 @@
     "submit": "Enviar",
     "sending": "Enviando...",
     "success": "¡Éxito!",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "errorDetail": "Ocurrió un error inesperado. Inténtalo de nuevo más tarde.",
+    "skipToContent": "Saltar al contenido principal",
+    "toastRegionLabel": "Notificaciones",
+    "toastDismissLabel": "Descartar notificación"
   },
   "home": {
     "title": "Boilerplate Frontend",
@@ -110,7 +114,14 @@
   },
   "posts": {
     "title": "Publicaciones",
-    "description": "Obtenido desde JSONPlaceholder API · cacheado ~1 minuto vía use cache"
+    "description": "Obtenido desde JSONPlaceholder API · cacheado ~1 minuto vía use cache",
+    "comments": {
+      "title": "Comentarios (fetching en el cliente)",
+      "selectLabel": "Selecciona una publicación",
+      "selectPlaceholder": "Elige una publicación...",
+      "error": "No se pudieron cargar los comentarios.",
+      "empty": "No hay comentarios para esta publicación."
+    }
   },
   "contact": {
     "title": "Contacto",

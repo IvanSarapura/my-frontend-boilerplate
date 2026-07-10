@@ -11,6 +11,7 @@ import { ThemeProvider } from '@/components/providers/theme-provider';
 import { ToastProvider } from '@/components/providers/toast-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { defaultLocale, type Locale, locales } from '@/i18n/config';
+import { getDictionary } from '@/i18n/dictionaries';
 import { env } from '@/lib/env';
 import { buildAlternates, localeToOgLocale } from '@/lib/seo';
 
@@ -83,6 +84,8 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!(locales as readonly string[]).includes(locale)) notFound();
 
+  const dict = await getDictionary(locale);
+
   return (
     <html
       lang={locale}
@@ -103,7 +106,7 @@ export default async function LocaleLayout({
       </head>
       <body>
         <a href="#main-content" className="sr-only">
-          Skip to main content
+          {dict.common.skipToContent}
         </a>
         <ThemeProvider>
           <ToastProvider>
@@ -113,7 +116,10 @@ export default async function LocaleLayout({
               <div id="main-content" tabIndex={-1}>
                 {children}
               </div>
-              <Toaster />
+              <Toaster
+                regionLabel={dict.common.toastRegionLabel}
+                dismissLabel={dict.common.toastDismissLabel}
+              />
             </QueryProvider>
           </ToastProvider>
         </ThemeProvider>

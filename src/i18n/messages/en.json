@@ -8,7 +8,11 @@
     "submit": "Submit",
     "sending": "Sending...",
     "success": "Success!",
-    "close": "Close"
+    "close": "Close",
+    "errorDetail": "An unexpected error occurred. Please try again later.",
+    "skipToContent": "Skip to main content",
+    "toastRegionLabel": "Notifications",
+    "toastDismissLabel": "Dismiss notification"
   },
   "home": {
     "title": "Frontend Boilerplate",
@@ -110,7 +114,14 @@
   },
   "posts": {
     "title": "Posts",
-    "description": "Fetched from JSONPlaceholder API · cached ~1 minute via use cache"
+    "description": "Fetched from JSONPlaceholder API · cached ~1 minute via use cache",
+    "comments": {
+      "title": "Comments (Client-side fetching)",
+      "selectLabel": "Select a post",
+      "selectPlaceholder": "Choose a post...",
+      "error": "Failed to load comments.",
+      "empty": "No comments for this post."
+    }
   },
   "contact": {
     "title": "Contact",
