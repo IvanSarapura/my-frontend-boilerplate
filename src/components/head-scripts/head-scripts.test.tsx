@@ -60,7 +60,12 @@ describe('HeadScripts', () => {
     const jsx = await HeadScripts(TEST_PROPS);
     const { container } = render(jsx);
     const [themeScript] = getScripts(container);
-    expect(themeScript?.innerHTML).toContain("localStorage.getItem('theme')");
+    // Reads the namespaced key and migrates the legacy "theme" key one time.
+    expect(themeScript?.innerHTML).toContain(
+      'my-frontend-boilerplate:theme:v1',
+    );
+    expect(themeScript?.innerHTML).toContain('"theme"');
+    expect(themeScript?.innerHTML).toContain('removeItem');
     expect(themeScript?.innerHTML).toContain('data-theme');
     expect(themeScript?.getAttribute('type')).toBeNull();
   });

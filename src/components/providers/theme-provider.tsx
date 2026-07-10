@@ -7,6 +7,13 @@ import {
   useSyncExternalStore,
 } from 'react';
 
+import {
+  LEGACY_THEME_STORAGE_KEY,
+  THEME_STORAGE_KEY,
+} from './theme-storage-key';
+
+export { THEME_STORAGE_KEY } from './theme-storage-key';
+
 export type Theme = 'light' | 'dark' | 'system';
 export type ResolvedTheme = 'light' | 'dark';
 
@@ -16,7 +23,6 @@ type ThemeContextValue = {
   setTheme: (theme: Theme) => void;
 };
 
-export const THEME_STORAGE_KEY = 'theme';
 const THEME_ATTRIBUTE = 'data-theme';
 const DARK_QUERY = '(prefers-color-scheme: dark)';
 const THEME_CHANGE_EVENT = 'theme:change';
@@ -37,7 +43,11 @@ function readStoredTheme(): Theme {
   /* v8 ignore next -- SSR guard; window is always defined under jsdom */
   if (typeof window === 'undefined') return 'system';
   try {
-    const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+    // Fall back to the legacy key so a returning user keeps their preference;
+    // the anti-FOUC script migrates it to the new key on first load (P3-02).
+    const stored =
+      window.localStorage.getItem(THEME_STORAGE_KEY) ??
+      window.localStorage.getItem(LEGACY_THEME_STORAGE_KEY);
     if (stored === 'light' || stored === 'dark' || stored === 'system') {
       memoryTheme = stored;
       return stored;

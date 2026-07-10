@@ -9,6 +9,7 @@ import {
   ThemeProvider,
   useTheme,
 } from './theme-provider';
+import { LEGACY_THEME_STORAGE_KEY } from './theme-storage-key';
 
 type MatchMediaMock = ReturnType<typeof createMatchMediaMock>;
 
@@ -97,6 +98,18 @@ describe('ThemeProvider', () => {
     );
     expect(screen.getByTestId('theme')).toHaveTextContent('dark');
     expect(screen.getByTestId('resolved')).toHaveTextContent('dark');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+  });
+
+  it('falls back to the legacy key so an existing preference survives (P3-02)', () => {
+    window.localStorage.setItem(LEGACY_THEME_STORAGE_KEY, 'dark');
+    installMatchMedia(createMatchMediaMock(false));
+    render(
+      <ThemeProvider>
+        <Probe />
+      </ThemeProvider>,
+    );
+    expect(screen.getByTestId('theme')).toHaveTextContent('dark');
     expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
   });
 

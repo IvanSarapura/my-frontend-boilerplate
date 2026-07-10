@@ -1,14 +1,19 @@
 import { headers } from 'next/headers';
 
 import {
+  LEGACY_THEME_STORAGE_KEY,
+  THEME_STORAGE_KEY,
+} from '@/components/providers/theme-storage-key';
+import {
   generateOrganizationJsonLd,
   generateWebsiteJsonLd,
   serializeJsonLd,
 } from '@/lib/json-ld';
 
-// Anti-FOUC: applies data-theme before first paint. Keep in sync with
-// src/components/providers/theme-provider.
-const THEME_INIT_SCRIPT = `(function(){try{var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`;
+// Anti-FOUC: applies data-theme before first paint. Reads the namespaced key
+// (shared with theme-provider via theme-storage-key), falling back to and
+// migrating the legacy key one time (P3-02).
+const THEME_INIT_SCRIPT = `(function(){try{var K=${JSON.stringify(THEME_STORAGE_KEY)},L=${JSON.stringify(LEGACY_THEME_STORAGE_KEY)};var t=localStorage.getItem(K);if(t!=='light'&&t!=='dark'&&t!=='system'){var l=localStorage.getItem(L);if(l==='light'||l==='dark'||l==='system'){t=l;localStorage.setItem(K,l);localStorage.removeItem(L);}}if(t==='light'||t==='dark'){document.documentElement.setAttribute('data-theme',t);}}catch(e){}})();`;
 
 type HeadScriptsProps = {
   appName: string;
