@@ -1,0 +1,24 @@
+name: Setup
+description: Set up Node from .nvmrc, activate the pinned npm via Corepack, and run npm ci.
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v4
+      with:
+        node-version-file: .nvmrc
+        cache: npm
+
+    - name: Activate pinned npm via Corepack
+      shell: bash
+      # Corepack reads `packageManager` from package.json and provides that exact
+      # npm (11.x) — the runner's bundled npm 10.x fails the >=11 engine gate.
+      # Suppress the interactive download prompt for the whole job so the first
+      # npm/npx invocation fetches it non-interactively.
+      run: |
+        corepack enable
+        echo "COREPACK_ENABLE_DOWNLOAD_PROMPT=0" >> "$GITHUB_ENV"
+
+    - name: Install dependencies
+      shell: bash
+      run: npm ci

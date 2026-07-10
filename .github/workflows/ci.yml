@@ -28,12 +28,7 @@ jobs:
           # Fetch full history so commitlint can traverse the PR range
           fetch-depth: 0
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - run: npm ci
+      - uses: ./.github/actions/setup
 
       - name: Cache Next.js build
         uses: actions/cache@v4
@@ -101,12 +96,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - run: npm ci
+      - uses: ./.github/actions/setup
 
       - name: Cache Next.js build
         uses: actions/cache@v4
@@ -131,12 +121,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - run: npm ci
+      - uses: ./.github/actions/setup
 
       - name: Run tests with coverage thresholds
         run: npm run test:coverage
@@ -160,12 +145,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - run: npm ci
+      - uses: ./.github/actions/setup
 
       - name: Cache Next.js build
         uses: actions/cache@v4
@@ -229,12 +209,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - run: npm ci
+      - uses: ./.github/actions/setup
 
       # Fail-fast: if the Storybook app does not compile, skip the browser run.
       - name: Build Storybook
@@ -260,12 +235,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-
-      - run: npm ci
+      - uses: ./.github/actions/setup
 
       - name: Download build artifact
         uses: actions/download-artifact@v4
