@@ -134,6 +134,8 @@ In CSS and CSS Modules, keep design-contract and accessibility comments (contras
 
 On component props, keep JSDoc that documents non-obvious semantics — accessible/ARIA labels, localization, responsive contracts, variants with special behavior, or side effects. Drop it for self-explanatory props (`className`, `title`, `subtitle`, `actions`, `brand`) unless they carry a special contract.
 
+In tests, keep comments that document a test's specific environment limitation (a real jsdom/browser quirk or exception). Centralize recurring setup and shared workarounds in `vitest.setup.ts` (or a fixture/helper) instead of repeating the same explanation across files.
+
 ### Adding a New Feature
 
 Features live in `src/features/<feature-name>/` and follow a consistent structure:

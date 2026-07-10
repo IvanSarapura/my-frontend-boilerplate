@@ -1,3 +1,7 @@
+// Shared jsdom test environment: MSW request mocking, the `server-only` mock and
+// the matchMedia polyfill below. Put recurring environment workarounds here
+// rather than re-explaining them per test file; keep local comments for a test's
+// own specific quirk.
 import '@testing-library/jest-dom/vitest';
 
 import { cleanup } from '@testing-library/react';
