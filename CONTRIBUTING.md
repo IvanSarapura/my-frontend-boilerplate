@@ -241,7 +241,7 @@ import Image from 'next/image';
 **Where to put the file:**
 
 - Static assets bundled with the app live in `public/` and are referenced as `/file.png`.
-- For icons, prefer the central `Icon` registry in `src/components/ui/icon/` over inline SVG or PNG sprites. The registry handles ARIA, sizing, and currentColor inheritance for you.
+- For icons, prefer the central `Icon` registry in `src/components/ui/icon/` over inline SVG or PNG sprites. The registry handles ARIA, sizing, and currentColor inheritance for you. Importing from the `@/components/ui/icon` barrel is safe: it's listed in `optimizePackageImports` (`next.config.ts`), so only the icons you use are bundled.
 
 **External images** (CMS, CDN, S3): add the host to `images.remotePatterns` in `next.config.ts`:
 

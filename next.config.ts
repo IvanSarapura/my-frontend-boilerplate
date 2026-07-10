@@ -35,10 +35,11 @@ const nextConfig: NextConfig = {
   // behind a proxy/CDN, prefer `compress: false` and let the proxy compress.
   compress: true,
 
-  // Tree-shake the @/components/ui barrel so a server route importing one
-  // primitive doesn't pull sibling client modules (+ @floating-ui) into its bundle.
+  // Tree-shake local barrels so importing one primitive/icon doesn't pull
+  // siblings (+ @floating-ui) or the full icon set into a bundle. Entries
+  // don't cover subpaths — new deep barrels need their own entry.
   experimental: {
-    optimizePackageImports: ['@/components/ui'],
+    optimizePackageImports: ['@/components/ui', '@/components/ui/icon'],
   },
 
   // Empty allowlist blocks all external image hosts by default. Add hosts as
