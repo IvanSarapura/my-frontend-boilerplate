@@ -97,16 +97,18 @@ describe('apiClient', () => {
     });
   });
 
-  it('merges custom headers and method with the default Content-Type', async () => {
+  it('sets Content-Type json for a string body and honors custom headers', async () => {
     let receivedMethod: string | undefined;
     let receivedAuth: string | null = null;
     let receivedContentType: string | null = null;
+    let receivedAccept: string | null = null;
 
     server.use(
       http.post('https://api.test/echo', ({ request }) => {
         receivedMethod = request.method;
         receivedAuth = request.headers.get('Authorization');
         receivedContentType = request.headers.get('Content-Type');
+        receivedAccept = request.headers.get('Accept');
         return HttpResponse.json({ ok: true });
       }),
     );
@@ -121,6 +123,72 @@ describe('apiClient', () => {
     expect(receivedMethod).toBe('POST');
     expect(receivedAuth).toBe('Bearer token-123');
     expect(receivedContentType).toBe('application/json');
+    expect(receivedAccept).toBe('application/json');
+  });
+
+  it('sends no Content-Type on a GET without a body, but defaults Accept to json', async () => {
+    let receivedContentType: string | null = null;
+    let receivedAccept: string | null = null;
+
+    server.use(
+      http.get('https://api.test/user', ({ request }) => {
+        receivedContentType = request.headers.get('Content-Type');
+        receivedAccept = request.headers.get('Accept');
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    await apiClient('https://api.test/user', { schema: pass });
+
+    expect(receivedContentType).toBeNull();
+    expect(receivedAccept).toBe('application/json');
+  });
+
+  it('lets the caller override the default Content-Type and Accept', async () => {
+    let receivedContentType: string | null = null;
+    let receivedAccept: string | null = null;
+
+    server.use(
+      http.post('https://api.test/echo', ({ request }) => {
+        receivedContentType = request.headers.get('Content-Type');
+        receivedAccept = request.headers.get('Accept');
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    await apiClient('https://api.test/echo', {
+      schema: pass,
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain', Accept: 'text/plain' },
+      body: 'plain text body',
+    });
+
+    expect(receivedContentType).toBe('text/plain');
+    expect(receivedAccept).toBe('text/plain');
+  });
+
+  it('does not force application/json for a non-string (FormData) body', async () => {
+    let receivedContentType: string | null = null;
+
+    server.use(
+      http.post('https://api.test/upload', ({ request }) => {
+        receivedContentType = request.headers.get('Content-Type');
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    const form = new FormData();
+    form.append('field', 'value');
+
+    await apiClient('https://api.test/upload', {
+      schema: pass,
+      method: 'POST',
+      body: form,
+    });
+
+    // The platform sets multipart/form-data with a boundary; never plain json.
+    expect(receivedContentType).not.toBe('application/json');
+    expect(receivedContentType).toContain('multipart/form-data');
   });
 
   it('throws ApiError(504) when the request exceeds the timeout', async () => {

@@ -39,6 +39,24 @@ function safeStatusMessage(status: number): string {
   return STATUS_MESSAGES[status] ?? 'Request failed';
 }
 
+// Normalize via `new Headers()` so a caller's Headers instance or tuple array
+// (both valid HeadersInit) merge correctly — a plain spread would drop them.
+function buildHeaders(
+  callerHeaders: HeadersInit | undefined,
+  body: BodyInit | null | undefined,
+): Headers {
+  const headers = new Headers(callerHeaders);
+  // JSON-first client: accept JSON unless the caller asked for something else.
+  if (!headers.has('Accept')) headers.set('Accept', 'application/json');
+  // Only declare a JSON Content-Type for string bodies (the JSON.stringify
+  // case). FormData/Blob/URLSearchParams/streams carry their own type — let the
+  // platform set it. The caller's explicit Content-Type always wins.
+  if (typeof body === 'string' && !headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+  return headers;
+}
+
 export async function apiClient<T>(
   url: string,
   options: ApiClientOptions<T>,
@@ -63,10 +81,7 @@ export async function apiClient<T>(
     res = await fetch(url, {
       ...fetchOptions,
       signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        ...fetchOptions.headers,
-      },
+      headers: buildHeaders(fetchOptions.headers, fetchOptions.body),
     });
   } catch (err) {
     // Our timeout fired → 504. A caller-initiated abort is re-thrown untouched.
