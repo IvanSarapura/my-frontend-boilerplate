@@ -45,6 +45,26 @@ describe('ContactForm', () => {
     expect(screen.getByRole('button', { name: 'Submit' })).toBeInTheDocument();
   });
 
+  it('applies input-purpose autofill attributes to each field', () => {
+    renderForm();
+    expect(screen.getByLabelText('Name')).toHaveAttribute(
+      'autocomplete',
+      'name',
+    );
+
+    const email = screen.getByLabelText('Email');
+    expect(email).toHaveAttribute('type', 'email');
+    expect(email).toHaveAttribute('autocomplete', 'email');
+    expect(email).toHaveAttribute('spellcheck', 'false');
+    expect(email).toHaveAttribute('autocapitalize', 'none');
+    expect(email).toHaveAttribute('autocorrect', 'off');
+
+    expect(screen.getByLabelText('Message')).toHaveAttribute(
+      'autocomplete',
+      'off',
+    );
+  });
+
   it('surfaces server-side field errors returned by the action', async () => {
     submitMock.mockResolvedValueOnce({
       success: false,

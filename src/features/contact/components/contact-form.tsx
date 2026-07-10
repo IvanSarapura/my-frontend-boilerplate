@@ -62,6 +62,7 @@ export function ContactForm({ errorMessages, labels }: ContactFormProps) {
     <form action={formAction} className={styles.form} noValidate>
       <Input
         label={labels.nameLabel}
+        autoComplete="name"
         placeholder={labels.namePlaceholder}
         error={errors.name?.message ?? getServerError(state, 'name')}
         {...register('name')}
@@ -69,12 +70,17 @@ export function ContactForm({ errorMessages, labels }: ContactFormProps) {
       <Input
         label={labels.emailLabel}
         type="email"
+        autoComplete="email"
+        spellCheck={false}
+        autoCapitalize="none"
+        autoCorrect="off"
         placeholder={labels.emailPlaceholder}
         error={errors.email?.message ?? getServerError(state, 'email')}
         {...register('email')}
       />
       <Textarea
         label={labels.messageLabel}
+        autoComplete="off"
         placeholder={labels.messagePlaceholder}
         rows={5}
         error={errors.message?.message ?? getServerError(state, 'message')}
