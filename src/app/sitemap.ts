@@ -19,12 +19,13 @@ function buildLanguageAlternates(path: string): Record<string, string> {
 }
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const now = new Date();
-
+  // `lastModified` is intentionally omitted: a fabricated `new Date()` changes
+  // every build and Google ignores/distrusts an inaccurate value. Declare it
+  // only with a real date — a release/build constant for static pages, or the
+  // CMS/API timestamp for dynamic content.
   return STATIC_PATHS.flatMap(path =>
     locales.map(locale => ({
       url: buildLocaleUrl(locale, path),
-      lastModified: now,
       changeFrequency: 'monthly' as const,
       priority: path === '' ? 1 : 0.8,
       alternates: {
