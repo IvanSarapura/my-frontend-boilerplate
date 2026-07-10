@@ -47,5 +47,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **DX** — Husky v9 pre-commit + commit-msg hooks; commitlint conventional config; Prettier; ESLint with import-sort and a11y plugins
 - **Architecture** — Zod-validated environment variables (`src/lib/env.ts`); CSS design tokens in `globals.css`; `server-only` guardrails on server utilities
 
-[Unreleased]: https://github.com/your-org/my-frontend-boilerplate/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/your-org/my-frontend-boilerplate/releases/tag/v0.1.0
+[Unreleased]: https://github.com/IvanSarapura/my-frontend-boilerplate/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/IvanSarapura/my-frontend-boilerplate/releases/tag/v0.1.0
