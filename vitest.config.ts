@@ -26,6 +26,11 @@ export default defineConfig({
         'coverage/**',
         // Pure re-export barrels — no executable logic to cover.
         '**/index.ts',
+        // Code-generated image routes (next/og ImageResponse): the output is a
+        // binary image, verified at build/E2E — not unit-coverable in jsdom.
+        '**/opengraph-image.tsx',
+        '**/apple-icon.tsx',
+        '**/icon.tsx',
       ],
       thresholds: {
         lines: 70,

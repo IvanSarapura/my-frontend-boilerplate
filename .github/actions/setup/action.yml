@@ -1,5 +1,5 @@
 name: Setup
-description: Set up Node from .nvmrc, activate the pinned npm via Corepack, and run npm ci.
+description: Set up Node from .nvmrc and install with npm ci.
 
 runs:
   using: composite
@@ -8,17 +8,6 @@ runs:
       with:
         node-version-file: .nvmrc
         cache: npm
-
-    - name: Install the pinned npm
-      shell: bash
-      # The runner's bundled npm 10.x fails the engines ">=11" gate. Corepack
-      # does not reliably override npm on GitHub Actions (its shim loses PATH
-      # precedence to the pre-installed npm), so install the exact version from
-      # package.json's `packageManager` field explicitly.
-      run: |
-        version="$(node -p "require('./package.json').packageManager.split('@')[1].split('+')[0]")"
-        npm install -g "npm@${version}"
-        npm --version
 
     - name: Install dependencies
       shell: bash

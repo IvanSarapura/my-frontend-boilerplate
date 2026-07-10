@@ -56,7 +56,7 @@
 Before you begin, ensure you have the following installed:
 
 - **Node.js** `>=22.0.0 <23`
-- **npm** `>=11 <12`
+- **npm** `>=10 <12`
 - **Git** `>=2.40.0`
 
 We use [nvm](https://github.com/nvm-sh/nvm) to manage Node versions. The project includes a `.nvmrc` file for automatic version switching.

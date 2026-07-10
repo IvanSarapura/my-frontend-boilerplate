@@ -147,7 +147,7 @@ Key principles:
 ### Prerequisites
 
 - **Node.js** `>=22.0.0 <23`
-- **npm** `>=11 <12` (both ranges enforced by `engine-strict` in `.npmrc`)
+- **npm** `>=10 <12` (both ranges enforced by `engine-strict` in `.npmrc`; `>=10` matches the npm bundled with Node 22 LTS so it installs cleanly on any CI/host)
 
 We recommend using [nvm](https://github.com/nvm-sh/nvm):
 
