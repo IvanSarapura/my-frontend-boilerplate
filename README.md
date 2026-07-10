@@ -1077,6 +1077,8 @@ NEXT_PUBLIC_API_ORIGIN=https://jsonplaceholder.typicode.com
 
 Public variables (`NEXT_PUBLIC_*`) are validated with Zod (`src/lib/env.ts`). In `development` and `test` they ship with defaults so a fresh clone runs zero-config. In **production** all three are required — `next build` (and `next start`) **fails with an explicit error** if any is unset, so a misconfigured deploy can never ship localhost metadata, a wrong sitemap or a demo-API CSP silently. Server-only secrets live in `src/lib/env.server.ts` (no defaults, guarded by `server-only`) and also throw at startup if missing or malformed.
 
+> **Deploying (Vercel, Netlify, …):** `.env.local` is git-ignored and **never deployed**, so you must set the three `NEXT_PUBLIC_*` variables in your host's environment settings — otherwise the production build fails fast (this is exactly the error you'll see if `next build` aborts right after installing dependencies). On **Vercel**: _Settings → Environment Variables_, add each for **Production** (and **Preview**), then redeploy — or via CLI, `vercel env add NEXT_PUBLIC_APP_URL production`. Set `NEXT_PUBLIC_APP_URL` to the **deployed origin** (your domain or `https://<project>.vercel.app`): it drives `metadataBase`, canonical/OG URLs and the sitemap.
+
 `NEXT_PUBLIC_API_ORIGIN` is the origin of the demo posts/comments API. It feeds both the API services (`src/features/posts/api/`) and the CSP `connect-src` allowlist in `src/proxy.ts`, so swapping in a real API is a single env change — the CSP stays in sync by construction. The value is normalized to a bare origin (no path, no trailing slash) by the Zod schema.
 
 ---
@@ -1085,7 +1087,7 @@ Public variables (`NEXT_PUBLIC_*`) are validated with Zod (`src/lib/env.ts`). In
 
 Everything in this boilerplate runs out of the box for local development and demos. Before you deploy it as a real product, complete these adoption tasks — they replace the boilerplate's defaults with your own:
 
-- [ ] **Environment variables** — set `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_APP_URL` (your real domain), and `NEXT_PUBLIC_API_ORIGIN` (your real API, not the demo JSONPlaceholder). The production build fails fast if any is unset. → [Environment Variables](#environment-variables)
+- [ ] **Environment variables** — set `NEXT_PUBLIC_APP_NAME`, `NEXT_PUBLIC_APP_URL` (your real domain), and `NEXT_PUBLIC_API_ORIGIN` (your real API, not the demo JSONPlaceholder) **in your host's environment settings** (e.g. Vercel → _Settings → Environment Variables_), not just in `.env.local` — the production build fails fast if any is unset. → [Environment Variables](#environment-variables)
 - [ ] **Security reporting** — enable GitHub Private Vulnerability Reporting (Settings → Code security) and update the advisory link in [`SECURITY.md`](SECURITY.md) to point at your repository.
 - [ ] **Brand icons** — customize the generated icons in `src/app/icon.tsx` and `src/app/apple-icon.tsx`; they default to your app's initial on `#0070f3` (the `--accent` token). Update the manifest `theme_color` in `src/app/manifest.ts` if you change the brand color.
 - [ ] **Theme storage namespace** — rename the key in `src/components/providers/theme-storage-key.ts` (`my-frontend-boilerplate:theme:v1`) so it won't collide with a host app's `localStorage`.
