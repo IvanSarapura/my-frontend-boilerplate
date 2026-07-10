@@ -15,7 +15,9 @@ patches.
 
 **Do not open a public issue for security problems.**
 
-Report privately to the maintainer (see the contact below). Include:
+Report privately through GitHub's **Private Vulnerability Reporting**: open the
+repository's [**Security** tab → **Report a vulnerability**][report], which
+creates a private advisory visible only to you and the maintainers. Include:
 
 - A description of the issue and its impact.
 - Steps to reproduce or a proof of concept.
@@ -24,8 +26,11 @@ Report privately to the maintainer (see the contact below). Include:
 We aim to acknowledge reports within **3 working days** and to agree on a
 remediation timeline once the report is triaged.
 
-> **Maintainer contact:** replace this line with your team's private channel
-> or the maintainer email before sharing the repo.
+[report]: https://github.com/IvanSarapura/my-frontend-boilerplate/security/advisories/new
+
+> **Adopting this boilerplate?** Enable Private Vulnerability Reporting on your
+> fork (Settings → Code security → _Private vulnerability reporting_) and update
+> the link above to point at your repository before going public.
 
 ## Scope Notes
 

@@ -548,7 +548,7 @@ Found a bug or have a suggestion? We'd love to hear it.
    - Your environment (Node version, OS, browser if relevant)
    - Screenshots or code snippets if applicable
 
-For security vulnerabilities, please email the maintainer directly instead of opening a public issue.
+For security vulnerabilities, do not open a public issue — follow the [Security Policy](SECURITY.md) and report privately via GitHub's **Report a vulnerability** button on the Security tab.
 
 ---
 
