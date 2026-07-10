@@ -65,6 +65,7 @@
 }
 
 .close {
+  composes: ring from '../focus.module.css';
   flex-shrink: 0;
   padding: var(--space-1);
   line-height: 0;

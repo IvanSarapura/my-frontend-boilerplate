@@ -4,6 +4,7 @@
 }
 
 .trigger {
+  composes: ringforcedcolors from '../focus.module.css';
   display: flex;
   gap: var(--space-2);
   align-items: center;
@@ -24,7 +25,7 @@
     box-shadow var(--transition-fast);
 }
 
-.trigger:focus {
+.trigger:focus-visible {
   border-color: var(--color-focus-ring);
   box-shadow: 0 0 0 2px
     color-mix(in srgb, var(--color-focus-ring) 20%, transparent);
@@ -106,7 +107,7 @@
   border-color: var(--color-error);
 }
 
-.error:focus {
+.error:focus-visible {
   border-color: var(--color-error);
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-error) 20%, transparent);
 }

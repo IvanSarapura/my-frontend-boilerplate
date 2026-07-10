@@ -8,3 +8,16 @@
   outline: var(--color-focus-ring-width) solid var(--color-focus-ring);
   outline-offset: var(--color-focus-ring-offset);
 }
+
+/*
+ * Forced-colors fallback for components whose visible ring is a box-shadow
+ * (dropped under forced-colors). The token ring above uses `outline`, which
+ * forced-colors preserves; box-shadow rings (input family) compose this to
+ * gain an outline only when forced-colors is active.
+ */
+@media (forced-colors: active) {
+  .ringforcedcolors:focus-visible {
+    outline: var(--color-focus-ring-width) solid Highlight;
+    outline-offset: var(--color-focus-ring-offset);
+  }
+}
