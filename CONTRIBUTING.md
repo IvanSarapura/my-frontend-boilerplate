@@ -130,6 +130,8 @@ Comments explain **why**, not **what** — the code already shows what it does. 
 
 Keep them terse, and link to the README for recipes instead of duplicating them inline.
 
+In CSS and CSS Modules, keep design-contract and accessibility comments (contrast tables, token contracts, theming, safe-area, reduced-motion) and drop decorative separators or organizational labels a class or token name already conveys.
+
 ### Adding a New Feature
 
 Features live in `src/features/<feature-name>/` and follow a consistent structure:
