@@ -9,15 +9,16 @@ runs:
         node-version-file: .nvmrc
         cache: npm
 
-    - name: Activate pinned npm via Corepack
+    - name: Install the pinned npm
       shell: bash
-      # Corepack reads `packageManager` from package.json and provides that exact
-      # npm (11.x) — the runner's bundled npm 10.x fails the >=11 engine gate.
-      # Suppress the interactive download prompt for the whole job so the first
-      # npm/npx invocation fetches it non-interactively.
+      # The runner's bundled npm 10.x fails the engines ">=11" gate. Corepack
+      # does not reliably override npm on GitHub Actions (its shim loses PATH
+      # precedence to the pre-installed npm), so install the exact version from
+      # package.json's `packageManager` field explicitly.
       run: |
-        corepack enable
-        echo "COREPACK_ENABLE_DOWNLOAD_PROMPT=0" >> "$GITHUB_ENV"
+        version="$(node -p "require('./package.json').packageManager.split('@')[1].split('+')[0]")"
+        npm install -g "npm@${version}"
+        npm --version
 
     - name: Install dependencies
       shell: bash
