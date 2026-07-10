@@ -63,10 +63,8 @@ export async function generateMetadata({
       title: env.NEXT_PUBLIC_APP_NAME,
       description: APP_DESCRIPTION,
     },
-    icons: {
-      icon: '/favicon.ico',
-      apple: '/favicon.ico',
-    },
+    // Icons come from the file conventions (favicon.ico, icon.tsx, apple-icon.tsx)
+    // in src/app/, which auto-inject the <link> tags — no manual entry needed.
   };
 }
 
