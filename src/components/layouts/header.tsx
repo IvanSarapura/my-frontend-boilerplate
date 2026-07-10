@@ -13,7 +13,6 @@ interface NavItem {
 }
 
 interface HeaderProps {
-  /** Brand / wordmark slot (usually a link to home). */
   brand: ReactNode;
   /** Nav items — single source of truth, rendered inline (desktop) and in the
    * drawer (mobile). `href` must be locale-prefixed. */

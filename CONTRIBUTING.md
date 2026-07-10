@@ -132,6 +132,8 @@ Keep them terse, and link to the README for recipes instead of duplicating them 
 
 In CSS and CSS Modules, keep design-contract and accessibility comments (contrast tables, token contracts, theming, safe-area, reduced-motion) and drop decorative separators or organizational labels a class or token name already conveys.
 
+On component props, keep JSDoc that documents non-obvious semantics — accessible/ARIA labels, localization, responsive contracts, variants with special behavior, or side effects. Drop it for self-explanatory props (`className`, `title`, `subtitle`, `actions`, `brand`) unless they carry a special contract.
+
 ### Adding a New Feature
 
 Features live in `src/features/<feature-name>/` and follow a consistent structure:

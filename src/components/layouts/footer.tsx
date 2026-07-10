@@ -17,7 +17,6 @@ interface FooterColumn {
 }
 
 interface FooterProps {
-  /** Brand / wordmark slot. */
   brand?: ReactNode;
   /** Short description under the brand. */
   tagline?: ReactNode;
